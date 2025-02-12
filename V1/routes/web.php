@@ -2,7 +2,9 @@
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Solicitacao;
 
 // Pages/Web
 Route::get('/direito-passageiros', fn() => Inertia::render('Web/DireitoPassageiros'));
@@ -29,6 +31,33 @@ Route::get('/para-companhias', fn() => Inertia::render('Web/ParaCompanhias'));
 // /Pages
 Route::get('/termos-condicoes', fn() => Inertia::render('TermsOfService'));
 Route::get('/politica-privacidade', fn() => Inertia::render('PrivacyPolicy'));
+Route::get('/usuarios', fn() => Inertia::render('Usuarios'));
+Route::get('/companhias', fn() => Inertia::render('Companhias'));
+
+//Dinamic Pages
+Route::get('/solicitacoes', function () {
+    $solicitacoes = Solicitacao::with('user')->get();
+
+    return Inertia::render('Solicitacoes', [
+        'solicitacoes' => $solicitacoes,
+    ]);
+})->name('solicitacoes');
+
+Route::post('/solicitacoes', function (Request $request) {
+    $validated = $request->validate([
+        'nome_companhia' => 'required|string|max:255',
+        'iata' => 'required|string|size:3',
+        'icao' => 'required|string|size:4',
+        'indicativo_chamada' => 'required|string|max:255',
+        'aeroporto_partida' => 'required|string|max:255',
+        'aeroporto_escala' => 'nullable|string|max:255',
+        'aeroporto_destino' => 'required|string|max:255',
+    ]);
+
+    $request->user()->solicitacoes()->create($validated);
+
+    return redirect()->route('solicitacoes');
+});
 
 
 Route::get('/', function () {
@@ -46,6 +75,8 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
+        return Inertia::render('Dashboard', [
+            'userRole' => auth()->user()->role, // Passando a role do usuário
+        ]);
     })->name('dashboard');
 });

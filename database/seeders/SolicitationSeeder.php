@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Solicitations;
+use App\Models\Solicitation;
 use Illuminate\Database\Seeder;
 
 class SolicitationSeeder extends Seeder
@@ -12,6 +12,6 @@ class SolicitationSeeder extends Seeder
      */
     public function run(): void
     {
-        Solicitations::factory()->count(10)->create();
+        Solicitation::factory()->count(10)->create();
     }
 }

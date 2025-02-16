@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Solicitations;
+use App\Models\Solicitation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Solicitations>
+ * @extends Factory<Solicitation>
  */
-class SolicitationsFactory extends Factory
+class SolicitationFactory extends Factory
 {
     /**
      * Define the model's default state.

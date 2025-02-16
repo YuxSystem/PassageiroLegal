@@ -3,7 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\SolicitacoesController;
+use App\Http\Controllers\SolicitationController;
 use App\Http\Controllers\UserController;
 
 // Pages/Web
@@ -45,7 +45,7 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/solicitacoes', [SolicitacoesController::class, 'index'])->name('solicitacoes.index');
+    Route::get('/solicitacoes', [SolicitationController::class, 'index'])->name('solicitacoes.index');
 
     Route::get('/usuarios', [UserController::class, 'index'])->name('usuario.index');
     Route::get('/usuarios/create', [UserController::class, 'create'])->name('usuario.create');

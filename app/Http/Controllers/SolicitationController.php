@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Solicitation;
 use Inertia\Inertia;
 
-class SolicitacoesController extends Controller
+class SolicitationController extends Controller
 {
     public function index()
     {

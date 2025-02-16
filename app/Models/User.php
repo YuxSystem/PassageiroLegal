@@ -67,6 +67,6 @@ class User extends Authenticatable
 
     public function solicitacoes()
     {
-        return $this->hasMany(Solicitacoes::class);
+        return $this->hasMany(Solicitations::class);
     }
 }

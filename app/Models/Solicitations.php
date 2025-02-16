@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Database\Factories\SolicitationsFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Solicitations extends Model
 {
+    /** @use HasFactory<SolicitationsFactory> */
     use HasFactory;
 
     protected $fillable = [

@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Solicitation;
-use Inertia\Inertia;
+use App\Services\SolicitationService;
 
 class SolicitationController extends Controller
 {
+    public function __construct(protected SolicitationService $solicitationService)
+    {
+    }
+
     public function index()
     {
-        return Inertia::render('components/Solicitation', [
-            'solicitacoes' => Solicitation::with('user')->get(),
-        ]);
+        $solicitations = $this->solicitationService->getSolicitations();
+
+        return response()->json($solicitations, 200);
     }
 }

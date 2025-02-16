@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\Implementations\SolicitationServiceImpl;
 use App\Services\SolicitationService;
 use Illuminate\Support\ServiceProvider;
 
@@ -13,7 +14,7 @@ class ServicesServiceProvider extends ServiceProvider
      * @var array
      */
     public $bindings = [
-        SolicitationService::class => SolicitationService::class,
+        SolicitationService::class => SolicitationServiceImpl::class,
     ];
 
     /**

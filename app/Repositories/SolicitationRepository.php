@@ -9,4 +9,6 @@ interface SolicitationRepository {
     public function getAll(): Collection;
 
     public function create(array $data): Solicitation;
+
+    public function get(string $id): Solicitation;
 }

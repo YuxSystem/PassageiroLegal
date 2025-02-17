@@ -49,4 +49,19 @@ class SolicitationRepositoryTest extends TestCase
         // assert
         $this->assertNotNull($solicitation);
     }
+
+    public function test_get_solicitation(): void
+    {
+        // arrange
+        $this->seed();
+        $this->seed(SolicitationSeeder::class);
+        $sut = new SolicitationRepositoryImpl();
+
+        // act
+        $id = $sut->getAll()->first()["id"];
+        $solicitation = $sut->get($id);
+
+        // assert
+        $this->assertNotNull($solicitation);
+    }
 }

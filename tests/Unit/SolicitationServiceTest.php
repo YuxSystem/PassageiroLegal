@@ -6,6 +6,7 @@ use App\Models\Solicitation;
 use App\Repositories\SolicitationRepository;
 use App\Services\Implementations\SolicitationServiceImpl;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Validation\ValidationException;
 use Mockery;
 use Tests\TestCase;
 
@@ -34,5 +35,50 @@ class SolicitationServiceTest extends TestCase
         $this->assertCount(2, $solicitations);
         $this->assertEquals('voo_legal_1', $solicitations[0]['motivo']);
         $this->assertEquals('voo_legal_2', $solicitations[1]['motivo']);
+    }
+
+    public function test_create_solicitation_with_correct_data(): void
+    {
+        // arrange
+        $solicitation = new Solicitation([
+            'user_id' => 1,
+            'motivo' => 'voo_legal_1',
+            'num_voo' => '123',
+            'dta_voo' => '2021-01-01',
+            'detalhe' => 'detalhe',
+            'status' => 'status',
+        ]);
+
+        $solicitationRepositoryMock = Mockery::mock(SolicitationRepository::class);
+        $solicitationRepositoryMock->shouldReceive('create')->once()->andReturn($solicitation);
+
+        $sut = new SolicitationServiceImpl($solicitationRepositoryMock);
+
+        // act
+        $createdSolicitation = $sut->createSolicitation($solicitation->toArray());
+
+        // assert
+        $this->assertEquals('voo_legal_1', $createdSolicitation['motivo']);
+    }
+
+    public function test_create_solicitation_with_incorrect_data(): void
+    {
+        // arrange
+        $solicitation = new Solicitation([
+            'user_id' => "1",
+            'num_voo' => '123',
+            'dta_voo' => '2021-01-01',
+            'detalhe' => 'detalhe',
+            'status' => 'status',
+        ]);
+
+        $solicitationRepositoryMock = Mockery::mock(SolicitationRepository::class);
+        $solicitationRepositoryMock->shouldReceive('create')->never();
+
+        $sut = new SolicitationServiceImpl($solicitationRepositoryMock);
+
+        // act
+        $this->expectException(ValidationException::class);
+        $sut->createSolicitation($solicitation->toArray());
     }
 }

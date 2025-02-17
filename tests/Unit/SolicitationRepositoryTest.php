@@ -38,7 +38,7 @@ class SolicitationRepositoryTest extends TestCase
 
         // act
         $solicitation = $sut->create([
-            'user_id' => "uuid",
+            'user_id' => 1,
             'motivo' => 'Teste',
             'num_voo' => '123',
             'dta_voo' => '2021-10-10',

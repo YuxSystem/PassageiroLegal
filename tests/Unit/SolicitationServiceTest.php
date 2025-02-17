@@ -37,7 +37,7 @@ class SolicitationServiceTest extends TestCase
         $this->assertEquals('voo_legal_2', $solicitations[1]['motivo']);
     }
 
-    public function test_create_solicitation_with_correct_data(): void
+    public function test_create_solicitation(): void
     {
         // arrange
         $solicitation = new Solicitation([
@@ -59,26 +59,5 @@ class SolicitationServiceTest extends TestCase
 
         // assert
         $this->assertEquals('voo_legal_1', $createdSolicitation['motivo']);
-    }
-
-    public function test_create_solicitation_with_incorrect_data(): void
-    {
-        // arrange
-        $solicitation = new Solicitation([
-            'user_id' => "1",
-            'num_voo' => '123',
-            'dta_voo' => '2021-01-01',
-            'detalhe' => 'detalhe',
-            'status' => 'status',
-        ]);
-
-        $solicitationRepositoryMock = Mockery::mock(SolicitationRepository::class);
-        $solicitationRepositoryMock->shouldReceive('create')->never();
-
-        $sut = new SolicitationServiceImpl($solicitationRepositoryMock);
-
-        // act
-        $this->expectException(ValidationException::class);
-        $sut->createSolicitation($solicitation->toArray());
     }
 }

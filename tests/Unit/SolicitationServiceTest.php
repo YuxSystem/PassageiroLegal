@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Mockery;
 use Tests\TestCase;
 
-class SolicitationService extends TestCase
+class SolicitationServiceTest extends TestCase
 {
     /**
      * A basic feature test example.

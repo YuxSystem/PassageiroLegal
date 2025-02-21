@@ -50,7 +50,6 @@ node_modules/
 /tests/_support/_generated/
 
 # Configurações específicas de CI/CD
-/.github/
 docker-compose.override.yml
 .env.dusk.local
 Homestead.yaml

@@ -20,12 +20,33 @@ class SolicitationRepositoryTest extends TestCase
         $this->seed();
         $this->seed(SolicitationSeeder::class);
 
-        $repository = new SolicitationRepositoryImpl();
+        $sut = new SolicitationRepositoryImpl();
 
         // act
-        $solicitations = $repository->getAll();
+        $solicitations = $sut->getAll();
 
         // assert
         $this->assertCount(10, $solicitations);
+    }
+
+    public function test_create_solicitation(): void
+    {
+        // arrange
+        $this->seed();
+        $this->seed(SolicitationSeeder::class);
+        $sut = new SolicitationRepositoryImpl();
+
+        // act
+        $solicitation = $sut->create([
+            'user_id' => 1,
+            'motivo' => 'Teste',
+            'num_voo' => '123',
+            'dta_voo' => '2021-10-10',
+            'detalhe' => 'Teste',
+            'status' => 'Pendente',
+        ]);
+
+        // assert
+        $this->assertNotNull($solicitation);
     }
 }

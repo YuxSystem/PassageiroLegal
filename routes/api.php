@@ -11,7 +11,11 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware('auth:sanctum', 'admin')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/solicitations', [SolicitationController::class, 'store']);
+});
+
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/solicitations', [SolicitationController::class, 'index']);
 });
 

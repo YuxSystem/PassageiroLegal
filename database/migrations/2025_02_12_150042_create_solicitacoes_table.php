@@ -8,8 +8,8 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('solicitacoes', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary()->unique()->index();
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->string('motivo');
             $table->string('num_voo')->nullable();
             $table->date('dta_voo')->nullable();

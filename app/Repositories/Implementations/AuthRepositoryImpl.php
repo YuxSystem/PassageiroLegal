@@ -13,6 +13,6 @@ class AuthRepositoryImpl implements AuthRepository
      */
     public function create(User $user): User
     {
-        return $user::create($user->getAttributes());
+        return User::create($user->getAttributes());
     }
 }

@@ -24,4 +24,9 @@ class SolicitationRepositoryImpl implements SolicitationRepository
             'status' => $data['status'],
         ]);
     }
+
+    public function get(string $id): Solicitation
+    {
+        return Solicitation::findOrFail($id);
+    }
 }

@@ -23,4 +23,9 @@ class SolicitationServiceImpl implements SolicitationService
     {
         return $this->solicitationRepository->create($data)->toArray();
     }
+
+    public function getSolicitation(string $id): array
+    {
+        return $this->solicitationRepository->get($id)->toArray();
+    }
 }

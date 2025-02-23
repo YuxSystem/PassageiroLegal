@@ -17,5 +17,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/solicitations', [SolicitationController::class, 'index']);
+    Route::get('/solicitation/{id}', [SolicitationController::class, 'show']);
 });
 

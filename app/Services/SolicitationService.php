@@ -8,4 +8,6 @@ interface SolicitationService {
     public function createSolicitation(array $data): array;
 
     public function getSolicitation(string $id): array;
+
+    public function updateSolicitationStatus(string $id, array $data): array;
 }

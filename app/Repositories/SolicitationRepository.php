@@ -11,4 +11,6 @@ interface SolicitationRepository {
     public function create(array $data): Solicitation;
 
     public function get(string $id): Solicitation;
+
+    public function update(string $id, array $data): Solicitation;
 }

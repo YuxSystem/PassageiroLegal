@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SolicitationRequest;
+use App\Http\Requests\SolicitationUpdateStatus;
 use App\Services\SolicitationService;
-use Illuminate\Http\Request;
 
 class SolicitationController extends Controller
 {
@@ -31,5 +31,12 @@ class SolicitationController extends Controller
         $solicitation = $this->solicitationService->createSolicitation($request->all());
 
         return response()->json($solicitation, 201);
+    }
+
+    public function updateSolicitationStatus(SolicitationUpdateStatus $request, string $id)
+    {
+        $solicitation = $this->solicitationService->updateSolicitationStatus($id, $request->all());
+
+        return response()->json($solicitation, 200);
     }
 }

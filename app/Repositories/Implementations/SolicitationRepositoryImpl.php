@@ -15,18 +15,19 @@ class SolicitationRepositoryImpl implements SolicitationRepository
 
     public function create(array $data): Solicitation
     {
-        return Solicitation::create([
-            'user_id' => $data['user_id'],
-            'motivo' => $data['motivo'],
-            'num_voo' => $data['num_voo'],
-            'dta_voo' => $data['dta_voo'],
-            'detalhe' => $data['detalhe'],
-            'status' => $data['status'],
-        ]);
+        return Solicitation::create($data);
     }
 
     public function get(string $id): Solicitation
     {
         return Solicitation::findOrFail($id);
+    }
+
+    public function update(string $id, array $data): Solicitation
+    {
+        $solicitationToUpdate = Solicitation::findOrFail($id);
+        $solicitationToUpdate->update($data);
+
+        return $solicitationToUpdate;
     }
 }

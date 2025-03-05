@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Solicitation;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,7 @@ class SolicitationFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => 1,
+            'user_id' => User::factory()->create()->id,
             'motivo' => $this->faker->text(100),
             'num_voo' => $this->faker->text(10),
             'dta_voo' => $this->faker->date(),

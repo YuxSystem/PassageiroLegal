@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\User;
 use App\Repositories\Implementations\SolicitationRepositoryImpl;
 use Database\Seeders\SolicitationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -34,11 +35,14 @@ class SolicitationRepositoryTest extends TestCase
         // arrange
         $this->seed();
         $this->seed(SolicitationSeeder::class);
+
+        $userMock = User::factory()->create();
+
         $sut = new SolicitationRepositoryImpl();
 
         // act
         $solicitation = $sut->create([
-            'user_id' => 1,
+            'user_id' => $userMock->id,
             'motivo' => 'Teste',
             'num_voo' => '123',
             'dta_voo' => '2021-10-10',
@@ -63,5 +67,23 @@ class SolicitationRepositoryTest extends TestCase
 
         // assert
         $this->assertNotNull($solicitation);
+    }
+
+    public function test_update_solicitation(): void
+    {
+        // arrange
+        $this->seed();
+        $this->seed(SolicitationSeeder::class);
+        $sut = new SolicitationRepositoryImpl();
+        $id = $sut->getAll()->first()["id"];
+
+        // act
+        $sut->update($id, [
+            'status' => 'Finalizado',
+        ]);
+
+        // assert
+        $this->assertEquals('Finalizado', $sut->get($id)->status);
+
     }
 }

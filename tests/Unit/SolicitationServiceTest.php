@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\Solicitation;
+use App\Models\User;
 use App\Repositories\SolicitationRepository;
 use App\Services\Implementations\SolicitationServiceImpl;
 use Illuminate\Database\Eloquent\Collection;
@@ -40,7 +41,7 @@ class SolicitationServiceTest extends TestCase
     {
         // arrange
         $solicitation = new Solicitation([
-            'user_id' => 1,
+            'user_id' => User::factory()->create()->id,
             'motivo' => 'voo_legal_1',
             'num_voo' => '123',
             'dta_voo' => '2021-01-01',
@@ -64,7 +65,7 @@ class SolicitationServiceTest extends TestCase
     {
         // arrange
         $solicitation = new Solicitation([
-            'user_id' => 1,
+            'user_id' => User::factory()->create()->id,
             'motivo' => 'voo_legal_1',
             'num_voo' => '123',
             'dta_voo' => '2021-01-01',
@@ -82,5 +83,30 @@ class SolicitationServiceTest extends TestCase
 
         // assert
         $this->assertEquals('voo_legal_1', $solicitation['motivo']);
+    }
+
+    public function test_update_solicitation_status(): void
+    {
+        // arrange
+        $id = User::factory()->create()->id;
+        $solicitation = new Solicitation([
+            'user_id' => $id,
+            'motivo' => 'voo_legal_1',
+            'num_voo' => '123',
+            'dta_voo' => '2021-01-01',
+            'detalhe' => 'detalhe',
+            'status' => 'Finalizado',
+        ]);
+
+        $solicitationRepositoryMock = Mockery::mock(SolicitationRepository::class);
+        $solicitationRepositoryMock->shouldReceive('update')->once()->andReturn($solicitation);
+
+        $sut = new SolicitationServiceImpl($solicitationRepositoryMock);
+
+        // act
+        $updatedSolicitation = $sut->updateSolicitationStatus($id, ['status' => 'Finalizado']);
+
+        // assert
+        $this->assertEquals('Finalizado', $updatedSolicitation['status']);
     }
 }

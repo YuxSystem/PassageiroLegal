@@ -28,4 +28,9 @@ class SolicitationServiceImpl implements SolicitationService
     {
         return $this->solicitationRepository->get($id)->toArray();
     }
+
+    public function updateSolicitationStatus(string $id, array $data): array
+    {
+        return $this->solicitationRepository->update($id, $data)->toArray();
+    }
 }

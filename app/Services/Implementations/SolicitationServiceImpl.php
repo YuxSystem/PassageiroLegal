@@ -33,4 +33,18 @@ class SolicitationServiceImpl implements SolicitationService
     {
         return $this->solicitationRepository->update($id, $data)->toArray();
     }
+
+    public function uploadFiles(string $id, array $files): array
+    {
+        $paths = [];
+
+        foreach ($files as $key => $file) {
+            $path = $file->store("solicitations/{$id}");
+            $paths[$key] = $path;
+        }
+
+        $this->solicitationRepository->update($id, $paths);
+
+        return $paths;
+    }
 }

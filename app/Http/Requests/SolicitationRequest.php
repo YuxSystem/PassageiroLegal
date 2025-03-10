@@ -28,7 +28,9 @@ class SolicitationRequest extends FormRequest
             'dta_voo' => 'required|date',
             'detalhe' => 'required|string',
             'status' => 'required|string',
-
+            'registro_nasc' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'comprovante_res' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'comprovante_voo' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120',
         ];
     }
 }

@@ -10,4 +10,6 @@ interface SolicitationService {
     public function getSolicitation(string $id): array;
 
     public function updateSolicitationStatus(string $id, array $data): array;
+
+    public function uploadFiles(string $id, array $files): array;
 }

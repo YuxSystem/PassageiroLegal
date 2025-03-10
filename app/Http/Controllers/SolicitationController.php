@@ -29,8 +29,11 @@ class SolicitationController extends Controller
     public function store(SolicitationRequest $request)
     {
         $solicitation = $this->solicitationService->createSolicitation($request->all());
+        $this->solicitationService->uploadFiles($solicitation['id'], $request->allFiles());
 
-        return response()->json($solicitation, 201);
+        $created_solicitation = $this->solicitationService->getSolicitation($solicitation['id']);
+
+        return response()->json($created_solicitation, 201);
     }
 
     public function updateSolicitationStatus(SolicitationUpdateStatus $request, string $id)

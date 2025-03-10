@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Repositories\SolicitationRepository;
 use App\Services\Implementations\SolicitationServiceImpl;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Mockery;
 use Tests\TestCase;
 
@@ -108,5 +110,35 @@ class SolicitationServiceTest extends TestCase
 
         // assert
         $this->assertEquals('Finalizado', $updatedSolicitation['status']);
+    }
+
+    public function test_upload_files(): void
+    {
+        // arrange
+        Storage::fake('local');
+
+        // ID da solicitação
+        $solicitationId = '12345';
+
+        // Cria arquivos simulados
+        $files = [
+            'registro_nasc' => UploadedFile::fake()->create('documento.pdf', 1024),
+            'comprovante_res' => UploadedFile::fake()->create('documento.pdf', 1024),
+            'comprovante_voo' => UploadedFile::fake()->create('documento.pdf', 1024)
+        ];
+
+        $solicitationRepositoryMock = Mockery::mock(SolicitationRepository::class);
+        $solicitationRepositoryMock
+            ->shouldReceive('update')
+            ->once()
+            ->andReturn(new Solicitation());
+
+        $sut = new SolicitationServiceImpl($solicitationRepositoryMock);
+
+        // act
+        $result = $sut->uploadFiles($solicitationId, $files);
+
+        // assert
+        $this->assertNotNull($result);
     }
 }

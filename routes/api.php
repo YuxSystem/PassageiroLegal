@@ -23,5 +23,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::put('/solicitation/status/{id}', [SolicitationControllerApi::class, 'updateSolicitationStatus']);
 
     Route::put('/user/{id}', [UserControllerApi::class, 'changeRole']);
+    Route::get('/user/search', [UserControllerApi::class, 'searchUser']);
 });
 

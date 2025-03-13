@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface UserRepository
 {
@@ -22,4 +24,14 @@ interface UserRepository
      * @return User Usuário atualizado
      */
     public function update(string $id, array $data): User;
+
+    /**
+     * Busca um usuário
+     *
+     * @param $query String a ser consultada
+     * @param int $perPage Quantidade de itens por página
+     * @param int $page Página a ser consultada
+     * @return Collection
+     */
+    public function search($query, int $perPage, int $page): LengthAwarePaginator;
 }

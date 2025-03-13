@@ -17,7 +17,7 @@ class EnsureAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $isAdmin = auth()->check() && User::where('id', auth()->id())->first()->rule === 'Admin';
+        $isAdmin = auth()->check() && User::where('id', auth()->id())->first()->role === 'Admin';
 
         if ($isAdmin) {
             return $next($request);

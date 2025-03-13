@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\UserRoleEnum;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface UserService
 {
@@ -14,4 +15,12 @@ interface UserService
      * @return array Usuário atualizado
      */
     public function changeRole(string $id, UserRoleEnum $role): array;
+
+    /**
+     * Busca um usuário por ID, Nome ou Email
+     *
+     * @param string $query Dado a ser pesquisado
+     * @return LengthAwarePaginator
+     */
+    public function searchUser(string $query, int $perPage, int $page): LengthAwarePaginator;
 }

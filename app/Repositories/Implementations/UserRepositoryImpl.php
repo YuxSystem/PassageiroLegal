@@ -4,6 +4,7 @@ namespace App\Repositories\Implementations;
 
 use App\Models\User;
 use App\Repositories\UserRepository;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserRepositoryImpl implements UserRepository
 {
@@ -16,6 +17,9 @@ class UserRepositoryImpl implements UserRepository
         return User::create($user->getAttributes());
     }
 
+    /**
+     * @inheritDoc
+     */
     public function update(string $id, array $data): User
     {
         $userToUpdate = User::findOrFail($id);
@@ -23,4 +27,17 @@ class UserRepositoryImpl implements UserRepository
 
         return $userToUpdate;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function search($query, int $perPage = 10, int $page = 1): LengthAwarePaginator
+    {
+        return User::where('id', 'LIKE', "%{$query}%")
+            ->orWhere('email', 'LIKE', "%{$query}%")
+            ->orWhere('name', 'LIKE', "%{$query}%")
+            ->paginate($perPage, ['*'], 'page', $page);
+    }
+
+
 }

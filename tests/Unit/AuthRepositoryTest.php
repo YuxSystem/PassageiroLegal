@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\User;
-use App\Repositories\Implementations\AuthRepositoryImpl;
+use App\Repositories\Implementations\UserRepositoryImpl;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -16,7 +16,7 @@ class AuthRepositoryTest extends TestCase
         // arrange
         $this->seed();
 
-        $sut = new AuthRepositoryImpl();
+        $sut = new UserRepositoryImpl();
 
         // act
         $user = $sut->create(new User([
@@ -27,5 +27,26 @@ class AuthRepositoryTest extends TestCase
 
         // assert
         $this->assertNotNull($user);
+    }
+
+    public function test_update_user(): void
+    {
+        // arrange
+        $this->seed();
+
+        $sut = new UserRepositoryImpl();
+        $user = $sut->create(new User([
+            'name' => 'Teste',
+            'email' => 'test@email.com',
+            'password' => '12345678',
+        ]));
+
+        $updateUser = $sut->update($user->id, [
+            'name' => 'Teste 2'
+        ]);
+
+        // assert
+        $this->assertEquals('Teste 2', $updateUser['name']);
+
     }
 }

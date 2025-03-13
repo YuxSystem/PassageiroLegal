@@ -91,25 +91,16 @@ class SolicitationServiceTest extends TestCase
     {
         // arrange
         $id = User::factory()->create()->id;
-        $solicitation = new Solicitation([
-            'user_id' => $id,
-            'motivo' => 'voo_legal_1',
-            'num_voo' => '123',
-            'dta_voo' => '2021-01-01',
-            'detalhe' => 'detalhe',
-            'status' => 'Finalizado',
-        ]);
+        $data = ['status' => 'Finalizado'];
 
-        $solicitationRepositoryMock = Mockery::mock(SolicitationRepository::class);
-        $solicitationRepositoryMock->shouldReceive('update')->once()->andReturn($solicitation);
+        $repository = Mockery::mock(SolicitationRepository::class);
+        $sut = new SolicitationServiceImpl($repository);
 
-        $sut = new SolicitationServiceImpl($solicitationRepositoryMock);
+        $repository->shouldReceive('update')->with(Mockery::any(), $data)->once()->andReturn(new Solicitation());
 
         // act
-        $updatedSolicitation = $sut->updateSolicitationStatus($id, ['status' => 'Finalizado']);
+        $sut->updateSolicitationStatus($id, $data);
 
-        // assert
-        $this->assertEquals('Finalizado', $updatedSolicitation['status']);
     }
 
     public function test_upload_files(): void

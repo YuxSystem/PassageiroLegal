@@ -7,10 +7,12 @@ use App\Models\User;
 interface AuthService
 {
     /**
-     * Solicita a criação de um novo usuário.
+     * Cria um novo usuário.
      *
      * @param array $data Dados do usuário.
      * @return User Usuário criado.
      */
-    public function createUser(array $data): User;
+    public function signUp(array $data): User;
+
+
 }

@@ -5,7 +5,9 @@ namespace App\Providers;
 use App\Services\AuthService;
 use App\Services\Implementations\AuthServiceImpl;
 use App\Services\Implementations\SolicitationServiceImpl;
+use App\Services\Implementations\UserServiceImpl;
 use App\Services\SolicitationService;
+use App\Services\UserService;
 use Illuminate\Support\ServiceProvider;
 
 class ServicesServiceProvider extends ServiceProvider
@@ -18,6 +20,7 @@ class ServicesServiceProvider extends ServiceProvider
     public $bindings = [
         SolicitationService::class => SolicitationServiceImpl::class,
         AuthService::class => AuthServiceImpl::class,
+        UserService::class => UserServiceImpl::class,
     ];
 
     /**

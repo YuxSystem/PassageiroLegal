@@ -1,20 +1,21 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
 use App\Models\User;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class AuthController extends Controller
+class AuthControllerApi extends Controller
 {
     public function __construct(protected AuthService $service)
     {
     }
 
-    public function login(Request $request)
+    public function signIn(Request $request)
     {
         $credentials = $request->validate([
             'email' => 'required|email',
@@ -33,10 +34,10 @@ class AuthController extends Controller
         return response()->json(['token' => $token]);
     }
 
-    public function register(AuthRequest $request)
+    public function signUp(AuthRequest $request)
     {
-        $user = $this->service->createUser($request->all());
+        $user = $this->service->signUp($request->all());
 
-        return response()->json($user, 204);
+        return response()->json($user, 201);
     }
 }

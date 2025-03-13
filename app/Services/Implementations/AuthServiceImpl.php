@@ -2,15 +2,16 @@
 
 namespace App\Services\Implementations;
 
+use App\Adapters\StringDatabaseAdapter;
 use App\Models\User;
-use App\Repositories\AuthRepository;
+use App\Repositories\UserRepository;
 use App\Services\AuthService;
 
 class AuthServiceImpl implements AuthService
 {
-    private AuthRepository $repository;
+    private UserRepository $repository;
 
-    public function __construct(AuthRepository $repository)
+    public function __construct(UserRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -18,8 +19,9 @@ class AuthServiceImpl implements AuthService
     /**
      * @inheritDoc
      */
-    public function createUser(array $data): User
+    public function signUp(array $data): User
     {
-        return $this->repository->create(new User($data));
+        return $this->repository->create(new User(StringDatabaseAdapter::toSnakeCase($data)));
     }
+
 }

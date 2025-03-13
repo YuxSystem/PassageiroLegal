@@ -19,13 +19,13 @@ class AuthRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'cpf' => 'required|unique:users',
+            'legal_document' => 'required|unique:users',
             'password' => 'required|min:6',
-            'telefone' => 'nullable',
-            'celular' => 'nullable',
-            'cidade' => 'nullable',
-            'estado' => 'nullable',
-            'pais' => 'nullable',
+            'phone' => 'nullable',
+            'cellphone' => 'nullable',
+            'city' => 'nullable',
+            'state' => 'nullable',
+            'country' => 'nullable',
         ];
     }
 }

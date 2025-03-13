@@ -2,12 +2,11 @@
 
 namespace App\Services\Implementations;
 
-use App\Adapters\StringDatabaseAdapter;
-use App\Models\User;
+use App\Enums\UserRoleEnum;
 use App\Repositories\UserRepository;
-use App\Services\AuthService;
+use App\Services\UserService;
 
-class AuthServiceImpl implements AuthService
+class UserServiceImpl implements UserService
 {
     private UserRepository $repository;
 
@@ -19,9 +18,8 @@ class AuthServiceImpl implements AuthService
     /**
      * @inheritDoc
      */
-    public function signUp(array $data): User
+    public function changeRole(string $id, UserRoleEnum $role): array
     {
-        return $this->repository->create(new User(StringDatabaseAdapter::toSnakeCase($data)));
+        return $this->repository->update($id, ['role' => $role->value])->toArray();
     }
-
 }

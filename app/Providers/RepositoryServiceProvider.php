@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Repositories\AuthRepository;
-use App\Repositories\Implementations\AuthRepositoryImpl;
 use App\Repositories\Implementations\SolicitationRepositoryImpl;
+use App\Repositories\Implementations\UserRepositoryImpl;
 use App\Repositories\SolicitationRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -17,7 +17,7 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public $bindings = [
         SolicitationRepository::class => SolicitationRepositoryImpl::class,
-        AuthRepository::class => AuthRepositoryImpl::class,
+        UserRepository::class => UserRepositoryImpl::class,
     ];
 
     /**

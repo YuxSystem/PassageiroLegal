@@ -6,8 +6,9 @@ use App\Models\Solicitation;
 use App\Models\User;
 use App\Repositories\SolicitationRepository;
 use App\Services\Implementations\SolicitationServiceImpl;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Mockery;
 use Tests\TestCase;
@@ -20,23 +21,24 @@ class SolicitationServiceTest extends TestCase
     public function test_get_solicitations(): void
     {
         // arrange
-        $expectedValues = new Collection([
-            new Solicitation(['user_id' => 1, 'motivo' => 'voo_legal_1']),
-            new Solicitation(['user_id' => 2, 'motivo' => 'voo_legal_2']),
-        ]);
+        // 🔹 Criamos um usuário mockado como admin
+        $admin = User::factory()->make(['id' => 1, 'role' => 'Admin']);
+
+        // 🔹 Mockamos `Auth::user()` para retornar esse usuário
+        Auth::shouldReceive('user')
+            ->once()
+            ->andReturn($admin);
 
         $solicitationRepositoryMock = Mockery::mock(SolicitationRepository::class);
-        $solicitationRepositoryMock->shouldReceive('getAll')->once()->andReturn($expectedValues);
+        $solicitationRepositoryMock->shouldReceive('getAll')->with(10, 1)->once()->andReturn(new LengthAwarePaginator([], 0, 10, 1));
 
         $sut = new SolicitationServiceImpl($solicitationRepositoryMock);
 
         // act
-        $solicitations = $sut->getSolicitations();
+        $result = $sut->getSolicitations(10, 1);
 
         // assert
-        $this->assertCount(2, $solicitations);
-        $this->assertEquals('voo_legal_1', $solicitations[0]['motivo']);
-        $this->assertEquals('voo_legal_2', $solicitations[1]['motivo']);
+        $this->assertInstanceOf(LengthAwarePaginator::class, $result);
     }
 
     public function test_create_solicitation(): void

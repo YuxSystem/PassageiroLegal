@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Services\AuthService;
 use App\Services\Implementations\AuthServiceImpl;
+use App\Services\Implementations\MessagingServiceImpl;
 use App\Services\Implementations\SolicitationServiceImpl;
 use App\Services\Implementations\UserServiceImpl;
+use App\Services\MessagingService;
 use App\Services\SolicitationService;
 use App\Services\UserService;
 use Illuminate\Support\ServiceProvider;
@@ -21,6 +23,7 @@ class ServicesServiceProvider extends ServiceProvider
         SolicitationService::class => SolicitationServiceImpl::class,
         AuthService::class => AuthServiceImpl::class,
         UserService::class => UserServiceImpl::class,
+        MessagingService::class => MessagingServiceImpl::class,
     ];
 
     /**

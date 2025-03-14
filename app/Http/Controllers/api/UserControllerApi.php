@@ -46,8 +46,12 @@ class UserControllerApi extends Controller
                 'total_pages' => $users->lastPage(),
                 'total_items' => $users->total(),
                 'per_page' => $users->perPage(),
-                'next_page' => $users->nextPageUrl(),
-                'previous_page' => $users->previousPageUrl(),
+                'next_page' => $users->nextPageUrl()
+                    ? $users->nextPageUrl() . "&per_page={$perPage}"
+                    : null,
+                'previous_page' => $users->previousPageUrl()
+                    ? $users->previousPageUrl() . "&per_page={$perPage}"
+                    : null,
             ]
         ], 200);
     }

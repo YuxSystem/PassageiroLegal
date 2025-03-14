@@ -15,10 +15,10 @@ Route::post('/signup', [AuthControllerApi::class, 'signUp']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/solicitations', [SolicitationControllerApi::class, 'createSolicitation']);
+    Route::get('/solicitations', [SolicitationControllerApi::class, 'getSolicitations']);
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
-    Route::get('/solicitations', [SolicitationControllerApi::class, 'getSolicitations']);
     Route::get('/solicitation/{id}', [SolicitationControllerApi::class, 'getSolicitation']);
     Route::put('/solicitation/status/{id}', [SolicitationControllerApi::class, 'updateSolicitationStatus']);
 

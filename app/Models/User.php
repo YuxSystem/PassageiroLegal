@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\UserRoleEnum;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -73,7 +75,17 @@ class User extends Authenticatable
         ];
     }
 
-    public function solicitacoes()
+    public function isAdmin(): bool
+    {
+        return $this->role === UserRoleEnum::ADMIN->value;
+    }
+
+    public function isEmployee(): bool
+    {
+        return $this->role === UserRoleEnum::EMPLOYEE->value;
+    }
+
+    public function solicitations(): HasMany
     {
         return $this->hasMany(Solicitation::class);
     }

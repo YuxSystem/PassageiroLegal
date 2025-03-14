@@ -3,10 +3,12 @@
 namespace App\Repositories;
 
 use App\Models\Solicitation;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface SolicitationRepository {
-    public function getAll(): Collection;
+    public function getAll(int $perPage, int $page): LengthAwarePaginator;
+
+    public function getByUserId(string $userId, int $perPage, int $page): LengthAwarePaginator;
 
     public function create(array $data): Solicitation;
 

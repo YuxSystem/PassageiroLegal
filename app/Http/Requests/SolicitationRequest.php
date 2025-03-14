@@ -22,7 +22,6 @@ class SolicitationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|string',
             'motivo' => 'required|string',
             'num_voo' => 'required|string',
             'dta_voo' => 'required|date',

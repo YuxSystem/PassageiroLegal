@@ -4,13 +4,20 @@ namespace App\Repositories\Implementations;
 
 use App\Models\Solicitation;
 use App\Repositories\SolicitationRepository;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 
 class SolicitationRepositoryImpl implements SolicitationRepository
 {
-    public function getAll(): Collection
+    public function getAll(int $perPage = 10, int $page = 1): LengthAwarePaginator
     {
-        return Solicitation::all();
+        return Solicitation::paginate($perPage, ['*'], 'page', $page);
+    }
+
+    public function getByUserId(string $userId, int $perPage = 10, int $page = 1): LengthAwarePaginator
+    {
+        return Solicitation::where('user_id', $userId)
+            ->paginate($perPage, ['*'], 'page', $page);
     }
 
     public function create(array $data): Solicitation

@@ -4,37 +4,36 @@ import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
 import { PlaneTakeoff } from "lucide-react";
+import { useSignIn } from "@/hooks/useSignIn";
+import {CredentialsModel} from "@/models/CredentialsModel";
+import { Link } from '@inertiajs/react'
+import {useToast} from "@/hooks/use-toast.ts";
+
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [credentials, setCredentials] = useState<CredentialsModel>({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const mutation = useSignIn();
   const { toast } = useToast();
+
+  function handleChange(e) {
+    const key = e.target.id;
+    const value = e.target.value
+    setCredentials(values => ({
+      ...values,
+      [key]: value,
+    }))
+  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    mutation.mutate(credentials)
 
-    try {
-      // Login logic would go here
-      // For now, simulate a delay and show a toast
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      toast({
-        title: "Login bem-sucedido",
-        description: "Você está sendo redirecionado para sua conta.",
-      });
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Erro ao fazer login",
-        description: "Verifique suas credenciais e tente novamente.",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    toast({
+      title: "Login bem-sucedido",
+      description: "Você está sendo redirecionado para sua conta.",
+    });
   };
 
   return (
@@ -42,10 +41,10 @@ const Login = () => {
       <div className="flex-1 flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-md">
           <div className="mb-8 text-center">
-            <a href="/" className="inline-flex items-center justify-center">
+            <Link href="/" className="inline-flex items-center justify-center">
               <PlaneTakeoff className="h-8 w-8 text-sky-600" />
               <span className="ml-2 text-2xl font-bold">Passageiro Legal</span>
-            </a>
+            </Link>
             <h1 className="mt-6 text-3xl font-bold">Bem-vindo de volta</h1>
             <p className="mt-2 text-gray-600">
               Entre na sua conta para acessar seus processos
@@ -60,8 +59,8 @@ const Login = () => {
                   id="email"
                   type="email"
                   placeholder="seu@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={credentials.email}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -69,17 +68,17 @@ const Login = () => {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password">Senha</Label>
-                  <a href="/recuperar-senha" className="text-sm text-sky-600 hover:underline">
+                  <Link href="/recuperar-senha" className="text-sm text-sky-600 hover:underline">
                     Esqueceu a senha?
-                  </a>
+                  </Link>
                 </div>
                 <div className="relative">
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={credentials.password}
+                    onChange={handleChange}
                     required
                   />
                   <button
@@ -99,25 +98,25 @@ const Login = () => {
               <Button
                 type="submit"
                 className="w-full bg-sky-600 hover:bg-sky-700"
-                disabled={isLoading}
+                disabled={mutation.isPending}
               >
-                {isLoading ? "Entrando..." : "Entrar"}
+                {mutation.isPending ? "Entrando..." : "Entrar"}
               </Button>
             </form>
 
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
                 Ainda não tem uma conta?{" "}
-                <a href="/cadastro" className="text-sky-600 hover:underline font-medium">Cadastre-se</a>
+                <Link href="/cadastro" className="text-sky-600 hover:underline font-medium">Cadastre-se</Link>
               </p>
             </div>
           </div>
 
           <div className="mt-8 text-center">
-            <a href="/" className="inline-flex items-center text-sky-600 hover:text-sky-700">
+            <Link href="/" className="inline-flex items-center text-sky-600 hover:text-sky-700">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Voltar para a página inicial
-            </a>
+            </Link>
           </div>
         </div>
       </div>

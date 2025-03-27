@@ -7,6 +7,7 @@ use App\Http\Requests\AuthRequest;
 use App\Models\User;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthControllerApi extends Controller
@@ -15,23 +16,29 @@ class AuthControllerApi extends Controller
     {
     }
 
-    public function signIn(Request $request)
+    public function login(Request $request)
     {
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ]);
 
-        $user = User::where('email', $credentials['email'])->first();
+        if (Auth::attempt($credentials)) {
+          return response()->json([
+              'message' => 'Login successful!',
+          ]);
+      }
 
-        if (!$user || !Hash::check($credentials['password'], $user->password)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
-        }
+      return response()->json(['message' => 'Credenciais Inválidas'], 401);
 
-        // Gera um token para o usuário autenticado
-        $token = $user->createToken('API Token')->plainTextToken;
+    }
 
-        return response()->json(['token' => $token]);
+    public function logout() {
+      auth()->logout(); // For session-based authentication
+
+      return response()->json([
+        'message' => 'Successfully logged out!',
+      ]);
     }
 
     public function signUp(AuthRequest $request)

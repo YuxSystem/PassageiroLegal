@@ -7,6 +7,8 @@ import { useToast } from "@/hooks/use-toast";
 import { PlaneTakeoff } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
+import { Link } from '@inertiajs/react'
+
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -120,10 +122,10 @@ const Signup = () => {
       <div className="flex-1 flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-md">
           <div className="mb-8 text-center">
-            <a href="/" className="inline-flex items-center justify-center">
+            <Link href="/" className="inline-flex items-center justify-center">
               <PlaneTakeoff className="h-8 w-8 text-sky-600" />
               <span className="ml-2 text-2xl font-bold">Passageiro Legal</span>
-            </a>
+            </Link>
             <h1 className="mt-6 text-3xl font-bold">Crie sua conta</h1>
             <p className="mt-2 text-gray-600">
               Cadastre-se para começar a resolver seus problemas com voos
@@ -251,9 +253,9 @@ const Signup = () => {
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
                 Já tem uma conta?{" "}
-                <a href="/login" className="text-sky-600 hover:underline font-medium">
+                <Link href="/login" className="text-sky-600 hover:underline font-medium">
                   Faça login
-                </a>
+                </Link>
               </p>
             </div>
 
@@ -269,10 +271,10 @@ const Signup = () => {
           </div>
 
           <div className="mt-8 text-center">
-            <a href="/" className="inline-flex items-center text-sky-600 hover:text-sky-700">
+            <Link href="/" className="inline-flex items-center text-sky-600 hover:text-sky-700">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Voltar para a página inicial
-            </a>
+            </Link>
           </div>
         </div>
       </div>

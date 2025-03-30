@@ -5,35 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PlaneTakeoff } from "lucide-react";
-import { useSignIn } from "@/hooks/useSignIn";
-import {CredentialsModel} from "@/models/CredentialsModel";
-import { Link } from '@inertiajs/react'
-import {useToast} from "@/hooks/use-toast.ts";
+import { Link, useForm } from '@inertiajs/react'
 
 
 const Login = () => {
-  const [credentials, setCredentials] = useState<CredentialsModel>({ email: "", password: "" });
+  const { data, setData, post, processing, errors, reset } = useForm({
+    email: '',
+    password: '',
+  });
   const [showPassword, setShowPassword] = useState(false);
-  const mutation = useSignIn();
-  const { toast } = useToast();
 
-  function handleChange(e) {
-    const key = e.target.id;
-    const value = e.target.value
-    setCredentials(values => ({
-      ...values,
-      [key]: value,
-    }))
-  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    mutation.mutate(credentials)
+    post("/login");
 
-    toast({
-      title: "Login bem-sucedido",
-      description: "Você está sendo redirecionado para sua conta.",
-    });
   };
 
   return (
@@ -59,8 +45,8 @@ const Login = () => {
                   id="email"
                   type="email"
                   placeholder="seu@email.com"
-                  value={credentials.email}
-                  onChange={handleChange}
+                  value={data.email}
+                  onChange={(e) => setData('email', e.target.value)}
                   required
                 />
               </div>
@@ -77,8 +63,8 @@ const Login = () => {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
-                    value={credentials.password}
-                    onChange={handleChange}
+                    value={data.password}
+                    onChange={(e) => setData('password', e.target.value)}
                     required
                   />
                   <button
@@ -98,9 +84,9 @@ const Login = () => {
               <Button
                 type="submit"
                 className="w-full bg-sky-600 hover:bg-sky-700"
-                disabled={mutation.isPending}
+                disabled={processing}
               >
-                {mutation.isPending ? "Entrando..." : "Entrar"}
+                {processing ? "Entrando..." : "Entrar"}
               </Button>
             </form>
 

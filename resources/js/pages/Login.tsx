@@ -6,11 +6,20 @@ import { Label } from "@/components/ui/label";
 import { PlaneTakeoff } from "lucide-react";
 import { Link, useForm } from '@inertiajs/react'
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Checkbox } from "@/components/ui/checkbox";
+
+interface LoginFormData {
+  email: string;
+  password: string;
+  remember: boolean;
+  [key: string]: string | boolean;
+}
 
 const Login = () => {
-  const { data, setData, post, processing, errors, reset } = useForm({
+  const { data, setData, post, processing, errors, reset } = useForm<LoginFormData>({
     email: '',
     password: '',
+    remember: false,
   });
   const [showPassword, setShowPassword] = useState(false);
 
@@ -40,7 +49,6 @@ const Login = () => {
 
           <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100">
             <form onSubmit={handleLogin} className="space-y-6">
-
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -90,7 +98,20 @@ const Login = () => {
                     </AlertDescription>
                   </Alert>
                 )}
+              </div>
 
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="remember"
+                  checked={data.remember}
+                  onCheckedChange={(checked: boolean) => setData('remember', checked)}
+                />
+                <Label
+                  htmlFor="remember"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Manter conectado
+                </Label>
               </div>
 
               <Button

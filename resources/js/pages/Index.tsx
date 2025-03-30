@@ -2,7 +2,6 @@
 import { useEffect } from "react";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import ClaimForm from "@/components/ClaimForm";
 import HowItWorks from "@/components/HowItWorks";
 import PassengerRights from "@/components/PassengerRights";
 import FlightProblems from "@/components/FlightProblems";

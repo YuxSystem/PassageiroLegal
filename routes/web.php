@@ -69,3 +69,5 @@ use Inertia\Inertia;
 Route::get('/', fn() => inertia("Index"));
 Route::get('/login', fn() => inertia("Login"));
 Route::get('/cadastro', fn() => inertia("Signup"));
+
+Route::get('/dashboard', fn() => inertia("Dashboard"));

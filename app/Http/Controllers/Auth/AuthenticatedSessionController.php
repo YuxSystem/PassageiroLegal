@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class AuthControllerApi extends Controller
+class AuthenticatedSessionController extends Controller
 {
     public function __construct(protected AuthService $service)
     {
@@ -33,12 +33,15 @@ class AuthControllerApi extends Controller
 
     }
 
-    public function logout() {
-      auth()->logout(); // For session-based authentication
+    public function destroy(Request $request): RedirectResponse
+    {
+        Auth::guard('web')->logout();
 
-      return response()->json([
-        'message' => 'Successfully logged out!',
-      ]);
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 
     public function signUp(AuthRequest $request)

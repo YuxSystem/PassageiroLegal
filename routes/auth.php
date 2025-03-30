@@ -1,4 +1,4 @@
 <?php
 
-Route::post('/login', [AuthControllerApi::class, 'login']);
-Route::post('/logout', [AuthControllerApi::class, 'logout']);
+Route::post('/login', [AuthenticatedSessionController::class, 'login']);
+Route::post('/logout', [AuthenticatedSessionController::class, 'logout']);

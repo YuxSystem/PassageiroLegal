@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
-import { Eye, EyeOff, ArrowLeft, Shield, Check, X, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Shield, PlaneTakeoff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
-import { PlaneTakeoff } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Progress } from "@/components/ui/progress";
-import { Link, useForm } from '@inertiajs/react'
-
+import { Link, useForm } from '@inertiajs/react';
+import { PasswordField } from "@/components/SignUp/PasswordField";
+import { TermsCheckbox } from "@/components/SignUp/TermsCheckbox";
+import { calculatePasswordStrength } from "@/utils/passwordStrength";
 
 const Signup = () => {
   const { data, setData, processing, post, errors } = useForm({
@@ -17,111 +15,18 @@ const Signup = () => {
     password: "",
     password_confirmation: "",
     acceptedTerms: null,
-  })
+  });
+
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
-  const { toast } = useToast();
 
   useEffect(() => {
-    calculatePasswordStrength(data.password);
+    setPasswordStrength(calculatePasswordStrength(data.password));
   }, [data.password]);
-
-  const calculatePasswordStrength = (pass: string) => {
-    if (!pass) {
-      setPasswordStrength(0);
-      return;
-    }
-
-    let strength = 0;
-    const length = pass.length;
-    const hasUpperCase = /[A-Z]/.test(pass);
-    const hasLowerCase = /[a-z]/.test(pass);
-    const hasNumbers = /[0-9]/.test(pass);
-    const hasSpecialChars = /[@$!%*#?&]/.test(pass);
-    const hasSequentialNumbers = /(012|123|234|345|456|567|678|789|987|876|765|654|543|432|321|210)/.test(pass);
-
-    // Pontuação por comprimento (máximo 25 pontos)
-    strength += Math.min(length * 2, 25);
-
-    // Pontuação por complexidade (máximo 75 pontos)
-    if (hasUpperCase) strength += 15;
-    if (hasLowerCase) strength += 15;
-    if (hasNumbers) strength += 15;
-    if (hasSpecialChars) strength += 15;
-    if (!hasSequentialNumbers) strength += 15;
-
-    setPasswordStrength(strength);
-  };
-
-  const getPasswordStrengthLabel = () => {
-    if (passwordStrength === 0) return "Vazia";
-    if (passwordStrength <= 25) return "Fraca";
-    if (passwordStrength <= 50) return "Média";
-    if (passwordStrength <= 75) return "Boa";
-    return "Forte";
-  };
-
-  const getPasswordStrengthColor = () => {
-    if (passwordStrength === 0) return "bg-gray-200";
-    if (passwordStrength <= 25) return "bg-red-500";
-    if (passwordStrength <= 50) return "bg-yellow-500";
-    if (passwordStrength <= 75) return "bg-blue-500";
-    return "bg-green-500";
-  };
-
-  const getPasswordStrengthIcon = () => {
-    if (passwordStrength === 0) return null;
-    if (passwordStrength <= 25) return <X className="h-4 w-4 text-red-500" />;
-    if (passwordStrength <= 50) return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-    if (passwordStrength <= 75) return <Shield className="h-4 w-4 text-blue-500" />;
-    return <Check className="h-4 w-4 text-green-500" />;
-  };
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     post("/register");
-    if (data.password !== data.password_confirmation) {
-      // toast({
-      //   variant: "destructive",
-      //   title: "As senhas não coincidem",
-      //   description: "Por favor, verifique se as senhas são iguais.",
-      // });
-      return;
-    }
-
-    if (!data.acceptedTerms) {
-      // toast({
-      //   variant: "destructive",
-      //   title: "Termos não aceitos",
-      //   description: "Você precisa aceitar os termos para continuar.",
-      // });
-      return;
-    }
-
-    if (passwordStrength < 50) {
-      // toast({
-      //   variant: "destructive",
-      //   title: "Senha muito fraca",
-      //   description: "Por favor, escolha uma senha mais forte para sua segurança.",
-      // });
-      return;
-    }
-
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      // toast({
-      //   title: "Cadastro realizado com sucesso",
-      //   description: "Sua conta foi criada, você já pode fazer login.",
-      // });
-    } catch (error) {
-      // toast({
-      //   variant: "destructive",
-      //   title: "Erro ao criar conta",
-      //   description: "Ocorreu um erro ao processar seu cadastro. Tente novamente.",
-      // });
-    } finally {
-      // setIsLoading(false);
-    }
   };
 
   return (
@@ -173,106 +78,31 @@ const Signup = () => {
                 )}
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="signup-password">Senha</Label>
-                <div className="relative">
-                  <Input
-                    id="signup-password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="••••••••"
-                    value={data.password}
-                    onChange={(e) => setData("password", e.target.value)}
-                    required
-                    className={errors.password ? "border-red-500" : ""}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-                {errors.password && (
-                  <p className="text-sm text-red-500 mt-1">{errors.password}</p>
-                )}
+              <PasswordField
+                id="signup-password"
+                label="Senha"
+                value={data.password}
+                onChange={(value) => setData("password", value)}
+                error={errors.password}
+                showPassword={showPassword}
+                onTogglePassword={() => setShowPassword(!showPassword)}
+              />
 
-                <div className="mt-2 space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-600">Força da senha: {getPasswordStrengthLabel()}</span>
-                    <span>{getPasswordStrengthIcon()}</span>
-                  </div>
-                  <Progress
-                    value={passwordStrength}
-                    className={`h-1.5 ${getPasswordStrengthColor()}`}
-                  />
-                  <div className="text-xs text-gray-500 mt-1">
-                    <p>Sua senha deve conter:</p>
-                    <ul className="list-disc pl-5 mt-1 space-y-0.5">
-                      <li className={data.password.length >= 8 ? "text-green-600" : ""}>
-                        No mínimo 8 caracteres
-                      </li>
-                      <li className={/[A-Z]/.test(data.password) ? "text-green-600" : ""}>
-                        Pelo menos uma letra maiúscula
-                      </li>
-                      <li className={/[a-z]/.test(data.password) ? "text-green-600" : ""}>
-                        Pelo menos uma letra minúscula
-                      </li>
-                      <li className={/[0-9]/.test(data.password) ? "text-green-600" : ""}>
-                        Pelo menos um número
-                      </li>
-                      <li className={/[@$!%*#?&]/.test(data.password) ? "text-green-600" : ""}>
-                        Pelo menos um caractere especial (@$!%*#?&)
-                      </li>
-                      <li className={!/(012|123|234|345|456|567|678|789|987|876|765|654|543|432|321|210)/.test(data.password) ? "text-green-600" : ""}>
-                        Não pode conter números sequenciais
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+              <PasswordField
+                id="confirm-password"
+                label="Confirme a senha"
+                value={data.password_confirmation}
+                onChange={(value) => setData("password_confirmation", value)}
+                error={errors.password_confirmation}
+                showPassword={showPassword}
+                onTogglePassword={() => setShowPassword(!showPassword)}
+              />
 
-              <div className="space-y-2">
-                <Label htmlFor="confirm-password">Confirme a senha</Label>
-                <Input
-                  id="confirm-password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
-                  value={data.password_confirmation}
-                  onChange={(e) => setData("password_confirmation", e.target.value)}
-                  required
-                  className={errors.password_confirmation ? "border-red-500" : ""}
-                />
-                {errors.password_confirmation && (
-                  <p className="text-sm text-red-500 mt-1">{errors.password_confirmation}</p>
-                )}
-              </div>
-
-              <div className="flex items-start space-x-2 pt-2">
-                <Checkbox
-                  id="terms"
-                  checked={data.acceptedTerms}
-                  onCheckedChange={(checked) =>
-                    setData("acceptedTerms", checked as boolean)
-                  }
-                  className={errors.acceptedTerms ? "border-red-500" : ""}
-                />
-                <div className="grid gap-1.5 leading-none">
-                  <label
-                    htmlFor="terms"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    Aceito os termos de uso e a política de privacidade
-                  </label>
-                  {errors.acceptedTerms && (
-                    <p className="text-sm text-red-500 mt-1">{errors.acceptedTerms}</p>
-                  )}
-                </div>
-              </div>
+              <TermsCheckbox
+                checked={data.acceptedTerms}
+                onChange={(checked) => setData("acceptedTerms", checked)}
+                error={errors.acceptedTerms}
+              />
 
               <Button
                 type="submit"

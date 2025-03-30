@@ -1,53 +1,56 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
-use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\RedirectResponse;
 
 class AuthenticatedSessionController extends Controller
 {
-    public function __construct(protected AuthService $service)
-    {
+  public function __construct(protected AuthService $service) {}
+
+  public function login(Request $request): RedirectResponse
+  {
+    $credentials = $request->validate([
+      'email' => 'required|email',
+      'password' => 'required'
+    ]);
+
+    if (Auth::attempt($credentials)) {
+      $request->session()->regenerate();
+
+      return redirect()->intended('dashboard');
     }
 
-    public function login(Request $request): RedirectResponse
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
+    return back()->withErrors([
+      'error' => 'Credenciais inválidas',
+    ]);
+  }
 
-        if (Auth::attempt($credentials)) {
-          $request->session()->regenerate();
+  public function destroy(Request $request): RedirectResponse
+  {
+    Auth::guard('web')->logout();
 
-            return redirect()->intended('dashboard');
-      }
+    $request->session()->invalidate();
 
-      return response()->json(['message' => 'Credenciais Inválidas'], 401);
+    $request->session()->regenerateToken();
 
-    }
+    return redirect('/');
+  }
 
-    public function destroy(Request $request): RedirectResponse
-    {
-        Auth::guard('web')->logout();
+  public function register(AuthRequest $request)
+  {
+    $user = $this->service->signUp($request->all());
 
-        $request->session()->invalidate();
+    event(new Registered($user));
 
-        $request->session()->regenerateToken();
+    Auth::login($user);
 
-        return redirect('/');
-    }
-
-    public function signUp(AuthRequest $request)
-    {
-        $user = $this->service->signUp($request->all());
-
-        return response()->json($user, 201);
-    }
+    return redirect()->intended('dashboard');
+  }
 }

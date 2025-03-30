@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //})->middleware('auth:sanctum');
 //
-Route::post('/login', [AuthControllerApi::class, 'login']);
-Route::post('/logout', [AuthControllerApi::class, 'logout']);
 //Route::post('/signup', [AuthControllerApi::class, 'signUp']);
 //
 //Route::middleware('auth:sanctum')->group(function () {
@@ -27,3 +25,5 @@ Route::post('/logout', [AuthControllerApi::class, 'logout']);
 //    Route::get('/user/search', [UserControllerApi::class, 'searchUser']);
 //});
 
+
+Route::get('/solicitations', [SolicitationControllerApi::class, 'getSolicitations']);

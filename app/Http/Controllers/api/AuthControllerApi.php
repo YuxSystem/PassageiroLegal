@@ -16,7 +16,7 @@ class AuthControllerApi extends Controller
     {
     }
 
-    public function login(Request $request)
+    public function login(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
             'email' => 'required|email',
@@ -24,9 +24,9 @@ class AuthControllerApi extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-          return response()->json([
-              'message' => 'Login successful!',
-          ]);
+          $request->session()->regenerate();
+
+            return redirect()->intended('dashboard');
       }
 
       return response()->json(['message' => 'Credenciais Inválidas'], 401);

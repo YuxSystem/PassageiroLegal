@@ -1,12 +1,11 @@
-
 import { useState } from "react";
-import { Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, ArrowLeft, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PlaneTakeoff } from "lucide-react";
 import { Link, useForm } from '@inertiajs/react'
-
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const Login = () => {
   const { data, setData, post, processing, errors, reset } = useForm({
@@ -15,11 +14,13 @@ const Login = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
 
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    post("/login");
-
+    post("/login", {
+      onError: () => {
+        reset('password');
+      }
+    });
   };
 
   return (
@@ -39,6 +40,7 @@ const Login = () => {
 
           <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100">
             <form onSubmit={handleLogin} className="space-y-6">
+
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -79,6 +81,16 @@ const Login = () => {
                     )}
                   </button>
                 </div>
+
+                {(errors as any).error && (
+                  <Alert variant="destructive" className="mt-2">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>
+                      {(errors as any).error}
+                    </AlertDescription>
+                  </Alert>
+                )}
+
               </div>
 
               <Button

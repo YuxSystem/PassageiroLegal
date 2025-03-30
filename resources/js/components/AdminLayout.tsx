@@ -57,10 +57,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 </svg>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-[240px] p-0">
+            <SheetContent side="left" className="w-[300px] p-0">
               <ScrollArea className="h-full py-6">
-                <div className="px-4">
-                  <h2 className="text-lg font-semibold text-[#0284C7]">Voou Legal</h2>
+                <div className="px-4 flex items-center space-x-2 font-medium text-xl md:text-2xl">
+                  <PlaneTakeoff className="h-6 w-6 text-sky-600" />
+                  <span className="font-semibold">Passageiro Legal</span>
                 </div>
                 <nav className="mt-6">
                   {menuItems.map((item) => (
@@ -135,9 +136,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           'hidden md:block'
         )}
       >
-        <div className="flex items-center justify-between h-16 px-4 border-b">
-          <h2 className="text-lg font-semibold text-[#0284C7]">Voou Legal</h2>
-        </div>
         <ScrollArea className="h-[calc(100vh-8rem)]">
           <nav className="p-4">
             {menuItems.map((item) => (

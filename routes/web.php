@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\SolicitationController;
+
 // use Illuminate\Foundation\Application;
 // use Illuminate\Support\Facades\Route;
 // use Inertia\Inertia;
@@ -71,6 +73,7 @@ Route::get('/login', fn() => inertia("Login"));
 Route::get('/cadastro', fn() => inertia("Signup"));
 
 Route::get('/dashboard', fn() => inertia("Dashboard"));
-Route::get('/solicitacoes', fn() => inertia("Solicitations"));
+Route::get('/solicitacoes', [SolicitationController::class, 'index'])->name('solicitacoes.index');
+Route::put('/solicitacoes/{id}/status', [SolicitationController::class, 'updateStatus'])->name('solicitacoes.update-status');
 
 require __DIR__ . '/auth.php';

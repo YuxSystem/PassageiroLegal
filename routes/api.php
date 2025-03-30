@@ -27,3 +27,4 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/solicitations', [SolicitationControllerApi::class, 'getSolicitations']);
+Route::post('/solicitations', [SolicitationControllerApi::class, 'createSolicitation']);

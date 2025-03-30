@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -21,7 +21,7 @@ import { Calendar as CalendarIcon, PlaneTakeoff, PlaneLanding, ArrowRight, Loade
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
-import { useToast } from "@/hooks/use-toast";
+// import { useToast } from "@/hooks/use-toast";
 
 // Sample flight data
 const SAMPLE_FLIGHTS = [
@@ -36,14 +36,14 @@ const AIRLINES = [
   { value: 'latam', label: 'LATAM' },
   { value: 'gol', label: 'GOL' },
   { value: 'azul', label: 'Azul' },
-  { value: 'tam', label: 'TAM' }, 
+  { value: 'tam', label: 'TAM' },
   { value: 'avianca', label: 'Avianca' },
   { value: 'tap', label: 'TAP Portugal' },
   { value: 'american', label: 'American Airlines' },
 ];
 
 const ClaimForm = () => {
-  const { toast } = useToast();
+  // const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -56,7 +56,7 @@ const ClaimForm = () => {
     problem: '',
     voluntaryGaveUpSeat: '',
     travelingWithOthers: 'no',
-    companions: [{name: '', email: ''}],
+    companions: [{ name: '', email: '' }],
     firstName: '',
     lastName: '',
     email: '',
@@ -93,7 +93,7 @@ const ClaimForm = () => {
   const handleAddCompanion = () => {
     setFormData(prev => ({
       ...prev,
-      companions: [...prev.companions, {name: '', email: ''}]
+      companions: [...prev.companions, { name: '', email: '' }]
     }));
   };
 
@@ -123,25 +123,25 @@ const ClaimForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
+
     // Validating if the user has accepted terms and privacy policy
     if (!formData.acceptTerms || !formData.acceptPrivacy) {
-      toast({
-        title: "Erro",
-        description: "Você precisa aceitar os termos e a política de privacidade para continuar.",
-        variant: "destructive",
-      });
+      // toast({
+      //   title: "Erro",
+      //   description: "Você precisa aceitar os termos e a política de privacidade para continuar.",
+      //   variant: "destructive",
+      // });
       setLoading(false);
       return;
     }
-    
+
     // Simulation of form submission
     setTimeout(() => {
       setLoading(false);
-      toast({
-        title: "Solicitação enviada com sucesso!",
-        description: "Analisaremos seu caso e entraremos em contato em breve.",
-      });
+      // toast({
+      //   title: "Solicitação enviada com sucesso!",
+      //   description: "Analisaremos seu caso e entraremos em contato em breve.",
+      // });
       // Reset form
       setCurrentStep(1);
       setFormData({
@@ -151,7 +151,7 @@ const ClaimForm = () => {
         problem: '',
         voluntaryGaveUpSeat: '',
         travelingWithOthers: 'no',
-        companions: [{name: '', email: ''}],
+        companions: [{ name: '', email: '' }],
         firstName: '',
         lastName: '',
         email: '',
@@ -169,14 +169,14 @@ const ClaimForm = () => {
   };
 
   const navButtonStyles = "sm:min-w-[120px]";
-  
+
   return (
     <section id="claim-form" className="section bg-sky-50 py-16">
       <div className="page-container">
         <div className="text-center mb-10 max-w-3xl mx-auto">
           <h2 className="text-3xl font-bold mb-4">Verificação de Elegibilidade</h2>
           <p className="text-lg text-muted-foreground">
-            Descubra se você tem direito a indenização pelo seu voo atrasado, 
+            Descubra se você tem direito a indenização pelo seu voo atrasado,
             cancelado ou com overbooking.
           </p>
         </div>
@@ -187,21 +187,21 @@ const ClaimForm = () => {
             <div className="flex justify-between mb-2">
               {['Verificação', 'Informações', 'Documentos', 'Finalização'].map((label, index) => (
                 <div key={index} className="flex flex-col items-center">
-                  <div 
+                  <div
                     className={cn(
                       "w-8 h-8 rounded-full flex items-center justify-center text-sm mb-1",
-                      currentStep > (index+1)*2 
-                        ? "bg-green-500 text-white" 
-                        : currentStep >= (index+1)*2-1 
-                          ? "bg-sky-600 text-white" 
+                      currentStep > (index + 1) * 2
+                        ? "bg-green-500 text-white"
+                        : currentStep >= (index + 1) * 2 - 1
+                          ? "bg-sky-600 text-white"
                           : "bg-gray-200 text-gray-500"
                     )}
                   >
-                    {currentStep > (index+1)*2 ? <Check className="h-4 w-4" /> : index + 1}
+                    {currentStep > (index + 1) * 2 ? <Check className="h-4 w-4" /> : index + 1}
                   </div>
                   <span className={cn(
                     "text-xs hidden sm:block",
-                    currentStep >= (index+1)*2-1 ? "text-sky-600 font-medium" : "text-muted-foreground"
+                    currentStep >= (index + 1) * 2 - 1 ? "text-sky-600 font-medium" : "text-muted-foreground"
                   )}>
                     {label}
                   </span>
@@ -222,7 +222,7 @@ const ClaimForm = () => {
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="flightNumber">Número do Voo</Label>
-                      <Input 
+                      <Input
                         id="flightNumber"
                         name="flightNumber"
                         value={formData.flightNumber}
@@ -231,10 +231,10 @@ const ClaimForm = () => {
                         className="w-full"
                       />
                     </div>
-                    
+
                     <div className="pt-4 flex justify-end">
-                      <Button 
-                        type="button" 
+                      <Button
+                        type="button"
                         onClick={handleNext}
                         className={cn("bg-sky-600 hover:bg-sky-700", navButtonStyles)}
                         disabled={!formData.flightNumber || loading}
@@ -287,8 +287,8 @@ const ClaimForm = () => {
                     {date && (
                       <div className="space-y-2 animate-fade-in pt-4">
                         <Label htmlFor="airline">Com que companhia aérea você voou?</Label>
-                        <Select 
-                          value={formData.airline} 
+                        <Select
+                          value={formData.airline}
                           onValueChange={(value) => handleSelectChange('airline', value)}
                         >
                           <SelectTrigger id="airline">
@@ -304,19 +304,19 @@ const ClaimForm = () => {
                         </Select>
                       </div>
                     )}
-                    
+
                     <div className="pt-4 flex justify-between">
-                      <Button 
-                        type="button" 
-                        variant="outline" 
+                      <Button
+                        type="button"
+                        variant="outline"
                         onClick={handlePrev}
                         className={navButtonStyles}
                       >
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Voltar
                       </Button>
-                      <Button 
-                        type="button" 
+                      <Button
+                        type="button"
                         onClick={handleNext}
                         className={cn("bg-sky-600 hover:bg-sky-700", navButtonStyles)}
                         disabled={!date || !formData.airline || loading}
@@ -340,7 +340,7 @@ const ClaimForm = () => {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <p className="text-muted-foreground">A seguir, selecione seu voo na lista abaixo:</p>
-                    
+
                     <div className="rounded-md border">
                       <Table>
                         <TableHeader>
@@ -356,8 +356,8 @@ const ClaimForm = () => {
                           {SAMPLE_FLIGHTS.map((flight) => (
                             <TableRow key={flight.id} className={formData.flightId === flight.id ? "bg-sky-50" : ""}>
                               <TableCell>
-                                <RadioGroup 
-                                  value={formData.flightId} 
+                                <RadioGroup
+                                  value={formData.flightId}
                                   onValueChange={(value) => handleSelectChange('flightId', value)}
                                   className="flex"
                                 >
@@ -373,10 +373,10 @@ const ClaimForm = () => {
                         </TableBody>
                       </Table>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2 pt-2">
-                      <RadioGroup 
-                        value={formData.flightId} 
+                      <RadioGroup
+                        value={formData.flightId}
                         onValueChange={(value) => handleSelectChange('flightId', value)}
                         className="flex"
                       >
@@ -386,19 +386,19 @@ const ClaimForm = () => {
                         Não consigo encontrar meu voo
                       </Label>
                     </div>
-                    
+
                     <div className="pt-4 flex justify-between">
-                      <Button 
-                        type="button" 
-                        variant="outline" 
+                      <Button
+                        type="button"
+                        variant="outline"
                         onClick={handlePrev}
                         className={navButtonStyles}
                       >
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Voltar
                       </Button>
-                      <Button 
-                        type="button" 
+                      <Button
+                        type="button"
                         onClick={handleNext}
                         className={cn("bg-sky-600 hover:bg-sky-700", navButtonStyles)}
                         disabled={!formData.flightId || loading}
@@ -422,9 +422,9 @@ const ClaimForm = () => {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <p className="text-muted-foreground">Agora vamos falar sobre o problema com o voo em si. O que aconteceu de fato?</p>
-                    
-                    <RadioGroup 
-                      value={formData.problem} 
+
+                    <RadioGroup
+                      value={formData.problem}
                       onValueChange={(value) => handleSelectChange('problem', value)}
                       className="space-y-3"
                     >
@@ -437,13 +437,13 @@ const ClaimForm = () => {
                         <Label htmlFor="denied-boarding" className="cursor-pointer">Meu embarque foi negado (overbooking)</Label>
                       </div>
                     </RadioGroup>
-                    
+
                     {formData.problem === 'denied-boarding' && (
                       <div className="pt-4 pl-6 space-y-3 animate-fade-in">
                         <p className="text-sm text-muted-foreground">Você se ofereceu como voluntário para abrir mão do seu assento em troca de outros benefícios da companhia aérea?</p>
-                        
-                        <RadioGroup 
-                          value={formData.voluntaryGaveUpSeat} 
+
+                        <RadioGroup
+                          value={formData.voluntaryGaveUpSeat}
                           onValueChange={(value) => handleSelectChange('voluntaryGaveUpSeat', value)}
                           className="space-y-3"
                         >
@@ -458,19 +458,19 @@ const ClaimForm = () => {
                         </RadioGroup>
                       </div>
                     )}
-                    
+
                     <div className="pt-4 flex justify-between">
-                      <Button 
-                        type="button" 
-                        variant="outline" 
+                      <Button
+                        type="button"
+                        variant="outline"
                         onClick={handlePrev}
                         className={navButtonStyles}
                       >
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Voltar
                       </Button>
-                      <Button 
-                        type="button" 
+                      <Button
+                        type="button"
                         onClick={handleNext}
                         className={cn("bg-sky-600 hover:bg-sky-700", navButtonStyles)}
                         disabled={!formData.problem || (formData.problem === 'denied-boarding' && !formData.voluntaryGaveUpSeat) || loading}
@@ -496,62 +496,62 @@ const ClaimForm = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="firstName">Nome</Label>
-                        <Input 
-                          id="firstName" 
+                        <Input
+                          id="firstName"
                           name="firstName"
                           value={formData.firstName}
                           onChange={handleInputChange}
-                          placeholder="Seu nome" 
+                          placeholder="Seu nome"
                         />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="lastName">Sobrenome</Label>
-                        <Input 
-                          id="lastName" 
+                        <Input
+                          id="lastName"
                           name="lastName"
                           value={formData.lastName}
                           onChange={handleInputChange}
-                          placeholder="Seu sobrenome" 
+                          placeholder="Seu sobrenome"
                         />
                       </div>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Label htmlFor="email">Email</Label>
-                      <Input 
-                        id="email" 
+                      <Input
+                        id="email"
                         name="email"
                         type="email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        placeholder="seu.email@exemplo.com" 
+                        placeholder="seu.email@exemplo.com"
                       />
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Label htmlFor="phone">Telefone</Label>
-                      <Input 
-                        id="phone" 
+                      <Input
+                        id="phone"
                         name="phone"
                         type="tel"
                         value={formData.phone}
                         onChange={handleInputChange}
-                        placeholder="(11) 98765-4321" 
+                        placeholder="(11) 98765-4321"
                       />
                     </div>
-                    
+
                     <div className="pt-4 flex justify-between">
-                      <Button 
-                        type="button" 
-                        variant="outline" 
+                      <Button
+                        type="button"
+                        variant="outline"
                         onClick={handlePrev}
                         className={navButtonStyles}
                       >
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Voltar
                       </Button>
-                      <Button 
-                        type="button" 
+                      <Button
+                        type="button"
                         onClick={handleNext}
                         className={cn("bg-sky-600 hover:bg-sky-700", navButtonStyles)}
                         disabled={!formData.firstName || !formData.lastName || !formData.email || !formData.phone || loading}
@@ -575,9 +575,9 @@ const ClaimForm = () => {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <p className="text-muted-foreground">Seus companheiros de viagem também podem receber indenização. Você estava viajando com mais alguém?</p>
-                    
-                    <RadioGroup 
-                      value={formData.travelingWithOthers} 
+
+                    <RadioGroup
+                      value={formData.travelingWithOthers}
                       onValueChange={(value) => handleSelectChange('travelingWithOthers', value)}
                       className="space-y-3"
                     >
@@ -590,17 +590,17 @@ const ClaimForm = () => {
                         <Label htmlFor="companions-no" className="cursor-pointer">Não, estava viajando sem acompanhantes</Label>
                       </div>
                     </RadioGroup>
-                    
+
                     {formData.travelingWithOthers === 'yes' && (
                       <div className="space-y-4 pt-4 animate-fade-in">
                         <h3 className="text-base font-medium">Adicione seus companheiros de viagem:</h3>
-                        
+
                         {formData.companions.map((companion, index) => (
                           <div key={index} className="space-y-3 p-4 border rounded-md relative">
                             {index > 0 && (
-                              <Button 
-                                type="button" 
-                                variant="outline" 
+                              <Button
+                                type="button"
+                                variant="outline"
                                 size="icon"
                                 className="absolute top-2 right-2 h-7 w-7 rounded-full"
                                 onClick={() => handleRemoveCompanion(index)}
@@ -608,30 +608,30 @@ const ClaimForm = () => {
                                 <X className="h-4 w-4" />
                               </Button>
                             )}
-                            
+
                             <div className="space-y-2">
                               <Label htmlFor={`companion-name-${index}`}>Nome Completo</Label>
-                              <Input 
+                              <Input
                                 id={`companion-name-${index}`}
                                 value={companion.name}
                                 onChange={(e) => handleCompanionChange(index, 'name', e.target.value)}
-                                placeholder="Nome do companheiro" 
+                                placeholder="Nome do companheiro"
                               />
                             </div>
-                            
+
                             <div className="space-y-2">
                               <Label htmlFor={`companion-email-${index}`}>Email</Label>
-                              <Input 
+                              <Input
                                 id={`companion-email-${index}`}
                                 type="email"
                                 value={companion.email}
                                 onChange={(e) => handleCompanionChange(index, 'email', e.target.value)}
-                                placeholder="email.do.companheiro@exemplo.com" 
+                                placeholder="email.do.companheiro@exemplo.com"
                               />
                             </div>
                           </div>
                         ))}
-                        
+
                         <Button
                           type="button"
                           variant="outline"
@@ -643,25 +643,25 @@ const ClaimForm = () => {
                         </Button>
                       </div>
                     )}
-                    
+
                     <div className="pt-4 flex justify-between">
-                      <Button 
-                        type="button" 
-                        variant="outline" 
+                      <Button
+                        type="button"
+                        variant="outline"
                         onClick={handlePrev}
                         className={navButtonStyles}
                       >
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Voltar
                       </Button>
-                      <Button 
-                        type="button" 
+                      <Button
+                        type="button"
                         onClick={handleNext}
                         className={cn("bg-sky-600 hover:bg-sky-700", navButtonStyles)}
                         disabled={
-                          !formData.travelingWithOthers || 
-                          (formData.travelingWithOthers === 'yes' && 
-                           formData.companions.some(c => !c.name || !c.email)) || 
+                          !formData.travelingWithOthers ||
+                          (formData.travelingWithOthers === 'yes' &&
+                            formData.companions.some(c => !c.name || !c.email)) ||
                           loading
                         }
                       >
@@ -684,11 +684,11 @@ const ClaimForm = () => {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <p className="text-muted-foreground">Vou precisar dos números dos seus documentos de identificação para fazer seu pedido de indenização com a companhia aérea.</p>
-                    
+
                     <div className="space-y-3">
                       <p className="text-sm font-medium">Você tem CPF?</p>
-                      <RadioGroup 
-                        value={formData.hasCPF} 
+                      <RadioGroup
+                        value={formData.hasCPF}
                         onValueChange={(value) => handleSelectChange('hasCPF', value)}
                         className="space-x-4 flex"
                       >
@@ -702,61 +702,61 @@ const ClaimForm = () => {
                         </div>
                       </RadioGroup>
                     </div>
-                    
+
                     {formData.hasCPF === 'yes' && (
                       <div className="space-y-2 animate-fade-in">
                         <Label htmlFor="cpf">CPF</Label>
-                        <Input 
-                          id="cpf" 
+                        <Input
+                          id="cpf"
                           name="cpf"
                           value={formData.cpf}
                           onChange={handleInputChange}
-                          placeholder="123.456.789-00" 
+                          placeholder="123.456.789-00"
                         />
                       </div>
                     )}
-                    
+
                     <div className="pt-4 space-y-4">
                       <div className="flex items-center space-x-2">
-                        <Checkbox 
-                          id="terms" 
+                        <Checkbox
+                          id="terms"
                           checked={formData.acceptTerms}
-                          onCheckedChange={(checked) => handleCheckboxChange('acceptTerms', checked as boolean)} 
+                          onCheckedChange={(checked) => handleCheckboxChange('acceptTerms', checked as boolean)}
                         />
                         <Label htmlFor="terms" className="text-sm cursor-pointer">
                           Li e aceito os <a href="#" className="text-sky-600 hover:underline">Termos e Condições</a>
                         </Label>
                       </div>
-                      
+
                       <div className="flex items-center space-x-2">
-                        <Checkbox 
-                          id="privacy" 
+                        <Checkbox
+                          id="privacy"
                           checked={formData.acceptPrivacy}
-                          onCheckedChange={(checked) => handleCheckboxChange('acceptPrivacy', checked as boolean)} 
+                          onCheckedChange={(checked) => handleCheckboxChange('acceptPrivacy', checked as boolean)}
                         />
                         <Label htmlFor="privacy" className="text-sm cursor-pointer">
                           Li e aceito a <a href="#" className="text-sky-600 hover:underline">Política de Privacidade</a>
                         </Label>
                       </div>
                     </div>
-                    
+
                     <div className="pt-4 flex justify-between">
-                      <Button 
-                        type="button" 
-                        variant="outline" 
+                      <Button
+                        type="button"
+                        variant="outline"
                         onClick={handlePrev}
                         className={navButtonStyles}
                       >
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Voltar
                       </Button>
-                      <Button 
+                      <Button
                         type="submit"
                         className={cn("bg-sky-600 hover:bg-sky-700", navButtonStyles)}
                         disabled={
-                          (formData.hasCPF === 'yes' && !formData.cpf) || 
-                          !formData.acceptTerms || 
-                          !formData.acceptPrivacy || 
+                          (formData.hasCPF === 'yes' && !formData.cpf) ||
+                          !formData.acceptTerms ||
+                          !formData.acceptPrivacy ||
                           loading
                         }
                       >

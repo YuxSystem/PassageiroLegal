@@ -14,68 +14,42 @@ use Illuminate\Support\Facades\Auth;
 
 class SolicitationControllerApi extends Controller
 {
-    public function __construct(
-        protected SolicitationService $solicitationService,
-        protected MessagingService    $messagingService,
-    )
-    {
-    }
+  public function __construct(
+    protected SolicitationService $solicitationService,
+    // protected MessagingService    $messagingService,
+  ) {}
 
-    public function getSolicitations(Request $request): JsonResponse
-    {
-        $perPage = (int)$request->input('per_page', 10);
-        $page = (int)$request->input('page', 1);
+  public function createSolicitation(SolicitationRequest $request): JsonResponse
+  {
+    // $user = Auth::user();
+    // $request->merge(['user_id' => $user->id]);
 
-        $solicitations = $this->solicitationService->getSolicitations($perPage, $page);
+    $solicitation = $this->solicitationService->createSolicitation($request->all());
+    $this->solicitationService->uploadFiles($solicitation['id'], $request->allFiles());
 
-        return response()->json([
-            'solicitations' => $solicitations->items(),
-            'pagination' => [
-                'current_page' => $solicitations->currentPage(),
-                'total_pages' => $solicitations->lastPage(),
-                'total_items' => $solicitations->total(),
-                'per_page' => $solicitations->perPage(),
-                'next_page' => $solicitations->nextPageUrl()
-                    ? $solicitations->nextPageUrl() . "&per_page={$perPage}"
-                    : null,
-                'previous_page' => $solicitations->previousPageUrl()
-                    ? $solicitations->previousPageUrl() . "&per_page={$perPage}"
-                    : null,
-            ]
-        ], 200);
-    }
+    // if ($request->input("email_companion") != null) {
+    //   $this->messagingService->send(MessagingKindEnum::EMAIL, $request->input("email_companion"));
+    // }
 
-    public function createSolicitation(SolicitationRequest $request): JsonResponse
-    {
-        $user = Auth::user();
-        $request->merge(['user_id' => $user->id]);
+    // TODO: Implementar envio de mensagem
+    // $this->messagingService->send(MessagingKindEnum::WHATSAPP, $request->input("cellphone"));
 
-        $solicitation = $this->solicitationService->createSolicitation($request->all());
-        $this->solicitationService->uploadFiles($solicitation['id'], $request->allFiles());
+    $created_solicitation = $this->solicitationService->getSolicitation($solicitation['id']);
 
-        if ($request->input("email_companion") != null) {
-            $this->messagingService->send(MessagingKindEnum::EMAIL, $request->input("email_companion"));
-        }
+    return response()->json($created_solicitation, 201);
+  }
 
-        // TODO: Implementar envio de mensagem
-        $this->messagingService->send(MessagingKindEnum::WHATSAPP, $request->input("cellphone"));
+  public function getSolicitation(string $id): JsonResponse
+  {
+    $solicitation = $this->solicitationService->getSolicitation($id);
 
-        $created_solicitation = $this->solicitationService->getSolicitation($solicitation['id']);
+    return response()->json($solicitation, 200);
+  }
 
-        return response()->json($created_solicitation, 201);
-    }
+  public function updateSolicitationStatus(SolicitationUpdateStatus $request, string $id): JsonResponse
+  {
+    $solicitation = $this->solicitationService->updateSolicitationStatus($id, $request->all());
 
-    public function getSolicitation(string $id): JsonResponse
-    {
-        $solicitation = $this->solicitationService->getSolicitation($id);
-
-        return response()->json($solicitation, 200);
-    }
-
-    public function updateSolicitationStatus(SolicitationUpdateStatus $request, string $id): JsonResponse
-    {
-        $solicitation = $this->solicitationService->updateSolicitationStatus($id, $request->all());
-
-        return response()->json($solicitation, 200);
-    }
+    return response()->json($solicitation, 200);
+  }
 }

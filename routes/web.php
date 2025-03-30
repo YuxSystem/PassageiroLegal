@@ -71,5 +71,6 @@ Route::get('/login', fn() => inertia("Login"));
 Route::get('/cadastro', fn() => inertia("Signup"));
 
 Route::get('/dashboard', fn() => inertia("Dashboard"));
+Route::get('/solicitacoes', fn() => inertia("Solicitations"));
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

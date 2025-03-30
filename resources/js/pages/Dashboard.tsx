@@ -3,7 +3,9 @@ import AdminLayout from "@/components/AdminLayout"
 const Dashboard = () => {
   return (
     <AdminLayout>
-      <h1>Dashboard</h1>
+      <div className="container mx-auto py-10">
+        <h1>Dashboard</h1>
+      </div>
     </AdminLayout>
   )
 }

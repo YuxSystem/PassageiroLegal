@@ -33,14 +33,22 @@ const Signup = () => {
     }
 
     let strength = 0;
+    const length = pass.length;
+    const hasUpperCase = /[A-Z]/.test(pass);
+    const hasLowerCase = /[a-z]/.test(pass);
+    const hasNumbers = /[0-9]/.test(pass);
+    const hasSpecialChars = /[@$!%*#?&]/.test(pass);
+    const hasSequentialNumbers = /(012|123|234|345|456|567|678|789|987|876|765|654|543|432|321|210)/.test(pass);
 
-    if (pass.length >= 8) strength += 25;
+    // Pontuação por comprimento (máximo 25 pontos)
+    strength += Math.min(length * 2, 25);
 
-    if (/[A-Z]/.test(pass)) strength += 25;
-
-    if (/[a-z]/.test(pass)) strength += 25;
-
-    if (/[0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(pass)) strength += 25;
+    // Pontuação por complexidade (máximo 75 pontos)
+    if (hasUpperCase) strength += 15;
+    if (hasLowerCase) strength += 15;
+    if (hasNumbers) strength += 15;
+    if (hasSpecialChars) strength += 15;
+    if (!hasSequentialNumbers) strength += 15;
 
     setPasswordStrength(strength);
   };
@@ -57,7 +65,7 @@ const Signup = () => {
     if (passwordStrength === 0) return "bg-gray-200";
     if (passwordStrength <= 25) return "bg-red-500";
     if (passwordStrength <= 50) return "bg-yellow-500";
-    if (passwordStrength <= 75) return "bg-yellow-500";
+    if (passwordStrength <= 75) return "bg-blue-500";
     return "bg-green-500";
   };
 
@@ -65,7 +73,7 @@ const Signup = () => {
     if (passwordStrength === 0) return null;
     if (passwordStrength <= 25) return <X className="h-4 w-4 text-red-500" />;
     if (passwordStrength <= 50) return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-    if (passwordStrength <= 75) return <Shield className="h-4 w-4 text-yellow-500" />;
+    if (passwordStrength <= 75) return <Shield className="h-4 w-4 text-blue-500" />;
     return <Check className="h-4 w-4 text-green-500" />;
   };
 
@@ -214,8 +222,14 @@ const Signup = () => {
                       <li className={/[a-z]/.test(data.password) ? "text-green-600" : ""}>
                         Pelo menos uma letra minúscula
                       </li>
-                      <li className={/[0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(data.password) ? "text-green-600" : ""}>
-                        Pelo menos um número ou caractere especial
+                      <li className={/[0-9]/.test(data.password) ? "text-green-600" : ""}>
+                        Pelo menos um número
+                      </li>
+                      <li className={/[@$!%*#?&]/.test(data.password) ? "text-green-600" : ""}>
+                        Pelo menos um caractere especial (@$!%*#?&)
+                      </li>
+                      <li className={!/(012|123|234|345|456|567|678|789|987|876|765|654|543|432|321|210)/.test(data.password) ? "text-green-600" : ""}>
+                        Não pode conter números sequenciais
                       </li>
                     </ul>
                   </div>

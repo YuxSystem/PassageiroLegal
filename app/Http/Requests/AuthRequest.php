@@ -30,6 +30,12 @@ class AuthRequest extends FormRequest
           ->symbols()
           ->uncompromised(),
         'confirmed',
+        function ($attribute, $value, $fail) {
+          // Verifica números sequenciais
+          if (preg_match('/(012|123|234|345|456|567|678|789|987|876|765|654|543|432|321|210)/', $value)) {
+            $fail('A senha não pode conter números sequenciais.');
+          }
+        }
       ],
       'password_confirmation' => 'required',
       'acceptedTerms' => 'required|boolean|accepted',

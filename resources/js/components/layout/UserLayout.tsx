@@ -21,7 +21,8 @@ interface UserLayoutProps {
 
 const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
   const isSidebarOpen = true;
-  const { user } = usePage().props.auth;
+  const { url, props } = usePage();
+  const { user } = props.auth;
 
   const menuItems = [
     {
@@ -35,6 +36,10 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
       href: '/solicitacoes',
     },
   ];
+
+  const isActive = (href: string) => {
+    return url.includes(href);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -60,7 +65,10 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="flex items-center px-4 py-2 text-gray-700 hover:bg-[#0284C7]/10 hover:text-[#0284C7]"
+                      className={cn(
+                        "flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-[#0284C7]",
+                        isActive(item.href) && "bg-[#0284C7]/10 text-[#0284C7] font-medium"
+                      )}
                     >
                       {item.icon}
                       <span className="ml-3">{item.title}</span>
@@ -135,7 +143,10 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-[#0284C7]/10 hover:text-[#0284C7] transition-colors mb-2"
+                  className={cn(
+                    "flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 hover:text-[#0284C7] transition-colors mb-2",
+                    isActive(item.href) && "bg-[#0284C7]/10 text-[#0284C7] font-medium"
+                  )}
                 >
                   {item.icon}
                   <span className="ml-3">{item.title}</span>

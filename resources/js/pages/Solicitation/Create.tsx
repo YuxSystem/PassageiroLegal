@@ -1,5 +1,5 @@
 import React from 'react';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import { Card } from '@/components/ui/card';
 import { Stepper } from '@/components/ui/Stepper';
 import { EligibilityStep } from '@/components/requests/EligibilityStep';
@@ -13,6 +13,7 @@ import { router } from '@inertiajs/react'
 export default function Create() {
   const [currentStep, setCurrentStep] = React.useState(1);
   const [stepErrors, setStepErrors] = React.useState<Record<number, boolean>>({});
+  const { user } = usePage().props.auth
 
   const { data, setData, processing, errors, clearErrors } = useForm({
     motivo: '',
@@ -24,16 +25,16 @@ export default function Create() {
     comprovante_res: null as File | null,
     comprovante_voo: null as File | null,
     userData: {
-      name: '',
-      email: '',
-      legal_document: '',
-      phone: '',
-      cellphone: '',
-      street: '',
-      city: '',
-      state: '',
-      zipcode: '',
-      country: '',
+      name: user?.name || "",
+      email: user?.email || "",
+      legal_document: user?.legal_document || "",
+      phone: user?.phone || "",
+      cellphone: user?.cellphone || "",
+      street: user?.street || "",
+      city: user?.city || "",
+      state: user?.state || "",
+      zipcode: user?.zipcode || "",
+      country: user?.country || "",
     } as Partial<UserModel>,
   });
 

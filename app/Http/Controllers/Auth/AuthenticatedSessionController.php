@@ -50,6 +50,6 @@ class AuthenticatedSessionController extends Controller
 
     Auth::login($user);
 
-    return redirect()->intended('dashboard');
+    return redirect("/verify");
   }
 }

@@ -12,17 +12,15 @@ Route::get('/', fn() => inertia("Index"));
 Route::get('/login', fn() => inertia("Login"));
 Route::get('/cadastro', fn() => inertia("Signup"));
 
-// Auth Middleware
+// User Pages
 Route::middleware(['auth'])->group(function () {
+
   // Verify User Role
   Route::get("/verify", function () {
     $user = User::find(Auth::id());
-    return $user->role === "Admin" ? redirect()->route('solicitacoes.index') : redirect()->route('solicitacoes.create');
+    return $user->role === "Admin" ? redirect("/admin/dashboard") : redirect("/nova-solicitacao");
   });
-});
 
-// User Pages
-Route::middleware(['auth'])->group(function () {
   // Exibe View para criar uma nova solicitação
   Route::get('/nova-solicitacao', fn() => inertia("Solicitation/Create"))->name('solicitacoes.create');
   // Exibe View para listar todas as solicitações do usuário
@@ -47,5 +45,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
   Route::get('/admin/solicitacao/{id}/download/{type}', [SolicitationController::class, 'downloadFile'])->name('solicitacoes.download');
 });
 
+// Profile Routes
+Route::middleware(['auth'])->group(function () {
+  Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
+  Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+  Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
+  Route::post('/profile/browser-sessions', [App\Http\Controllers\ProfileController::class, 'logoutOtherBrowserSessions'])
+    ->name('profile.browser-sessions.destroy');
+  Route::delete('/profile', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
 require __DIR__ . '/auth.php';

@@ -66,7 +66,7 @@ class SolicitationController extends Controller
     // TODO: Implementar envio de mensagem
     // $this->messagingService->send(MessagingKindEnum::WHATSAPP, $request->input("cellphone"));
 
-    return redirect("/minhas-solicitacoes");
+    return redirect("/solicitacoes");
   }
 
   public function updateStatus(Request $request, string $id)

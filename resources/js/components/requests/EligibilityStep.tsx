@@ -13,10 +13,10 @@ import {
 import { cn } from '@/lib/utils';
 
 export const motivosReclamacao = [
-  { id: 'atraso', label: 'Atraso de Voo' },
-  { id: 'cancelamento', label: 'Cancelamento de Voo' },
-  { id: 'overbooking', label: 'Overbooking' },
-  { id: 'outros', label: 'Outros' },
+  { id: 'Atraso de Voo', label: 'Atraso de Voo' },
+  { id: 'Cancelamento de Voo', label: 'Cancelamento de Voo' },
+  { id: 'Overbooking', label: 'Overbooking' },
+  { id: 'Outros', label: 'Outros' },
 ] as const;
 
 interface EligibilityStepProps {

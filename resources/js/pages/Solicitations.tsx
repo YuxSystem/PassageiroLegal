@@ -120,11 +120,23 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
   const IS_ADMIN = usePage().props.auth.user?.role === "Admin";
 
   const handlePageChange = (page: number) => {
-    router.get(`/solicitacoes?page=${page}`);
+    router.get('/solicitacoes', {
+      page,
+      per_page: pagination.per_page
+    }, {
+      preserveState: true,
+      preserveScroll: true
+    });
   };
 
   const handlePerPageChange = (value: string) => {
-    router.get(`/solicitacao?per_page=${value}`);
+    router.get('/solicitacoes', {
+      per_page: value,
+      page: 1
+    }, {
+      preserveState: true,
+      preserveScroll: true
+    });
   };
 
   const handleViewSolicitation = (id: string) => {
@@ -254,8 +266,9 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="5">5</SelectItem>
                   <SelectItem value="10">10</SelectItem>
-                  <SelectItem value="30">30</SelectItem>
+                  <SelectItem value="25">25</SelectItem>
                   <SelectItem value="50">50</SelectItem>
                 </SelectContent>
               </Select>

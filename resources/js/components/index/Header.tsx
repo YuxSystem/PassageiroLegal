@@ -66,9 +66,7 @@ const Header = () => {
                   <span>Cadastrar</span>
                 </Button>
               </a>
-              <Button className="bg-sky-600 hover:bg-sky-700 btn-glow transition-all duration-300">
-                Solicitar Reembolso
-              </Button>
+
             </div>
           </nav>
 
@@ -113,9 +111,7 @@ const Header = () => {
                   Cadastrar
                 </Button>
               </a>
-              <Button className="w-full mt-2 bg-sky-600 hover:bg-sky-700">
-                Solicitar Reembolso
-              </Button>
+
             </div>
           </nav>
         )}

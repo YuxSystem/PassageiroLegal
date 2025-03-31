@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SolicitationController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +44,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
   Route::put('/admin/solicitacao/{id}/status', [SolicitationController::class, 'updateStatus'])->name('solicitacoes.update-status');
   // Faz o download de um arquivo de uma solicitação
   Route::get('/admin/solicitacao/{id}/download/{type}', [SolicitationController::class, 'downloadFile'])->name('solicitacoes.download');
+
+  // Rotas de usuários
+  Route::get('/admin/usuarios', [UserController::class, 'index'])->name('admin.users');
+  Route::put('/admin/usuarios/{id}/role', [UserController::class, 'updateRole'])->name('admin.users.role');
+  Route::put('/admin/usuarios/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('admin.users.toggle-status');
 });
 
 // Profile Routes

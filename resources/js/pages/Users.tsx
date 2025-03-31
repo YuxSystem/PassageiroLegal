@@ -317,8 +317,8 @@ const Users: React.FC<Props> = ({ users: initialUsers, pagination, search: initi
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="admin">Administrador</SelectItem>
-                  <SelectItem value="user">Usuário</SelectItem>
+                  <SelectItem value="Admin">Administrador</SelectItem>
+                  <SelectItem value="User">Usuário</SelectItem>
                 </SelectContent>
               </Select>
             </div>

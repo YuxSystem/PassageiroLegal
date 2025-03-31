@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Services\UserService;
+use App\Enums\UserRoleEnum;
 
 class UserController extends Controller
 {
@@ -52,6 +53,13 @@ class UserController extends Controller
       $user->update(['status' => $request->status]);
     }
 
+    return back();
+  }
+
+  public function changeRole(Request $request, string $id)
+  {
+    $role = $request->get('role');
+    $this->service->changeRole($id, UserRoleEnum::from($role));
     return back();
   }
 }

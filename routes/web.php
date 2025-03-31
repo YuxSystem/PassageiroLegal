@@ -47,7 +47,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
   // Rotas de usuários
   Route::get('/admin/usuarios', [UserController::class, 'index'])->name('admin.users');
-  Route::put('/admin/usuarios/{id}/role', [UserController::class, 'updateRole'])->name('admin.users.role');
+  Route::put('/admin/usuarios/{id}/role', [UserController::class, 'changeRole']);
   Route::put('/admin/usuarios/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('admin.users.toggle-status');
 });
 

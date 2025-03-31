@@ -66,7 +66,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        "flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-[#0284C7]",
+                        "flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-[#0284C7] mb-2",
                         isActive(item.href) && "bg-[#0284C7]/10 text-[#0284C7] font-medium"
                       )}
                     >

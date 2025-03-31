@@ -52,14 +52,32 @@ class ProfileController extends Controller
       'password' => ['required', 'current_password'],
     ]);
 
+    // Encerra todos os tokens de API exceto o atual
     Auth::user()->tokens()->where('id', '!=', Auth::user()->currentAccessToken()?->id)->delete();
 
+    // Encerra todas as sessões do banco de dados exceto a atual
     DB::table('sessions')
       ->where('user_id', Auth::id())
       ->where('id', '!=', $request->session()->getId())
       ->delete();
 
-    return back()->with('success', 'Outras sessões foram desconectadas.');
+    // Força o logout em todas as outras sessões
+    $sessions = DB::table('sessions')
+      ->where('user_id', Auth::id())
+      ->where('id', '!=', $request->session()->getId())
+      ->get();
+
+    foreach ($sessions as $session) {
+      $payload = unserialize(base64_decode($session->payload));
+      if (isset($payload['login_web_59ba36addc2b2f9401580f014c7f58ea4e30989d'])) {
+        $userId = $payload['login_web_59ba36addc2b2f9401580f014c7f58ea4e30989d'];
+        if ($userId === Auth::id()) {
+          DB::table('sessions')->where('id', $session->id)->delete();
+        }
+      }
+    }
+
+    return back()->with('success', 'Outras sessões foram desconectadas com sucesso.');
   }
 
   public function destroy(Request $request)
@@ -88,6 +106,7 @@ class ProfileController extends Controller
 
     return DB::table('sessions')
       ->where('user_id', Auth::id())
+      ->where('last_activity', '>=', now()->subMinutes(config('session.lifetime')))
       ->orderBy('last_activity', 'desc')
       ->get()
       ->map(function ($session) {

@@ -23,7 +23,7 @@ class AuthenticatedSessionController extends Controller
 
     if (Auth::attempt($credentials, $request->boolean('remember'))) {
       $request->session()->regenerate();
-      return redirect("/verify");
+      return redirect("/");
     }
 
     return back()->withErrors([
@@ -50,6 +50,6 @@ class AuthenticatedSessionController extends Controller
 
     Auth::login($user);
 
-    return redirect("/verify");
+    return redirect("/");
   }
 }

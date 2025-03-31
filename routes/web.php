@@ -7,21 +7,23 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 // Index Page
-Route::get('/', fn() => inertia("Index"));
+Route::get('/', function () {
+  if (Auth::check()) {
+    $user = Auth::user();
+    return $user->role === "Admin" ? redirect("/admin/solicitacoes") : redirect("/nova-solicitacao");
+  }
+
+  return inertia("Index");
+});
 
 // Auth Pages
-Route::get('/login', fn() => inertia("Login"));
-Route::get('/cadastro', fn() => inertia("Signup"));
+Route::middleware(['guest'])->group(function () {
+  Route::get('/login', fn() => inertia("Login"));
+  Route::get('/cadastro', fn() => inertia("Signup"));
+});
 
 // User Pages
 Route::middleware(['auth'])->group(function () {
-
-  // Verify User Role
-  Route::get("/verify", function () {
-    $user = User::find(Auth::id());
-    return $user->role === "Admin" ? redirect("/admin/solicitacoes") : redirect("/nova-solicitacao");
-  });
-
   // Exibe View para criar uma nova solicitação
   Route::get('/nova-solicitacao', fn() => inertia("Solicitation/Create"))->name('solicitacoes.create');
   // Exibe View para listar todas as solicitações do usuário
@@ -32,7 +34,6 @@ Route::middleware(['auth'])->group(function () {
   // Armazena uma nova solicitação
   Route::post('/solicitacao', [SolicitationController::class, 'store'])->name('solicitacoes.store');
 });
-
 
 // Admin Pages
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -54,8 +55,7 @@ Route::middleware(['auth'])->group(function () {
   Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
   Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
   Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
-  Route::post('/profile/browser-sessions', [App\Http\Controllers\ProfileController::class, 'logoutOtherBrowserSessions'])
-    ->name('profile.browser-sessions.destroy');
+  Route::post('/profile/browser-sessions', [App\Http\Controllers\ProfileController::class, 'logoutOtherBrowserSessions']);
   Route::delete('/profile', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 

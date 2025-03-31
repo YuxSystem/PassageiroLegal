@@ -62,4 +62,12 @@ class UserController extends Controller
     $this->service->changeRole($id, UserRoleEnum::from($role));
     return back();
   }
+
+  public function toggleStatus(string $id)
+  {
+    $user = User::findOrFail($id);
+    $newStatus = $user->status === "Enabled" ? "Disabled" : "Enabled";
+    $user->update(['status' => $newStatus]);
+    return back();
+  }
 }

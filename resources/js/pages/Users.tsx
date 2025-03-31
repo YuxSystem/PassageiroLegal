@@ -218,6 +218,7 @@ const Users: React.FC<Props> = ({ users: initialUsers, pagination, search: initi
                         <AlertDialogTrigger asChild>
                           <DropdownMenuItem
                             className={`cursor-pointer ${user.status === "Enabled" ? "text-red-600" : ""}`}
+                            onSelect={(e) => e.preventDefault()}
                           >
                             <Power className="h-4 w-4 mr-2" />
                             {user.status === "Enabled" ? "Inativar" : "Ativar"}

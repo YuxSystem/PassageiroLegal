@@ -124,11 +124,11 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
   };
 
   const handlePerPageChange = (value: string) => {
-    router.get(`/solicitacoes?per_page=${value}`);
+    router.get(`/solicitacao?per_page=${value}`);
   };
 
   const handleViewSolicitation = (id: string) => {
-    router.get(`/solicitacoes/${id}`);
+    router.get(`/solicitacao/${id}`);
   };
 
   const handleStatusChange = (solicitation: Solicitation, status: string) => {
@@ -140,7 +140,7 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
   const confirmStatusChange = () => {
     if (!selectedSolicitation) return;
 
-    router.put(`/solicitacoes/${selectedSolicitation.id}/status`, {
+    router.put(`/solicitacao/${selectedSolicitation.id}/status`, {
       status: newStatus,
     }, {
       onSuccess: () => {

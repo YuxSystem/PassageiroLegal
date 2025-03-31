@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\SolicitationService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
 
 class SolicitationController extends Controller
 {
@@ -37,10 +38,55 @@ class SolicitationController extends Controller
     ]);
   }
 
+  public function show(string $id)
+  {
+    $solicitation = $this->solicitationService->getSolicitation($id);
+
+    return Inertia::render('SolicitationDetails', [
+      'solicitation' => $solicitation
+    ]);
+  }
+
   public function updateStatus(Request $request, string $id)
   {
-    $solicitation = $this->solicitationService->updateSolicitationStatus($id, $request->all());
+    $this->solicitationService->updateSolicitationStatus($id, $request->all());
 
     return back();
+  }
+
+  public function downloadFile(string $id, string $type)
+  {
+    $solicitation = $this->solicitationService->getSolicitation($id);
+
+    $filePath = match ($type) {
+      'registro_nasc' => $solicitation['registro_nasc'],
+      'comprovante_res' => $solicitation['comprovante_res'],
+      'comprovante_voo' => $solicitation['comprovante_voo'],
+      default => throw new \InvalidArgumentException('Tipo de arquivo inválido'),
+    };
+
+    if (!Storage::disk("local")->exists($filePath)) {
+      return response()->json([
+        'error' => 'Arquivo não encontrado',
+      ], 404);
+    }
+
+    // Obtém a extensão original do arquivo
+    $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+
+    // Define o nome amigável baseado no tipo
+    $fileName = match ($type) {
+      'registro_nasc' => "Registro de Nascimento - {$id}.{$extension}",
+      'comprovante_res' => "Comprovante de Endereço - {$id}.{$extension}",
+      'comprovante_voo' => "Comprovante de Voo - {$id}.{$extension}",
+      default => basename($filePath),
+    };
+
+
+
+    return response()->download(
+      Storage::disk("local")->path($filePath),
+      $fileName,
+    );
   }
 }

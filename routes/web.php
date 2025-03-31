@@ -74,6 +74,8 @@ Route::get('/cadastro', fn() => inertia("Signup"));
 
 Route::get('/dashboard', fn() => inertia("Dashboard"));
 Route::get('/solicitacoes', [SolicitationController::class, 'index'])->name('solicitacoes.index');
-Route::put('/solicitacoes/{id}/status', [SolicitationController::class, 'updateStatus'])->name('solicitacoes.update-status');
+Route::get('/solicitacao/{id}', [SolicitationController::class, 'show'])->name('solicitacoes.show');
+Route::put('/solicitacao/{id}/status', [SolicitationController::class, 'updateStatus'])->name('solicitacoes.update-status');
+Route::get('/solicitacao/{id}/download/{type}', [SolicitationController::class, 'downloadFile'])->name('solicitacoes.download');
 
 require __DIR__ . '/auth.php';

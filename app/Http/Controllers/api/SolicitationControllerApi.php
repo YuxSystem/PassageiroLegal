@@ -45,11 +45,4 @@ class SolicitationControllerApi extends Controller
 
     return response()->json($solicitation, 200);
   }
-
-  public function updateSolicitationStatus(SolicitationUpdateStatus $request, string $id): JsonResponse
-  {
-    $solicitation = $this->solicitationService->updateSolicitationStatus($id, $request->all());
-
-    return response()->json($solicitation, 200);
-  }
 }

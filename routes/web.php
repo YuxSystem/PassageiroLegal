@@ -81,6 +81,8 @@ Route::middleware(['auth'])->group(function () {
   });
 
   Route::get('/nova-solicitacao', fn() => inertia("Solicitation/Create"))->name('solicitacoes.create');
+  Route::get('/minhas-solicitacoes', fn() => inertia("MyRequests"))->name('solicitacoes.my-requests');
+  Route::post('/solicitacao', [SolicitationController::class, 'store'])->name('solicitacoes.store');
 
   Route::middleware(['admin'])->group(function () {
     Route::get('/dashboard', fn() => inertia("Dashboard"));

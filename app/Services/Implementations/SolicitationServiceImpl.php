@@ -10,50 +10,50 @@ use Illuminate\Support\Facades\Auth;
 
 class SolicitationServiceImpl implements SolicitationService
 {
-    private SolicitationRepository $solicitationRepository;
+  private SolicitationRepository $solicitationRepository;
 
-    public function __construct(SolicitationRepository $solicitationRepository)
-    {
-        $this->solicitationRepository = $solicitationRepository;
+  public function __construct(SolicitationRepository $solicitationRepository)
+  {
+    $this->solicitationRepository = $solicitationRepository;
+  }
+
+  public function getSolicitations(int $perPage = 10, int $page = 1): LengthAwarePaginator
+  {
+    $user = Auth::user();
+
+    if ($user->isAdmin() || $user->isEmployee()) {
+      return $this->solicitationRepository->getAll($perPage, $page);
     }
 
-    public function getSolicitations(int $perPage = 10, int $page = 1): LengthAwarePaginator
-    {
-        $user = Auth::user();
+    return $this->solicitationRepository->getByUserId($user->id, $perPage, $page);
+  }
 
-        if ($user->isAdmin() || $user->isEmployee()) {
-            return $this->solicitationRepository->getAll($perPage, $page);
-        }
+  public function createSolicitation(array $data): array
+  {
+    return $this->solicitationRepository->create($data)->toArray();
+  }
 
-        return $this->solicitationRepository->getByUserId($user->id, $perPage, $page);
+  public function getSolicitation(string $id): array
+  {
+    return $this->solicitationRepository->get($id)->toArray();
+  }
+
+  public function updateSolicitationStatus(string $id, array $data): array
+  {
+    return $this->solicitationRepository->update($id, $data)->toArray();
+  }
+
+  public function uploadFiles(string $id, array $files): array
+  {
+    $paths = [];
+
+    foreach ($files as $key => $file) {
+      $path = $file->store("solicitations/{$id}");
+      $paths[$key] = $path;
     }
 
-    public function createSolicitation(array $data): array
-    {
-        return $this->solicitationRepository->create($data)->toArray();
-    }
+    $this->solicitationRepository->update($id, $paths);
 
-    public function getSolicitation(string $id): array
-    {
-        return $this->solicitationRepository->get($id)->toArray();
-    }
-
-    public function updateSolicitationStatus(string $id, array $data): array
-    {
-        return $this->solicitationRepository->update($id, $data)->toArray();
-    }
-
-    public function uploadFiles(string $id, array $files): array
-    {
-        $paths = [];
-
-        foreach ($files as $key => $file) {
-            $path = $file->store("solicitations/{$id}");
-            $paths[$key] = $path;
-        }
-
-        $this->solicitationRepository->update($id, $paths);
-
-        return $paths;
-    }
+    return $paths;
+  }
 }

@@ -6,6 +6,10 @@ use App\Services\SolicitationService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\SolicitationRequest;
+use Illuminate\Support\Facades\Auth;
+
+
 
 class SolicitationController extends Controller
 {
@@ -45,6 +49,24 @@ class SolicitationController extends Controller
     return Inertia::render('SolicitationDetails', [
       'solicitation' => $solicitation
     ]);
+  }
+
+  public function store(SolicitationRequest $request)
+  {
+    $user = Auth::user();
+    $request->merge(['user_id' => $user->id]);
+
+    $solicitation = $this->solicitationService->createSolicitation($request->all());
+    $this->solicitationService->uploadFiles($solicitation['id'], $request->allFiles());
+
+    // if ($request->input("email_companion") != null) {
+    //   $this->messagingService->send(MessagingKindEnum::EMAIL, $request->input("email_companion"));
+    // }
+
+    // TODO: Implementar envio de mensagem
+    // $this->messagingService->send(MessagingKindEnum::WHATSAPP, $request->input("cellphone"));
+
+    return redirect("/minhas-solicitacoes");
   }
 
   public function updateStatus(Request $request, string $id)

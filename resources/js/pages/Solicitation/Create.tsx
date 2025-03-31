@@ -9,19 +9,21 @@ import { DocumentsStep } from '@/components/solicitation/DocumentsStep';
 import { PersonalDataStep } from '@/components/solicitation/PersonalDataStep';
 import { UserModel } from '@/models/UserModel';
 import { STEPS, REQUIRED_USER_FIELDS } from '@/constants/solicitation';
+import { router } from '@inertiajs/react'
 
 export default function Create() {
   const [currentStep, setCurrentStep] = React.useState(1);
+  const [stepErrors, setStepErrors] = React.useState<Record<number, boolean>>({});
 
-  const { data, setData, post, processing, errors } = useForm({
+  const { data, setData, processing, errors, clearErrors } = useForm({
     motivo: '',
     outrosMotivo: '',
-    numeroVoo: '',
-    dataVoo: undefined as Date | undefined,
-    detalhesOcorrido: '',
-    registroNacional: null as File | null,
-    comprovanteResidencia: null as File | null,
-    passagemAerea: null as File | null,
+    num_voo: '',
+    dta_voo: undefined as Date | undefined,
+    detalhe: '',
+    registro_nasc: null as File | null,
+    comprovante_res: null as File | null,
+    comprovante_voo: null as File | null,
     userData: {
       name: '',
       email: '',
@@ -36,21 +38,48 @@ export default function Create() {
     } as Partial<UserModel>,
   });
 
+  const validateStep = (step: number): boolean => {
+    switch (step) {
+      case 1:
+        return !errors.motivo && !errors.outrosMotivo;
+      case 2:
+        return !errors.num_voo && !errors.dta_voo && !errors.detalhe;
+      case 3:
+        return !errors.registro_nasc && !errors.comprovante_res && !errors.comprovante_voo;
+      case 4:
+        return !Object.keys(errors.userData || {}).length;
+      default:
+        return true;
+    }
+  };
+
   const handleNext = () => {
     if (currentStep < STEPS.length) {
-      setCurrentStep(currentStep + 1);
+      if (validateStep(currentStep)) {
+        setCurrentStep(currentStep + 1);
+        clearErrors();
+      } else {
+        setStepErrors(prev => ({ ...prev, [currentStep]: true }));
+      }
     } else if (currentStep === STEPS.length) {
-      post('/solicitacao', {
-        onSuccess: () => {
-          // Redirecionar ou mostrar mensagem de sucesso
-        },
-      });
+      if (validateStep(currentStep)) {
+        const formattedData = {
+          ...data,
+          dta_voo: data.dta_voo ? new Date(data.dta_voo).toISOString().split('T')[0] : undefined,
+        };
+
+        router.post('/solicitacao', formattedData as any);
+      } else {
+        setStepErrors(prev => ({ ...prev, [currentStep]: true }));
+      }
     }
   };
 
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+      clearErrors();
+      setStepErrors(prev => ({ ...prev, [currentStep]: false }));
     }
   };
 
@@ -79,42 +108,42 @@ export default function Create() {
             onMotivoChange={(value) => setData('motivo', value)}
             onOutrosMotivoChange={(value) => setData('outrosMotivo', value)}
             onNext={handleNext}
-            error={errors.motivo}
+            error={errors.motivo || errors.outrosMotivo}
           />
         );
       case 2:
         return (
           <FlightInfoStep
-            numeroVoo={data.numeroVoo}
-            dataVoo={data.dataVoo}
-            detalhesOcorrido={data.detalhesOcorrido}
-            onNumeroVooChange={(value) => setData('numeroVoo', value)}
-            onDataVooChange={(value) => setData('dataVoo', value)}
-            onDetalhesOcorridoChange={(value) => setData('detalhesOcorrido', value)}
+            numeroVoo={data.num_voo}
+            dataVoo={data.dta_voo}
+            detalhesOcorrido={data.detalhe}
+            onNumeroVooChange={(value) => setData('num_voo', value)}
+            onDataVooChange={(value) => setData('dta_voo', value)}
+            onDetalhesOcorridoChange={(value) => setData('detalhe', value)}
             onBack={handleBack}
             onNext={handleNext}
             errors={{
-              numeroVoo: errors.numeroVoo,
-              dataVoo: errors.dataVoo,
-              detalhesOcorrido: errors.detalhesOcorrido,
+              numeroVoo: errors.num_voo,
+              dataVoo: errors.dta_voo,
+              detalhesOcorrido: errors.detalhe,
             }}
           />
         );
       case 3:
         return (
           <DocumentsStep
-            registroNacional={data.registroNacional}
-            comprovanteResidencia={data.comprovanteResidencia}
-            passagemAerea={data.passagemAerea}
-            onRegistroNacionalChange={(file) => setData('registroNacional', file)}
-            onComprovanteResidenciaChange={(file) => setData('comprovanteResidencia', file)}
-            onPassagemAereaChange={(file) => setData('passagemAerea', file)}
+            registroNacional={data.registro_nasc}
+            comprovanteResidencia={data.comprovante_res}
+            passagemAerea={data.comprovante_voo}
+            onRegistroNacionalChange={(file) => setData('registro_nasc', file)}
+            onComprovanteResidenciaChange={(file) => setData('comprovante_res', file)}
+            onPassagemAereaChange={(file) => setData('comprovante_voo', file)}
             onBack={handleBack}
             onNext={handleNext}
             errors={{
-              registroNacional: errors.registroNacional,
-              comprovanteResidencia: errors.comprovanteResidencia,
-              passagemAerea: errors.passagemAerea,
+              registroNacional: errors.registro_nasc,
+              comprovanteResidencia: errors.comprovante_res,
+              passagemAerea: errors.comprovante_voo,
             }}
           />
         );
@@ -126,7 +155,7 @@ export default function Create() {
             isUserDataValid={isUserDataValid}
             onBack={handleBack}
             onNext={handleNext}
-            errors={errors.userData as Record<keyof UserModel, string>}
+            errors={errors.userData as unknown as Record<keyof UserModel, string>}
             processing={processing}
           />
         );

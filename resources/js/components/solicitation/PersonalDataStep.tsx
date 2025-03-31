@@ -12,7 +12,9 @@ interface PersonalDataStepProps {
   isUserDataValid: () => boolean;
   onBack: () => void;
   onNext: () => void;
-  errors?: Record<keyof UserModel, string | undefined>;
+  errors?: {
+    [K in keyof UserModel]?: string;
+  };
   processing: boolean;
 }
 

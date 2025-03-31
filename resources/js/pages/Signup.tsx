@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link, useForm } from '@inertiajs/react';
-import { PasswordField } from "@/components/SignUp/PasswordField";
-import { TermsCheckbox } from "@/components/SignUp/TermsCheckbox";
+import { PasswordField } from "@/components/auth/register/PasswordField";
+import { TermsCheckbox } from "@/components/auth/register/TermsCheckbox";
 import { calculatePasswordStrength } from "@/utils/passwordStrength";
 
 const Signup = () => {

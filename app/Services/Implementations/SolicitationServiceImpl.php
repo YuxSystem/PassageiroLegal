@@ -6,6 +6,7 @@ use App\Repositories\SolicitationRepository;
 use App\Services\SolicitationService;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 
 class SolicitationServiceImpl implements SolicitationService
@@ -19,6 +20,7 @@ class SolicitationServiceImpl implements SolicitationService
 
   public function getSolicitations(int $perPage = 10, int $page = 1): LengthAwarePaginator
   {
+    /** @var User $user */
     $user = Auth::user();
 
     if ($user->isAdmin() || $user->isEmployee()) {

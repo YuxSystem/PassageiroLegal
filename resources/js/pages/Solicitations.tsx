@@ -11,9 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { Eye, MoreVertical, CheckCircle2, XCircle } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import AdminLayout from "@/components/AdminLayout";
 import { Separator } from "@/components/ui/separator";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import {
   Select,
   SelectContent,
@@ -118,6 +117,7 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
   const [selectedSolicitation, setSelectedSolicitation] = useState<Solicitation | null>(null);
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [newStatus, setNewStatus] = useState<string>("");
+  const IS_ADMIN = usePage().props.auth.user?.role === "Admin";
 
   const handlePageChange = (page: number) => {
     router.get(`/solicitacoes?page=${page}`);
@@ -152,7 +152,7 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
   };
 
   return (
-    <AdminLayout>
+    <>
       <div className="container mx-auto py-10">
         <div className="space-y-4">
           <div className="space-y-1">
@@ -206,7 +206,7 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
                           <Eye className="h-4 w-4 mr-2" />
                           Visualizar
                         </DropdownMenuItem>
-                        {getNextStatus(solicitation.status) && (
+                        {IS_ADMIN && getNextStatus(solicitation.status) && (
                           <DropdownMenuItem
                             onClick={() =>
                               handleStatusChange(solicitation, getNextStatus(solicitation.status)!)
@@ -217,7 +217,7 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
                             Avançar para {getNextStatus(solicitation.status)}
                           </DropdownMenuItem>
                         )}
-                        {getPreviousStatus(solicitation.status) && (
+                        {IS_ADMIN && getPreviousStatus(solicitation.status) && (
                           <DropdownMenuItem
                             onClick={() =>
                               handleStatusChange(solicitation, getPreviousStatus(solicitation.status)!)
@@ -299,7 +299,7 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </AdminLayout>
+    </>
   );
 };
 

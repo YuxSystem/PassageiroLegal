@@ -3,7 +3,7 @@ import "../css/index.css"
 
 import { createInertiaApp } from "@inertiajs/react";
 import { createRoot } from "react-dom/client";
-import Layout from "@/components/Layout.tsx";
+import Layout from "@/components/layout/Layout";
 
 createInertiaApp({
   resolve: (name) => {

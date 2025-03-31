@@ -1,8 +1,8 @@
 import { Eye, EyeOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { PasswordStrength } from "./PasswordStrength";
 import { PasswordRequirements } from "./PasswordRequirements";
+import { PasswordStrength } from "./PasswordStrength";
 
 interface PasswordFieldProps {
   id: string;

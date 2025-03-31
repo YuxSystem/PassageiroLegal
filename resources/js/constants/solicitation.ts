@@ -1,4 +1,4 @@
-import { Step } from '@/components/Stepper';
+import { Step } from '@/components/ui/Stepper';
 
 export const STEPS: Step[] = [
   { id: 1, title: 'Elegibilidade', description: 'Verificação de Elegibilidade' },

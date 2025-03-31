@@ -1,12 +1,10 @@
-import AdminLayout from "@/components/AdminLayout"
+import AdminLayout from "@/components/layout/AdminLayout"
 
 const Dashboard = () => {
   return (
-    <AdminLayout>
-      <div className="container mx-auto py-10">
-        <h1>Dashboard</h1>
-      </div>
-    </AdminLayout>
+    <div className="container mx-auto py-10">
+      <h1>Dashboard</h1>
+    </div>
   )
 }
 

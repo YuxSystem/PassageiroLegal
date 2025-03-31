@@ -1,9 +1,7 @@
-import UserLayout from "@/components/UserLayout";
+import UserLayout from "@/components/layout/UserLayout";
 
 const MyRequests = () => {
-  return <UserLayout>
-    <div>MyRequests</div>
-  </UserLayout>;
+  return <div>MyRequests</div>
 };
 
 export default MyRequests;

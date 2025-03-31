@@ -1,9 +1,7 @@
-import UserLayout from "@/components/UserLayout";
+import UserLayout from "@/components/layout/UserLayout";
 
 const SolicitationCreate = () => {
-  return <UserLayout>
-    <div>SolicitationCreate</div>
-  </UserLayout>;
+  return <div>SolicitationCreate</div>
 };
 
 export default SolicitationCreate;

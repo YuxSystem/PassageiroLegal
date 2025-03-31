@@ -1,12 +1,11 @@
 import React from 'react';
 import { Head, useForm } from '@inertiajs/react';
-import UserLayout from '@/components/UserLayout';
 import { Card } from '@/components/ui/card';
-import { Stepper } from '@/components/Stepper';
-import { EligibilityStep } from '@/components/solicitation/EligibilityStep';
-import { FlightInfoStep } from '@/components/solicitation/FlightInfoStep';
-import { DocumentsStep } from '@/components/solicitation/DocumentsStep';
-import { PersonalDataStep } from '@/components/solicitation/PersonalDataStep';
+import { Stepper } from '@/components/ui/Stepper';
+import { EligibilityStep } from '@/components/requests/EligibilityStep';
+import { FlightInfoStep } from '@/components/requests/FlightInfoStep';
+import { DocumentsStep } from '@/components/requests/DocumentsStep';
+import { PersonalDataStep } from '@/components/requests/PersonalDataStep';
 import { UserModel } from '@/models/UserModel';
 import { STEPS, REQUIRED_USER_FIELDS } from '@/constants/solicitation';
 import { router } from '@inertiajs/react'
@@ -165,13 +164,13 @@ export default function Create() {
   };
 
   return (
-    <UserLayout>
+    <>
       <Head title="Nova Solicitação" />
 
       <div className="container max-w-5xl mx-auto">
         <Stepper steps={STEPS} currentStep={currentStep} />
         <Card>{renderStepContent()}</Card>
       </div>
-    </UserLayout>
+    </>
   );
 }

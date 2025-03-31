@@ -1,5 +1,5 @@
 import React from 'react';
-import { format } from 'date-fns';
+import { format, isAfter, startOfDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { CardHeader, CardContent, CardTitle } from '@/components/ui/card';
@@ -42,6 +42,12 @@ export function FlightInfoStep({
   onNext,
   errors,
 }: FlightInfoStepProps) {
+  const today = startOfDay(new Date());
+
+  const disabledDate = (date: Date) => {
+    return isAfter(date, today);
+  };
+
   return (
     <>
       <CardHeader>
@@ -97,6 +103,7 @@ export function FlightInfoStep({
                   onSelect={onDataVooChange}
                   initialFocus
                   locale={ptBR}
+                  disabled={disabledDate}
                 />
               </PopoverContent>
             </Popover>

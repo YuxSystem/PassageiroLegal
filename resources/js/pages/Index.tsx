@@ -1,12 +1,12 @@
 
 import { useEffect } from "react";
-import Header from "@/components/Header";
-import Hero from "@/components/Hero";
-import HowItWorks from "@/components/HowItWorks";
-import PassengerRights from "@/components/PassengerRights";
-import FlightProblems from "@/components/FlightProblems";
-import FAQ from "@/components/FAQ";
-import Footer from "@/components/Footer";
+import Header from "@/components/index/Header";
+import Hero from "@/components/index/Hero";
+import HowItWorks from "@/components/index/HowItWorks";
+import PassengerRights from "@/components/index/PassengerRights";
+import FlightProblems from "@/components/index/FlightProblems";
+import FAQ from "@/components/index/FAQ";
+import Footer from "@/components/index/Footer";
 import { Button } from "@/components/ui/button";
 import { PlaneTakeoff, ArrowRight } from "lucide-react";
 

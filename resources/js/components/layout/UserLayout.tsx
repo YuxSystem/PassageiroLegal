@@ -32,7 +32,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
     {
       title: 'Minhas Solicitações',
       icon: <FileText className="w-5 h-5" />,
-      href: '/minhas-solicitacoes',
+      href: '/solicitacoes',
     },
   ];
 

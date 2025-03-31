@@ -66,16 +66,31 @@ use App\Http\Controllers\SolicitationController;
 // });
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use App\Models\User;
 
 Route::get('/', fn() => inertia("Index"));
 Route::get('/login', fn() => inertia("Login"));
 Route::get('/cadastro', fn() => inertia("Signup"));
 
-Route::get('/dashboard', fn() => inertia("Dashboard"));
-Route::get('/solicitacoes', [SolicitationController::class, 'index'])->name('solicitacoes.index');
-Route::get('/solicitacao/{id}', [SolicitationController::class, 'show'])->name('solicitacoes.show');
-Route::put('/solicitacao/{id}/status', [SolicitationController::class, 'updateStatus'])->name('solicitacoes.update-status');
-Route::get('/solicitacao/{id}/download/{type}', [SolicitationController::class, 'downloadFile'])->name('solicitacoes.download');
+Route::middleware(['auth'])->group(function () {
+
+  Route::get("/verify", function () {
+    $user = User::find(auth()->id());
+    return $user->role === "Admin" ? redirect()->route('solicitacoes.index') : redirect()->route('solicitacoes.create');
+  });
+
+  Route::get('/solicitacao/create', fn() => inertia("SolicitationCreate"))->name('solicitacoes.create');
+
+  Route::middleware(['admin'])->group(function () {
+    Route::get('/dashboard', fn() => inertia("Dashboard"));
+
+    Route::get('/solicitacoes', [SolicitationController::class, 'index'])->name('solicitacoes.index');
+    Route::get('/solicitacao/{id}', [SolicitationController::class, 'show'])->name('solicitacoes.show');
+    Route::put('/solicitacao/{id}/status', [SolicitationController::class, 'updateStatus'])->name('solicitacoes.update-status');
+    Route::get('/solicitacao/{id}/download/{type}', [SolicitationController::class, 'downloadFile'])->name('solicitacoes.download');
+  });
+});
+
+
 
 require __DIR__ . '/auth.php';

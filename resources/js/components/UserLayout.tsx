@@ -25,14 +25,14 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
 
   const menuItems = [
     {
-      title: 'Minhas Solicitações',
-      icon: <FileText className="w-5 h-5" />,
-      href: '/minhas-solicitacoes',
-    },
-    {
       title: 'Nova Solicitação',
       icon: <PlusCircle className="w-5 h-5" />,
       href: '/nova-solicitacao',
+    },
+    {
+      title: 'Minhas Solicitações',
+      icon: <FileText className="w-5 h-5" />,
+      href: '/minhas-solicitacoes',
     },
   ];
 

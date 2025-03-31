@@ -67,6 +67,7 @@ use App\Http\Controllers\SolicitationController;
 
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use Inertia\Inertia;
 
 Route::get('/', fn() => inertia("Index"));
 Route::get('/login', fn() => inertia("Login"));
@@ -79,7 +80,7 @@ Route::middleware(['auth'])->group(function () {
     return $user->role === "Admin" ? redirect()->route('solicitacoes.index') : redirect()->route('solicitacoes.create');
   });
 
-  Route::get('/solicitacao/create', fn() => inertia("SolicitationCreate"))->name('solicitacoes.create');
+  Route::get('/nova-solicitacao', fn() => inertia("Solicitation/Create"))->name('solicitacoes.create');
 
   Route::middleware(['admin'])->group(function () {
     Route::get('/dashboard', fn() => inertia("Dashboard"));

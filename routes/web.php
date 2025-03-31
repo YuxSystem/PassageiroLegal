@@ -19,7 +19,7 @@ Route::middleware(['auth'])->group(function () {
   // Verify User Role
   Route::get("/verify", function () {
     $user = User::find(Auth::id());
-    return $user->role === "Admin" ? redirect("/admin/dashboard") : redirect("/nova-solicitacao");
+    return $user->role === "Admin" ? redirect("/admin/solicitacoes") : redirect("/nova-solicitacao");
   });
 
   // Exibe View para criar uma nova solicitação
@@ -36,8 +36,6 @@ Route::middleware(['auth'])->group(function () {
 
 // Admin Pages
 Route::middleware(['auth', 'admin'])->group(function () {
-  // Exibe View do Dashboard do Admin
-  Route::get('/admin/dashboard', fn() => inertia("Dashboard"));
   // Exibe View para listar todas as solicitações do Admin
   Route::get('/admin/solicitacoes', [SolicitationController::class, 'index'])->name('solicitacoes.index');
   // Atualiza o status de uma solicitação

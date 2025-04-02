@@ -6,7 +6,6 @@ import { EligibilityStep } from '@/components/requests/EligibilityStep';
 import { FlightInfoStep } from '@/components/requests/FlightInfoStep';
 import { DocumentsStep } from '@/components/requests/DocumentsStep';
 import { PersonalDataStep } from '@/components/requests/PersonalDataStep';
-import { ConfirmationStep } from '@/components/requests/ConfirmationStep';
 import { UserModel } from '@/models/UserModel';
 import { STEPS, REQUIRED_USER_FIELDS } from '@/constants/solicitation';
 import { router } from '@inertiajs/react'
@@ -52,8 +51,6 @@ export default function SolicitationCreate() {
         return !errors.registro_nasc && !errors.comprovante_res && !errors.comprovante_voo;
       case 4:
         return !Object.keys(errors.userData || {}).length;
-      case 5:
-        return true;
       default:
         return true;
     }
@@ -102,15 +99,6 @@ export default function SolicitationCreate() {
     return REQUIRED_USER_FIELDS.every(
       (field) => data.userData[field] && data.userData[field].toString().trim() !== ''
     );
-  };
-
-  const handleSubmit = () => {
-    const formattedData = {
-      ...data,
-      dta_voo: data.dta_voo ? new Date(data.dta_voo).toISOString().split('T')[0] : undefined,
-    };
-
-    router.post('/solicitacao', formattedData as any);
   };
 
   const renderStepContent = () => {
@@ -174,20 +162,6 @@ export default function SolicitationCreate() {
             processing={processing}
           />
         );
-      case 5:
-        return (
-          <ConfirmationStep
-            motivo={data.motivo}
-            outrosMotivo={data.outrosMotivo}
-            numeroVoo={data.num_voo}
-            dataVoo={data.dta_voo}
-            detalhesOcorrido={data.detalhe}
-            userData={data.userData}
-            onBack={handleBack}
-            onConfirm={handleSubmit}
-            processing={processing}
-          />
-        );
       default:
         return null;
     }
@@ -220,9 +194,17 @@ export default function SolicitationCreate() {
 
         <div className="mt-4 md:mt-6">
           <div className="mb-8">
-            <Stepper steps={STEPS} currentStep={currentStep} />
+            <Stepper
+              steps={STEPS}
+              currentStep={currentStep}
+              renderContent={(stepId) => (
+                <Card className="sm:hidden">
+                  {renderStepContent()}
+                </Card>
+              )}
+            />
           </div>
-          <Card>
+          <Card className="hidden sm:block">
             {renderStepContent()}
           </Card>
         </div>

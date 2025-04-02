@@ -12,6 +12,7 @@ import { router } from '@inertiajs/react'
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { ConfirmationStep } from '@/components/requests/ConfirmationStep';
 
 export default function SolicitationCreate() {
   const [currentStep, setCurrentStep] = React.useState(1);
@@ -51,6 +52,8 @@ export default function SolicitationCreate() {
         return !errors.registro_nasc && !errors.comprovante_res && !errors.comprovante_voo;
       case 4:
         return !Object.keys(errors.userData || {}).length;
+      case 5:
+        return true;
       default:
         return true;
     }
@@ -171,6 +174,20 @@ export default function SolicitationCreate() {
             onBack={handleBack}
             onNext={handleNext}
             errors={errors.userData as unknown as Record<keyof UserModel, string>}
+            processing={processing}
+          />
+        );
+      case 5:
+        return (
+          <ConfirmationStep
+            motivo={data.motivo}
+            outrosMotivo={data.outrosMotivo}
+            numeroVoo={data.num_voo}
+            dataVoo={data.dta_voo}
+            detalhesOcorrido={data.detalhe}
+            userData={data.userData}
+            onBack={handleBack}
+            onConfirm={handleNext}
             processing={processing}
           />
         );

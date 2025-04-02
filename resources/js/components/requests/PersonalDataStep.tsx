@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { UserModel } from '@/models/UserModel';
 import { cn } from '@/lib/utils';
 import useViaCep from '@rsiqueira/use-viacep';
+import { useMask } from '@react-input/mask';
 
 interface PersonalDataStepProps {
   userData: Partial<UserModel>;
@@ -30,7 +31,11 @@ export function PersonalDataStep({
   errors,
   processing,
 }: PersonalDataStepProps) {
-  const { cep, loading, error } = useViaCep(userData.zipcode || '');
+  const { cep, loading, error } = useViaCep(userData.zipcode?.replace(/\D/g, '') || '');
+
+  const cpfInputRef = useMask({ mask: '___.___.___-__', replacement: { _: /\d/ } });
+  const celularInputRef = useMask({ mask: '(__) _____-____', replacement: { _: /\d/ } });
+  const cepInputRef = useMask({ mask: '_____-___', replacement: { _: /\d/ } });
 
   React.useEffect(() => {
     if (cep && onUserDataBatchChange) {
@@ -41,6 +46,11 @@ export function PersonalDataStep({
       });
     }
   }, [cep]);
+
+  const handleInputChange = (field: keyof UserModel) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    onUserDataChange(field)(value);
+  };
 
   return (
     <>
@@ -63,7 +73,7 @@ export function PersonalDataStep({
                 </label>
                 <Input
                   value={userData.name}
-                  onChange={onUserDataChange('name')}
+                  onChange={handleInputChange('name')}
                   placeholder="Digite seu nome completo"
                   className={cn(errors?.name && "border-red-500")}
                 />
@@ -76,9 +86,10 @@ export function PersonalDataStep({
                   CPF
                 </label>
                 <Input
+                  ref={cpfInputRef}
                   value={userData.legal_document}
-                  onChange={onUserDataChange('legal_document')}
-                  placeholder="Digite seu CPF"
+                  onChange={handleInputChange('legal_document')}
+                  placeholder="000.000.000-00"
                   className={cn(errors?.legal_document && "border-red-500")}
                 />
                 {errors?.legal_document && (
@@ -92,7 +103,7 @@ export function PersonalDataStep({
                 <Input
                   type="email"
                   value={userData.email}
-                  onChange={onUserDataChange('email')}
+                  onChange={handleInputChange('email')}
                   placeholder="Digite seu e-mail"
                   className={cn(errors?.email && "border-red-500")}
                 />
@@ -105,9 +116,10 @@ export function PersonalDataStep({
                   Celular
                 </label>
                 <Input
+                  ref={celularInputRef}
                   value={userData.cellphone}
-                  onChange={onUserDataChange('cellphone')}
-                  placeholder="Digite seu celular"
+                  onChange={handleInputChange('cellphone')}
+                  placeholder="(00) 00000-0000"
                   className={cn(errors?.cellphone && "border-red-500")}
                 />
                 {errors?.cellphone && (
@@ -126,9 +138,10 @@ export function PersonalDataStep({
                   CEP
                 </label>
                 <Input
+                  ref={cepInputRef}
                   value={userData.zipcode}
-                  onChange={onUserDataChange('zipcode')}
-                  placeholder="Digite seu CEP"
+                  onChange={handleInputChange('zipcode')}
+                  placeholder="00000-000"
                   className={cn(errors?.zipcode && "border-red-500")}
                 />
                 {errors?.zipcode && (
@@ -141,7 +154,7 @@ export function PersonalDataStep({
                 </label>
                 <Input
                   value={userData.street}
-                  onChange={onUserDataChange('street')}
+                  onChange={handleInputChange('street')}
                   placeholder="Digite seu endereço"
                   className={cn(errors?.street && "border-red-500")}
                   disabled={loading}
@@ -156,7 +169,7 @@ export function PersonalDataStep({
                 </label>
                 <Input
                   value={userData.city}
-                  onChange={onUserDataChange('city')}
+                  onChange={handleInputChange('city')}
                   placeholder="Digite sua cidade"
                   className={cn(errors?.city && "border-red-500")}
                   disabled={loading}
@@ -171,7 +184,7 @@ export function PersonalDataStep({
                 </label>
                 <Input
                   value={userData.state}
-                  onChange={onUserDataChange('state')}
+                  onChange={handleInputChange('state')}
                   placeholder="Digite seu estado"
                   className={cn(errors?.state && "border-red-500")}
                   disabled={loading}
@@ -186,7 +199,7 @@ export function PersonalDataStep({
                 </label>
                 <Input
                   value={userData.country}
-                  onChange={onUserDataChange('country')}
+                  onChange={handleInputChange('country')}
                   placeholder="Digite seu país"
                   className={cn(errors?.country && "border-red-500")}
                 />

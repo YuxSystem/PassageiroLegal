@@ -174,18 +174,8 @@ export default function SolicitationCreate() {
       <div className="px-2 sm:px-4 md:container mx-auto py-6 md:py-10">
         <div className="space-y-4">
           <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => router.visit('/solicitacoes')}
-                className="rounded-full"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <h1 className="text-3xl font-bold tracking-tight text-[#0284C7]">Nova Solicitação</h1>
-            </div>
-            <p className="text-sm text-gray-500 ml-11">
+            <h1 className="text-3xl font-bold tracking-tight text-[#0284C7]">Nova Solicitação</h1>
+            <p className="text-sm text-gray-500">
               Preencha os dados para solicitar sua indenização
             </p>
           </div>

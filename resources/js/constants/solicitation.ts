@@ -5,6 +5,7 @@ export const STEPS: Step[] = [
   { id: 2, title: 'Voo', description: 'Informações do Voo' },
   { id: 3, title: 'Documentos', description: 'Envio de Documentos' },
   { id: 4, title: 'Dados', description: 'Dados Pessoais' },
+  { id: 5, title: 'Confirmação', description: 'Revisar Informações' },
 ];
 
 export const REQUIRED_USER_FIELDS = [

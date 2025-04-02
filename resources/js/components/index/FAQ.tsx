@@ -1,4 +1,3 @@
-
 import {
   Accordion,
   AccordionContent,
@@ -41,9 +40,9 @@ const FAQ = () => {
   return (
     <section id="faq" className="section">
       <div className="page-container">
-        <div className="text-center mb-16 max-w-3xl mx-auto">
-          <h2 className="font-bold mb-4">Perguntas Frequentes</h2>
-          <p className="text-lg text-muted-foreground">
+        <div className="text-center mb-12 max-w-3xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold mb-3">Perguntas Frequentes</h2>
+          <p className="text-base text-muted-foreground">
             Confira as dúvidas mais comuns sobre o processo de solicitação de compensação e
             como o Passageiro Legal pode ajudar você.
           </p>
@@ -52,15 +51,15 @@ const FAQ = () => {
         <div className="max-w-3xl mx-auto glass-panel rounded-2xl p-6 md:p-8">
           <Accordion type="single" collapsible className="space-y-2">
             {faqItems.map((item, index) => (
-              <AccordionItem 
-                key={index} 
+              <AccordionItem
+                key={index}
                 value={`item-${index}`}
                 className="border border-gray-100 rounded-lg overflow-hidden bg-white/80 px-4"
               >
-                <AccordionTrigger className="py-4 text-left font-medium hover:text-sky-700 hover:no-underline">
+                <AccordionTrigger className="py-4 text-left text-sm md:text-base font-medium hover:text-sky-700 hover:no-underline">
                   {item.question}
                 </AccordionTrigger>
-                <AccordionContent className="py-4 text-muted-foreground">
+                <AccordionContent className="py-4 text-sm text-muted-foreground">
                   {item.answer}
                 </AccordionContent>
               </AccordionItem>

@@ -16,13 +16,11 @@ Route::get('/', function () {
 });
 
 // Auth Pages
-Route::middleware(['guest'])->group(function () {
-  Route::get('/login', fn() => inertia("Login"));
-  Route::get('/cadastro', fn() => inertia("Signup"));
-});
+Route::get('/login', fn() => inertia("Login"));
+Route::get('/cadastro', fn() => inertia("Signup"));
 
 // User Pages
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'enabled'])->group(function () {
   // Exibe View para criar uma nova solicitação
   Route::get('/nova-solicitacao', fn() => inertia("SolicitationCreate"));
   // Exibe View para listar todas as solicitações do usuário
@@ -35,7 +33,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Admin Pages
-Route::middleware(['auth', 'admin'])->group(function () {
+Route::middleware(['auth', 'admin', 'enabled'])->group(function () {
   // Exibe View para listar todas as solicitações do Admin
   Route::get('/admin/solicitacoes', [SolicitationController::class, 'index']);
   // Atualiza o status de uma solicitação
@@ -50,7 +48,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 // Profile Routes
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'enabled'])->group(function () {
   Route::get('/perfil', [App\Http\Controllers\ProfileController::class, 'show']);
   Route::put('/perfil', [App\Http\Controllers\ProfileController::class, 'update']);
   Route::put('/perfil/senha', [App\Http\Controllers\ProfileController::class, 'updatePassword']);

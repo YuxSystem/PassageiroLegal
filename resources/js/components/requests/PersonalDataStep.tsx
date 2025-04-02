@@ -5,10 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { UserModel } from '@/models/UserModel';
 import { cn } from '@/lib/utils';
+import useViaCep from '@rsiqueira/use-viacep';
 
 interface PersonalDataStepProps {
   userData: Partial<UserModel>;
-  onUserDataChange: (field: keyof UserModel) => (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onUserDataChange: (field: keyof UserModel) => (e: string | React.ChangeEvent<HTMLInputElement>) => void;
+  onUserDataBatchChange?: (updates: Partial<UserModel>) => void;
   isUserDataValid: () => boolean;
   onBack: () => void;
   onNext: () => void;
@@ -21,12 +23,25 @@ interface PersonalDataStepProps {
 export function PersonalDataStep({
   userData,
   onUserDataChange,
+  onUserDataBatchChange,
   isUserDataValid,
   onBack,
   onNext,
   errors,
   processing,
 }: PersonalDataStepProps) {
+  const { cep, loading, error } = useViaCep(userData.zipcode || '');
+
+  React.useEffect(() => {
+    if (cep && onUserDataBatchChange) {
+      onUserDataBatchChange({
+        city: cep.localidade || '',
+        state: cep.uf || '',
+        street: cep.logradouro || '',
+      });
+    }
+  }, [cep]);
+
   return (
     <>
       <CardHeader>
@@ -105,50 +120,8 @@ export function PersonalDataStep({
           {/* Endereço */}
           <div className="space-y-4">
             <h3 className="text-sm font-medium text-gray-700">Endereço</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="md:col-span-2">
-                <label className="text-sm font-medium text-gray-700 mb-1 block">
-                  Rua/Avenida
-                </label>
-                <Input
-                  value={userData.street}
-                  onChange={onUserDataChange('street')}
-                  placeholder="Digite seu endereço"
-                  className={cn(errors?.street && "border-red-500")}
-                />
-                {errors?.street && (
-                  <p className="text-sm text-red-500 mt-1">{errors.street}</p>
-                )}
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-1 block">
-                  Cidade
-                </label>
-                <Input
-                  value={userData.city}
-                  onChange={onUserDataChange('city')}
-                  placeholder="Digite sua cidade"
-                  className={cn(errors?.city && "border-red-500")}
-                />
-                {errors?.city && (
-                  <p className="text-sm text-red-500 mt-1">{errors.city}</p>
-                )}
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-1 block">
-                  Estado
-                </label>
-                <Input
-                  value={userData.state}
-                  onChange={onUserDataChange('state')}
-                  placeholder="Digite seu estado"
-                  className={cn(errors?.state && "border-red-500")}
-                />
-                {errors?.state && (
-                  <p className="text-sm text-red-500 mt-1">{errors.state}</p>
-                )}
-              </div>
-              <div>
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+              <div className="md:col-span-3">
                 <label className="text-sm font-medium text-gray-700 mb-1 block">
                   CEP
                 </label>
@@ -162,7 +135,52 @@ export function PersonalDataStep({
                   <p className="text-sm text-red-500 mt-1">{errors.zipcode}</p>
                 )}
               </div>
-              <div>
+              <div className="md:col-span-9">
+                <label className="text-sm font-medium text-gray-700 mb-1 block">
+                  Rua/Avenida
+                </label>
+                <Input
+                  value={userData.street}
+                  onChange={onUserDataChange('street')}
+                  placeholder="Digite seu endereço"
+                  className={cn(errors?.street && "border-red-500")}
+                  disabled={loading}
+                />
+                {errors?.street && (
+                  <p className="text-sm text-red-500 mt-1">{errors.street}</p>
+                )}
+              </div>
+              <div className="md:col-span-6">
+                <label className="text-sm font-medium text-gray-700 mb-1 block">
+                  Cidade
+                </label>
+                <Input
+                  value={userData.city}
+                  onChange={onUserDataChange('city')}
+                  placeholder="Digite sua cidade"
+                  className={cn(errors?.city && "border-red-500")}
+                  disabled={loading}
+                />
+                {errors?.city && (
+                  <p className="text-sm text-red-500 mt-1">{errors.city}</p>
+                )}
+              </div>
+              <div className="md:col-span-3">
+                <label className="text-sm font-medium text-gray-700 mb-1 block">
+                  Estado
+                </label>
+                <Input
+                  value={userData.state}
+                  onChange={onUserDataChange('state')}
+                  placeholder="Digite seu estado"
+                  className={cn(errors?.state && "border-red-500")}
+                  disabled={loading}
+                />
+                {errors?.state && (
+                  <p className="text-sm text-red-500 mt-1">{errors.state}</p>
+                )}
+              </div>
+              <div className="md:col-span-3">
                 <label className="text-sm font-medium text-gray-700 mb-1 block">
                   País
                 </label>

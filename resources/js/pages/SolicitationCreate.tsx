@@ -87,11 +87,22 @@ export default function SolicitationCreate() {
   };
 
   const handleUserDataChange = (field: keyof UserModel) => (
-    e: React.ChangeEvent<HTMLInputElement>
+    valueOrEvent: string | React.ChangeEvent<HTMLInputElement>
   ) => {
+    const value = typeof valueOrEvent === 'string'
+      ? valueOrEvent
+      : valueOrEvent.target.value;
+
     setData('userData', {
       ...data.userData,
-      [field]: e.target.value,
+      [field]: value,
+    });
+  };
+
+  const handleUserDataBatchChange = (updates: Partial<UserModel>) => {
+    setData('userData', {
+      ...data.userData,
+      ...updates
     });
   };
 
@@ -155,6 +166,7 @@ export default function SolicitationCreate() {
           <PersonalDataStep
             userData={data.userData}
             onUserDataChange={handleUserDataChange}
+            onUserDataBatchChange={handleUserDataBatchChange}
             isUserDataValid={isUserDataValid}
             onBack={handleBack}
             onNext={handleNext}

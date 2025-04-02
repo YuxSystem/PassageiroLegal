@@ -8,8 +8,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\SolicitationRequest;
 use Illuminate\Support\Facades\Auth;
-
-
+use App\Models\User;
 
 class SolicitationController extends Controller
 {
@@ -53,11 +52,25 @@ class SolicitationController extends Controller
 
   public function store(SolicitationRequest $request)
   {
+    /** @var \App\Models\User $user */
     $user = Auth::user();
     $request->merge(['user_id' => $user->id]);
 
     $solicitation = $this->solicitationService->createSolicitation($request->all());
     $this->solicitationService->uploadFiles($solicitation['id'], $request->allFiles());
+
+    // Atualiza os dados do usuário
+    $userData = $request->input('userData');
+    if ($userData) {
+      $user->legal_document = $userData['legal_document'];
+      $user->cellphone = $userData['cellphone'];
+      $user->zipcode = $userData['zipcode'];
+      $user->street = $userData['street'];
+      $user->city = $userData['city'];
+      $user->state = $userData['state'];
+      $user->country = $userData['country'];
+      $user->save();
+    }
 
     // if ($request->input("email_companion") != null) {
     //   $this->messagingService->send(MessagingKindEnum::EMAIL, $request->input("email_companion"));

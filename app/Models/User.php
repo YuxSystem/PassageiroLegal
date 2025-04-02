@@ -39,7 +39,13 @@ class User extends Authenticatable
     'email',
     'password',
     'role',
-    'status'
+    'status',
+    'legal_document',
+    'cellphone',
+    'zipcode',
+    'street',
+    'city',
+    'state',
   ];
 
   /**

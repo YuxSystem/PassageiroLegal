@@ -45,13 +45,15 @@ class UserController extends Controller
 
   public function update(Request $request, User $user)
   {
-    if ($request->has('rule')) {
-      $user->update(['rule' => $request->rule]);
-    }
+    // if ($request->has('rule')) {
+    //   $user->update(['rule' => $request->rule]);
+    // }
 
-    if ($request->has('status')) {
-      $user->update(['status' => $request->status]);
-    }
+    // if ($request->has('status')) {
+    //   $user->update(['status' => $request->status]);
+    // }
+
+    $user->update($request->all());
 
     return back();
   }

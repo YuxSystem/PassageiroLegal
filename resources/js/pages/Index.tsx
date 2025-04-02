@@ -9,6 +9,7 @@ import FAQ from "@/components/index/FAQ";
 import Footer from "@/components/index/Footer";
 import { Button } from "@/components/ui/button";
 import { PlaneTakeoff, ArrowRight } from "lucide-react";
+import { Head } from '@inertiajs/react';
 
 const FloatingCTA = () => {
   return (
@@ -59,18 +60,22 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main>
-        <Hero />
-        <HowItWorks />
-        <FlightProblems />
-        <PassengerRights />
-        <FAQ />
-      </main>
-      <Footer />
-      <FloatingCTA />
-    </div>
+    <>
+      <Head title="Passageiro Legal" />
+
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main>
+          <Hero />
+          <HowItWorks />
+          <FlightProblems />
+          <PassengerRights />
+          <FAQ />
+        </main>
+        <Footer />
+        <FloatingCTA />
+      </div>
+    </>
   );
 };
 

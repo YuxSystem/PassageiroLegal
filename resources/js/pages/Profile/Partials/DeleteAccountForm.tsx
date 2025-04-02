@@ -18,7 +18,7 @@ export default function DeleteAccountForm() {
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault();
-    destroy('/profile', {
+    destroy('/perfil', {
       onSuccess: () => closeModal(),
     });
   };

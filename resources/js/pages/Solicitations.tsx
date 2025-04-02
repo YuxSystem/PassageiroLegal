@@ -12,7 +12,7 @@ import { Eye, MoreVertical, CheckCircle2, XCircle } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Separator } from "@/components/ui/separator";
-import { router, usePage } from "@inertiajs/react";
+import { Head, router, usePage } from "@inertiajs/react";
 import {
   Select,
   SelectContent,
@@ -165,6 +165,8 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
 
   return (
     <>
+      <Head title="Solicitações | Passageiro Legal" />
+
       <div className="container mx-auto py-10">
         <div className="space-y-4">
           <div className="space-y-1">

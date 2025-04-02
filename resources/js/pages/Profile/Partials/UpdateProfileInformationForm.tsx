@@ -12,7 +12,7 @@ export default function UpdateProfileInformationForm() {
   const submit: FormEventHandler = (e) => {
     e.preventDefault();
 
-    put('/profile', {
+    put('/perfil', {
       onSuccess: () => {
         router.reload();
       }

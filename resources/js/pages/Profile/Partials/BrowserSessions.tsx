@@ -29,7 +29,7 @@ export default function BrowserSessions({ sessions }: Props) {
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault();
-    post('/profile/browser-sessions', {
+    post('/perfil/sessoes-navegador', {
       onSuccess: () => closeModal(),
     });
   };

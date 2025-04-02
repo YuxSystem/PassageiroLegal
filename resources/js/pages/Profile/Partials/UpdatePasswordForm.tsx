@@ -11,7 +11,7 @@ export default function UpdatePasswordForm() {
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault();
-    put('/profile/password', {
+    put('/perfil/senha', {
       onSuccess: () => reset('password', 'password_confirmation'),
     })
   };

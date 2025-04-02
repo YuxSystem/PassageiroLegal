@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { router } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import {
   Table,
   TableBody,
@@ -151,190 +151,195 @@ const Users: React.FC<Props> = ({ users: initialUsers, pagination, search: initi
   };
 
   return (
-    <div className="container mx-auto py-10">
-      <div className="space-y-4">
-        <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight text-[#0284C7]">Usuários</h1>
-          <p className="text-sm text-gray-500">
-            Gerencie todos os usuários do sistema
-          </p>
-        </div>
-        <Separator />
-      </div>
+    <>
+      <Head title="Usuários | Passageiro Legal" />
 
-      <div className="mt-6 bg-white rounded-lg shadow-md border border-gray-100">
-        <div className="flex gap-4 p-6">
-          <Input
-            placeholder="Buscar por ID, email ou nome"
-            value={searchTerm}
-            onChange={(e) => handleSearch(e.target.value)}
-            className="flex-1"
-          />
-        </div>
-
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>ID</TableHead>
-              <TableHead>Nome</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Ações</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {initialUsers.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell className="font-mono text-sm">
-                  {user.id.toString().slice(0, 8)}...
-                </TableCell>
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{getRoleLabel(user.role)}</TableCell>
-                <TableCell>
-                  <Badge
-                    className={user.status === "Enabled"
-                      ? "bg-blue-50 text-blue-700 hover:bg-blue-100"
-                      : "bg-red-50 text-red-700 hover:bg-red-100"
-                    }
-                  >
-                    {user.status === "Enabled" ? "Ativo" : "Inativo"}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="cursor-pointer">
-                        <MoreVertical className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="cursor-pointer">
-                      <DropdownMenuItem onClick={() => handleOpenModal(user)} className="cursor-pointer">
-                        <UserCog className="h-4 w-4 mr-2" />
-                        Alterar Role
-                      </DropdownMenuItem>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <DropdownMenuItem
-                            className={`cursor-pointer ${user.status === "Enabled" ? "text-red-600" : ""}`}
-                            onSelect={(e) => e.preventDefault()}
-                          >
-                            <Power className="h-4 w-4 mr-2" />
-                            {user.status === "Enabled" ? "Inativar" : "Ativar"}
-                          </DropdownMenuItem>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>
-                              {user.status === "Enabled" ? "Inativar" : "Ativar"} Usuário
-                            </AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Tem certeza que deseja {user.status === "Enabled" ? "inativar" : "ativar"} o usuário {user.name}?
-                              {user.status === "Enabled" && " O usuário não poderá mais acessar o sistema."}
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => handleToggleUserStatus(user.id)}
-                              className={user.status === "Enabled" ? "bg-red-600 hover:bg-red-700" : ""}
-                            >
-                              {user.status === "Enabled" ? "Inativar" : "Ativar"}
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-
-      <div className="flex justify-between items-center mt-4">
-        <div className="flex items-center gap-4">
-          <p className="text-sm text-gray-600">
-            Mostrando {(pagination.current_page - 1) * pagination.per_page + 1} a{" "}
-            {Math.min(pagination.current_page * pagination.per_page, pagination.total_items)} de{" "}
-            {pagination.total_items} resultados
-          </p>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-600">Itens por página:</span>
-            <Select
-              value={pagination.per_page.toString()}
-              onValueChange={handlePerPageChange}
-            >
-              <SelectTrigger className="w-[100px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="5">5</SelectItem>
-                <SelectItem value="10">10</SelectItem>
-                <SelectItem value="25">25</SelectItem>
-                <SelectItem value="50">50</SelectItem>
-              </SelectContent>
-            </Select>
+      <div className="container mx-auto py-10">
+        <div className="space-y-4">
+          <div className="space-y-1">
+            <h1 className="text-3xl font-bold tracking-tight text-[#0284C7]">Usuários</h1>
+            <p className="text-sm text-gray-500">
+              Gerencie todos os usuários do sistema
+            </p>
           </div>
+          <Separator />
         </div>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleChangePage(pagination.previous_page || 1)}
-            disabled={!pagination.previous_page}
-          >
-            Anterior
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleChangePage(pagination.next_page || pagination.total_pages)}
-            disabled={!pagination.next_page}
-          >
-            Próximo
-          </Button>
-        </div>
-      </div>
 
-      <Dialog open={openModal} onOpenChange={setOpenModal}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Alterar Role do Usuário</DialogTitle>
-            <DialogDescription>
-              Usuário: {selectedUser?.name}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="role">Nova Role</Label>
+        <div className="mt-6 bg-white rounded-lg shadow-md border border-gray-100">
+          <div className="flex gap-4 p-6">
+            <Input
+              placeholder="Buscar por ID, email ou nome"
+              value={searchTerm}
+              onChange={(e) => handleSearch(e.target.value)}
+              className="flex-1"
+            />
+          </div>
+
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>ID</TableHead>
+                <TableHead>Nome</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Role</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-right">Ações</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {initialUsers.map((user) => (
+                <TableRow key={user.id}>
+                  <TableCell className="font-mono text-sm">
+                    {user.id.toString().slice(0, 8)}...
+                  </TableCell>
+                  <TableCell>{user.name}</TableCell>
+                  <TableCell>{user.email}</TableCell>
+                  <TableCell>{getRoleLabel(user.role)}</TableCell>
+                  <TableCell>
+                    <Badge
+                      className={user.status === "Enabled"
+                        ? "bg-blue-50 text-blue-700 hover:bg-blue-100"
+                        : "bg-red-50 text-red-700 hover:bg-red-100"
+                      }
+                    >
+                      {user.status === "Enabled" ? "Ativo" : "Inativo"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="cursor-pointer">
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="cursor-pointer">
+                        <DropdownMenuItem onClick={() => handleOpenModal(user)} className="cursor-pointer">
+                          <UserCog className="h-4 w-4 mr-2" />
+                          Alterar Role
+                        </DropdownMenuItem>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <DropdownMenuItem
+                              className={`cursor-pointer ${user.status === "Enabled" ? "text-red-600" : ""}`}
+                              onSelect={(e) => e.preventDefault()}
+                            >
+                              <Power className="h-4 w-4 mr-2" />
+                              {user.status === "Enabled" ? "Inativar" : "Ativar"}
+                            </DropdownMenuItem>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>
+                                {user.status === "Enabled" ? "Inativar" : "Ativar"} Usuário
+                              </AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Tem certeza que deseja {user.status === "Enabled" ? "inativar" : "ativar"} o usuário {user.name}?
+                                {user.status === "Enabled" && " O usuário não poderá mais acessar o sistema."}
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => handleToggleUserStatus(user.id)}
+                                className={user.status === "Enabled" ? "bg-red-600 hover:bg-red-700" : ""}
+                              >
+                                {user.status === "Enabled" ? "Inativar" : "Ativar"}
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        <div className="flex justify-between items-center mt-4">
+          <div className="flex items-center gap-4">
+            <p className="text-sm text-gray-600">
+              Mostrando {(pagination.current_page - 1) * pagination.per_page + 1} a{" "}
+              {Math.min(pagination.current_page * pagination.per_page, pagination.total_items)} de{" "}
+              {pagination.total_items} resultados
+            </p>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-600">Itens por página:</span>
               <Select
-                value={newRole}
-                onValueChange={setNewRole}
+                value={pagination.per_page.toString()}
+                onValueChange={handlePerPageChange}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-[100px]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Admin">Administrador</SelectItem>
-                  <SelectItem value="User">Usuário</SelectItem>
+                  <SelectItem value="5">5</SelectItem>
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="25">25</SelectItem>
+                  <SelectItem value="50">50</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={handleCloseModal}>
-              Cancelar
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleChangePage(pagination.previous_page || 1)}
+              disabled={!pagination.previous_page}
+            >
+              Anterior
             </Button>
-            <Button onClick={handleConfirmRoleChange}>
-              Confirmar
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleChangePage(pagination.next_page || pagination.total_pages)}
+              disabled={!pagination.next_page}
+            >
+              Próximo
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
+          </div>
+        </div>
+
+        <Dialog open={openModal} onOpenChange={setOpenModal}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Alterar Role do Usuário</DialogTitle>
+              <DialogDescription>
+                Usuário: {selectedUser?.name}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="role">Nova Role</Label>
+                <Select
+                  value={newRole}
+                  onValueChange={setNewRole}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Admin">Administrador</SelectItem>
+                    <SelectItem value="User">Usuário</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={handleCloseModal}>
+                Cancelar
+              </Button>
+              <Button onClick={handleConfirmRoleChange}>
+                Confirmar
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </>
+
   );
 };
 

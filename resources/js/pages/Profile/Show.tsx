@@ -18,7 +18,7 @@ interface Props {
 export default function Show({ sessions, twoFactorEnabled }: Props) {
   return (
     <>
-      <Head title="Perfil" />
+      <Head title="Perfil | Passageiro Legal" />
 
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">

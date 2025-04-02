@@ -71,27 +71,32 @@ const SolicitationDetails = ({ solicitation }: Props) => {
 
   return (
     <>
-      <Head title="Detalhes da Solicitação | Passageiro Legal" />
+      <Head title={`Solicitação ${solicitation.id} | Passageiro Legal`} />
 
-      <div className="container mx-auto py-10">
+      <div className="px-2 sm:px-4 md:container mx-auto py-6 md:py-10">
         <div className="space-y-4">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={handleBack}>
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <div className="space-y-1">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => router.visit('/solicitacoes')}
+                className="rounded-full"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
               <h1 className="text-3xl font-bold tracking-tight text-[#0284C7]">
-                Detalhes da Solicitação
+                Solicitação {solicitation.id.slice(0, 8)}...
               </h1>
-              <p className="text-sm text-gray-500">
-                Visualize todos os detalhes da solicitação de indenização
-              </p>
             </div>
+            <p className="text-sm text-gray-500 ml-11">
+              Detalhes da solicitação de indenização
+            </p>
           </div>
           <Separator />
         </div>
 
-        <div className="mt-6 grid gap-6">
+        <div className="mt-4 md:mt-6 space-y-4 md:space-y-6">
           <Card>
             <CardHeader>
               <CardTitle>Informações Gerais</CardTitle>
@@ -228,7 +233,6 @@ const SolicitationDetails = ({ solicitation }: Props) => {
         </div>
       </div>
     </>
-
   );
 };
 

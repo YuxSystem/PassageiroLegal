@@ -181,7 +181,7 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
     <>
       <Head title="Solicitações | Passageiro Legal" />
 
-      <div className="container mx-auto py-10">
+      <div className="px-2 sm:px-4 md:container mx-auto py-6 md:py-10">
         <div className="space-y-4">
           <div className="space-y-1">
             <h1 className="text-3xl font-bold tracking-tight text-[#0284C7]">Solicitações</h1>
@@ -192,7 +192,7 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
           <Separator />
         </div>
 
-        <div className="mt-6 bg-white rounded-lg shadow-md border border-gray-100">
+        <div className="mt-4 md:mt-6 bg-white rounded-lg shadow-md border border-gray-100">
           {solicitations.length > 0 ? (
             <>
               <Table>

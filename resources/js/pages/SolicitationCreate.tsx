@@ -9,6 +9,9 @@ import { PersonalDataStep } from '@/components/requests/PersonalDataStep';
 import { UserModel } from '@/models/UserModel';
 import { STEPS, REQUIRED_USER_FIELDS } from '@/constants/solicitation';
 import { router } from '@inertiajs/react'
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 export default function SolicitationCreate() {
   const [currentStep, setCurrentStep] = React.useState(1);
@@ -168,9 +171,31 @@ export default function SolicitationCreate() {
     <>
       <Head title="Nova Solicitação | Passageiro Legal" />
 
-      <div className="container max-w-5xl mx-auto">
-        <Stepper steps={STEPS} currentStep={currentStep} />
-        <Card>{renderStepContent()}</Card>
+      <div className="px-2 sm:px-4 md:container mx-auto py-6 md:py-10">
+        <div className="space-y-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => router.visit('/solicitacoes')}
+                className="rounded-full"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <h1 className="text-3xl font-bold tracking-tight text-[#0284C7]">Nova Solicitação</h1>
+            </div>
+            <p className="text-sm text-gray-500 ml-11">
+              Preencha os dados para solicitar sua indenização
+            </p>
+          </div>
+          <Separator />
+        </div>
+
+        <div className="mt-4 md:mt-6 max-w-2xl">
+          <Stepper steps={STEPS} currentStep={currentStep} />
+          <Card>{renderStepContent()}</Card>
+        </div>
       </div>
     </>
   );

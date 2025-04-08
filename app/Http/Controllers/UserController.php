@@ -46,8 +46,28 @@ class UserController extends Controller
   public function show(string $id)
   {
     $user = User::findOrFail($id);
+    $perPage = request()->input('per_page', 10);
+    $page = request()->input('page', 1);
+
+    $solicitations = $user->solicitations()
+      ->orderBy('created_at', 'desc')
+      ->paginate($perPage);
+
     return Inertia::render('UserDetails', [
-      'user' => $user
+      'user' => $user,
+      'solicitations' => $solicitations->items(),
+      'solicitations_pagination' => [
+        'current_page' => $solicitations->currentPage(),
+        'total_pages' => $solicitations->lastPage(),
+        'total_items' => $solicitations->total(),
+        'per_page' => $solicitations->perPage(),
+        'next_page' => $solicitations->nextPageUrl()
+          ? $solicitations->nextPageUrl() . "&per_page={$perPage}"
+          : null,
+        'previous_page' => $solicitations->previousPageUrl()
+          ? $solicitations->previousPageUrl() . "&per_page={$perPage}"
+          : null,
+      ]
     ]);
   }
 

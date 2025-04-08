@@ -43,6 +43,7 @@ Route::middleware(['auth', 'admin', 'enabled'])->group(function () {
 
   // Rotas de usuários
   Route::get('/admin/usuarios', [UserController::class, 'index']);
+  Route::get('/admin/usuarios/{id}', [UserController::class, 'show']);
   Route::put('/admin/usuarios/{id}/role', [UserController::class, 'changeRole']);
   Route::put('/admin/usuarios/{id}/toggle-status', [UserController::class, 'toggleStatus']);
 });

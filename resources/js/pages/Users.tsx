@@ -28,7 +28,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { MoreVertical, UserCog, Power, Users2 } from "lucide-react";
+import { MoreVertical, UserCog, Power, Users2, Eye } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -241,6 +241,10 @@ const Users: React.FC<Props> = ({ users: initialUsers, pagination, search: initi
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end" className="cursor-pointer">
+                            <DropdownMenuItem onClick={() => router.get(`/admin/usuarios/${user.id}`)} className="cursor-pointer">
+                              <Eye className="h-4 w-4 mr-2" />
+                              Visualizar
+                            </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleOpenModal(user)} className="cursor-pointer">
                               <UserCog className="h-4 w-4 mr-2" />
                               Alterar Role

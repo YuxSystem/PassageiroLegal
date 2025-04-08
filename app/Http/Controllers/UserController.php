@@ -43,16 +43,16 @@ class UserController extends Controller
     return Inertia::render('Components/AddUsuario');
   }
 
+  public function show(string $id)
+  {
+    $user = User::findOrFail($id);
+    return Inertia::render('UserDetails', [
+      'user' => $user
+    ]);
+  }
+
   public function update(Request $request, User $user)
   {
-    // if ($request->has('rule')) {
-    //   $user->update(['rule' => $request->rule]);
-    // }
-
-    // if ($request->has('status')) {
-    //   $user->update(['status' => $request->status]);
-    // }
-
     $user->update($request->all());
 
     return back();

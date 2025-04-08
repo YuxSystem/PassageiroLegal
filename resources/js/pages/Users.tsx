@@ -53,6 +53,11 @@ interface Props {
   search?: string;
 }
 
+interface EmptyStateProps {
+  searchTerm: string;
+  handleSearch: (value: string) => void;
+}
+
 const getRoleLabel = (role: string) => {
   switch (role.toLowerCase()) {
     case "admin":
@@ -64,16 +69,24 @@ const getRoleLabel = (role: string) => {
   }
 };
 
-const EmptyState = () => {
+const EmptyState: React.FC<EmptyStateProps> = ({ searchTerm, handleSearch }) => {
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4">
       <div className="bg-gray-50 rounded-full p-4 mb-4">
         <Users2 className="h-8 w-8 text-gray-400" />
       </div>
       <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum usuário encontrado</h3>
-      <p className="text-sm text-gray-500 text-center max-w-sm">
+      <p className="text-sm text-gray-500 text-center max-w-sm mb-4">
         Não existem usuários registrados no momento.
       </p>
+      <div className="w-full max-w-md">
+        <Input
+          placeholder="Buscar por ID, email ou nome"
+          value={searchTerm}
+          onChange={(e) => handleSearch(e.target.value)}
+          className="w-full"
+        />
+      </div>
     </div>
   );
 };
@@ -316,7 +329,7 @@ const Users: React.FC<Props> = ({ users: initialUsers, pagination, search: initi
               </div>
             </>
           ) : (
-            <EmptyState />
+            <EmptyState searchTerm={searchTerm} handleSearch={handleSearch} />
           )}
         </div>
 

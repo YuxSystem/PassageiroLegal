@@ -205,7 +205,7 @@ const UserDetails: React.FC<Props> = ({ user, solicitations, solicitations_pagin
               <ArrowLeft className="h-4 w-4" />
             </Button>
             <div className="space-y-1">
-              <h1 className="text-3xl font-bold tracking-tight text-[#0284C7]">Detalhes do Usuário</h1>
+              <h1 className="text-3xl font-bold tracking-tight text-indigo-800">Detalhes do Usuário</h1>
               <p className="text-sm text-gray-500">
                 Visualize e gerencie as informações do usuário
               </p>
@@ -309,33 +309,6 @@ const UserDetails: React.FC<Props> = ({ user, solicitations, solicitations_pagin
                   <Label className="text-gray-500 text-sm">País</Label>
                   <p className="font-medium">{user.country || "-"}</p>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Ações do Usuário */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Ações</CardTitle>
-              <CardDescription>Gerencie as permissões e status do usuário</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button
-                  variant="outline"
-                  onClick={() => setOpenRoleModal(true)}
-                >
-                  <UserCog className="h-4 w-4 mr-2" />
-                  Alterar Role
-                </Button>
-
-                <Button
-                  variant={user.status === "Enabled" ? "destructive" : "default"}
-                  onClick={() => setOpenStatusModal(true)}
-                >
-                  <Power className="h-4 w-4 mr-2" />
-                  {user.status === "Enabled" ? "Inativar" : "Ativar"} Usuário
-                </Button>
               </div>
             </CardContent>
           </Card>
@@ -468,6 +441,33 @@ const UserDetails: React.FC<Props> = ({ user, solicitations, solicitations_pagin
                   </p>
                 </div>
               )}
+            </CardContent>
+          </Card>
+
+          {/* Ações do Usuário */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Ações</CardTitle>
+              <CardDescription>Gerencie as permissões e status do usuário</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setOpenRoleModal(true)}
+                >
+                  <UserCog className="h-4 w-4 mr-2" />
+                  Alterar Role
+                </Button>
+
+                <Button
+                  variant={user.status === "Enabled" ? "destructive" : "default"}
+                  onClick={() => setOpenStatusModal(true)}
+                >
+                  <Power className="h-4 w-4 mr-2" />
+                  {user.status === "Enabled" ? "Inativar" : "Ativar"} Usuário
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>

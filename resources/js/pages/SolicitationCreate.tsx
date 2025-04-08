@@ -9,8 +9,6 @@ import { PersonalDataStep } from '@/components/requests/PersonalDataStep';
 import { UserModel } from '@/models/UserModel';
 import { STEPS, REQUIRED_USER_FIELDS } from '@/constants/solicitation';
 import { router } from '@inertiajs/react'
-import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { ConfirmationStep } from '@/components/requests/ConfirmationStep';
 
@@ -203,7 +201,7 @@ export default function SolicitationCreate() {
       <div className="px-2 sm:px-4 md:container mx-auto py-6 md:py-10">
         <div className="space-y-4">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold tracking-tight text-[#0284C7]">Nova Solicitação</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-indigo-800">Nova Solicitação</h1>
             <p className="text-sm text-gray-500">
               Preencha os dados para solicitar sua indenização
             </p>

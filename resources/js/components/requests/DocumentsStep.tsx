@@ -61,7 +61,7 @@ export function DocumentsStep({
         "border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center space-y-2 hover:border-sky-600 transition-colors",
         error && "border-red-500"
       )}>
-        <div className="bg-sky-50 p-2 rounded-full">
+        <div className="bg-indigo-50 p-2 rounded-full">
           <Upload className="h-6 w-6 text-sky-600" />
         </div>
         <label

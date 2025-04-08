@@ -12,8 +12,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-16">
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center space-x-2 font-medium text-xl mb-4">
-              <PlaneTakeoff className="h-6 w-6 text-sky-600" />
-              <span className="font-semibold">Passageiro Legal</span>
+              <img src="/lovable-uploads/LogoHorizontal.png" alt="Logo" className="h-10" />
             </Link>
             <p className="text-muted-foreground mb-6">
               Ajudamos passageiros a obter compensação por voos atrasados,
@@ -87,7 +86,7 @@ const Footer = () => {
                 placeholder="Seu email"
                 className="bg-white"
               />
-              <Button variant="default" className="bg-sky-600 hover:bg-sky-700 whitespace-nowrap">
+              <Button variant="default" className="bg-indigo-800 hover:bg-indigo-700 whitespace-nowrap">
                 Assinar
               </Button>
             </div>

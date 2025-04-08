@@ -16,7 +16,7 @@ const Hero = () => {
     <section className="relative py-16 md:py-24 lg:py-32 bg-gradient-to-b from-sky-50 to-white overflow-hidden">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -right-1/4 -top-24 w-1/2 h-1/2 bg-blue-100 rounded-full opacity-20 blur-3xl"></div>
-        <div className="absolute -left-1/4 top-1/4 w-1/2 h-1/2 bg-sky-100 rounded-full opacity-20 blur-3xl"></div>
+        <div className="absolute -left-1/4 top-1/4 w-1/2 h-1/2 bg-indigo-100 rounded-full opacity-20 blur-3xl"></div>
       </div>
       <div className="page-container relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">

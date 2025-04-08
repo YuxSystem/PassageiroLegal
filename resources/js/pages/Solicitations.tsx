@@ -184,7 +184,7 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
       <div className="px-2 sm:px-4 md:container mx-auto py-6 md:py-10">
         <div className="space-y-4">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold tracking-tight text-[#0284C7]">Solicitações</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-indigo-800">Solicitações</h1>
             <p className="text-sm text-gray-500">
               Gerencie todas as solicitações de indenização
             </p>

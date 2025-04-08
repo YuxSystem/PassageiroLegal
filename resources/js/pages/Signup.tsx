@@ -111,7 +111,7 @@ const Signup = () => {
 
                   <Button
                     type="submit"
-                    className="w-full bg-sky-600 hover:bg-sky-700"
+                    className="w-full bg-indigo-800 hover:bg-indigo-700"
                     disabled={processing}
                   >
                     {processing ? "Criando conta..." : "Criar conta"}

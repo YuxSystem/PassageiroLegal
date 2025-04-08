@@ -64,8 +64,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
             <SheetContent side="left" className="w-[300px] p-0">
               <ScrollArea className="h-full py-6">
                 <div className="px-4 flex items-center space-x-2 font-medium text-xl md:text-2xl">
-                  <PlaneTakeoff className="h-6 w-6 text-sky-600" />
-                  <span className="font-semibold">Passageiro Legal</span>
+                  <img src="/lovable-uploads/LogoHorizontal.png" alt="Logo" className="h-10" />
                 </div>
                 <nav className="mt-6">
                   {menuItems.map((item) => (
@@ -73,8 +72,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        "flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-[#0284C7] mb-2",
-                        isActive(item.href) && "bg-[#0284C7]/10 text-[#0284C7] font-medium"
+                        "flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-indigo-800 mb-2",
+                        isActive(item.href) && "bg-[#0284C7]/10 text-indigo-800 font-medium"
                       )}
                     >
                       {item.icon}
@@ -88,8 +87,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
           <div className="flex-1">
             <div className="flex items-center space-x-2 font-medium text-xl md:text-2xl">
-              <PlaneTakeoff className="h-6 w-6 text-sky-600" />
-              <span className="font-semibold">Passageiro Legal</span>
+              <img src="/lovable-uploads/LogoHorizontal.png" alt="Logo" className="h-10" />
+
             </div>
           </div>
 
@@ -142,8 +141,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 hover:text-[#0284C7] transition-colors mb-2",
-                  isActive(item.href) && "bg-[#0284C7]/10 text-[#0284C7] font-medium"
+                  "flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 hover:text-indigo-800 transition-colors mb-2",
+                  isActive(item.href) && "bg-[#0284C7]/10 text-indigo-800 font-medium"
                 )}
               >
                 {item.icon}

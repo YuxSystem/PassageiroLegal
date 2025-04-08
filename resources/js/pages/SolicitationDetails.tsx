@@ -85,7 +85,7 @@ const SolicitationDetails = ({ solicitation }: Props) => {
               >
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <h1 className="text-3xl font-bold tracking-tight text-[#0284C7]">
+              <h1 className="text-3xl font-bold tracking-tight text-indigo-800">
                 Solicitação {solicitation.id.slice(0, 8)}...
               </h1>
             </div>

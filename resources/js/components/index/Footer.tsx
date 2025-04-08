@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PlaneTakeoff, Mail, Phone, MapPin } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { Link } from "@inertiajs/react";
 
 const Footer = () => {
   return (
@@ -10,10 +11,10 @@ const Footer = () => {
       <div className="page-container">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-16">
           <div className="lg:col-span-1">
-            <a href="/" className="flex items-center space-x-2 font-medium text-xl mb-4">
+            <Link href="/" className="flex items-center space-x-2 font-medium text-xl mb-4">
               <PlaneTakeoff className="h-6 w-6 text-sky-600" />
               <span className="font-semibold">Passageiro Legal</span>
-            </a>
+            </Link>
             <p className="text-muted-foreground mb-6">
               Ajudamos passageiros a obter compensação por voos atrasados,
               cancelados ou com overbooking.

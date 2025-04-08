@@ -34,13 +34,13 @@ const testimonials = [
     author: "Rita Rodrigues"
   },
   {
-    stars: 5,
+    stars: 4,
     timeAgo: "13 horas atrás",
     text: "Muito boa experiência e rápido serviço.",
     author: "Marco Santos Rebelo"
   },
   {
-    stars: 5,
+    stars: 4,
     timeAgo: "a day ago",
     text: "Passageiro Legal ajudaram muito na devolução do dinheiro por causa do voo atrasado. Sem problemas recebi o dinheiro na conta.",
     author: "Joanna Maria Leite"
@@ -60,35 +60,33 @@ const HowItWorks = () => {
             </div>
           ))}
         </div>
-        
+
         {/* Nós só recebemos quando você ganhar */}
         <div className="mt-24 bg-gradient-to-r from-blue-50 to-white rounded-xl shadow-md p-6 md:p-10">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             <div className="md:col-span-7">
               <div className="text-sm font-medium text-blue-600 uppercase mb-2">SEM PAGAMENTOS ANTECIPADOS</div>
-              <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-indigo-800 mb-4">
                 Nós só recebemos quando você ganhar
               </h2>
               <p className="text-muted-foreground mb-6">
                 Nossa tarifa é deduzida da indenização que ganhamos para você. Isso significa que nada sai da sua conta bancária e você não tem nada a perder. Nossa tarifa padrão é de 35% e já inclui todas as taxas, ou seja, sem surpresas no final.
               </p>
-              <Button className="bg-blue-600 hover:bg-blue-700">
+              <Button className="bg-indigo-800 hover:bg-indigo-700">
                 Verificar meu direito
               </Button>
             </div>
-            
+
             <div className="md:col-span-5">
               <div className="relative">
-                <div className="w-full max-w-[300px] h-[200px] mx-auto bg-blue-100 rounded-lg flex items-center justify-center">
-                  <div className="text-4xl">💸</div>
-                </div>
+                <img src="/lovable-uploads/Viajante.jpg" alt="Viajante" className="w-full max-w-[300px] h-[200px] mx-auto bg-blue-100 rounded-lg flex items-center justify-center" />
                 <div className="absolute -top-4 -right-4 w-20 h-20 bg-blue-100 rounded-full z-0"></div>
                 <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-pink-100 rounded-full z-0"></div>
               </div>
             </div>
           </div>
         </div>
-        
+
         {/* Avaliações */}
         <div className="mt-24">
           <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-8 text-center">
@@ -113,7 +111,7 @@ const HowItWorks = () => {
             ))}
           </div>
         </div>
-        
+
         {/* Stats */}
         <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-6">
           {[

@@ -24,16 +24,16 @@ const Hero = () => {
             "w-full lg:w-1/2 space-y-6 transition-all duration-700 transform",
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           )}>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-600 text-sm font-medium mb-2">
-              <Star className="h-4 w-4 fill-blue-500 text-blue-500" /> Avaliado em 4.9/5 por nossos clientes
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-200 text-indigo-600 text-sm font-medium mb-2">
+              <Star className="h-4 w-4 fill-orange-400 text-orange-400" /> Avaliado em 4.9/5 por nossos clientes
             </div>
 
             <h1 className="font-bold leading-tight text-3xl md:text-4xl lg:text-5xl text-blue-900">
-              Seu voo foi <span className="text-red-500">cancelado</span> ou <span className="text-red-500">atrasou</span>?
+              Seu voo foi <span className="text-orange-300">cancelado</span> ou <span className="text-orange-300">atrasou</span>?
             </h1>
 
             <p className="text-base md:text-lg text-muted-foreground max-w-2xl">
-              Receba até <span className="font-semibold text-blue-600">R$ 10.000 de indenização</span> por passageiro, seja qual for o preço da passagem. Você só paga se ganhar!
+              Receba até <span className="font-semibold text-indigo-800">R$ 10.000 de indenização</span> por passageiro, seja qual for o preço da passagem. Você só paga se ganhar!
             </p>
 
             <div className="mt-8 w-full">
@@ -48,7 +48,7 @@ const Hero = () => {
                   </div>
 
                   <div>
-                    <Button className="w-full md:w-auto h-12 bg-red-500 hover:bg-red-600 text-base">
+                    <Button className="w-full md:w-auto h-12 bg-orange-100 hover:bg-orange-200 text-base text-indigo-8">
                       <Search className="h-4 w-4 mr-2" />
                       Verificar indenização
                     </Button>
@@ -90,10 +90,10 @@ const Hero = () => {
 
           <div className="w-full lg:w-1/2 mt-8 lg:mt-0">
             <div className="relative">
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-red-500 rounded-lg blur opacity-20"></div>
-              <div className="w-full h-80 md:h-96 bg-gradient-to-r from-blue-100 to-sky-50 rounded-lg shadow-lg relative">
+              <div className="absolute -inset-0.5 rounded-lg blur opacity-20"></div>
+              <div className="w-full h-80 md:h-96 rounded-lg shadow-lg relative">
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <PlaneTakeoff className="h-24 w-24 text-blue-300" />
+                  <img src="/lovable-uploads/Passageira.jpg" alt="Passageira" className="w-full h-80 md:h-96 rounded-lg bg-red-600" />
                 </div>
               </div>
               <div className="absolute -bottom-6 -right-6 bg-white shadow-lg rounded-lg p-4 max-w-xs">

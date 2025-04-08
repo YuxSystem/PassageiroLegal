@@ -143,7 +143,7 @@ const FlightProblems = () => {
               A PASSAGEIRO LEGAL PROTEGE OS DIREITOS DO PASSAGEIRO AÉREO
             </h2>
           </div>
-          
+
           <div className="flex flex-wrap justify-center gap-4 md:gap-8">
             <div className="flex items-center gap-3 bg-white p-3 rounded-lg">
               <img src="/lovable-uploads/e93d2528-7af4-4fa0-ae0e-7e5639850faf.png" alt="Brasil" className="w-8 h-8" />

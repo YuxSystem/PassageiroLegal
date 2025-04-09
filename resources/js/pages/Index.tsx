@@ -8,7 +8,7 @@ import FAQ from "@/components/index/FAQ";
 import Footer from "@/components/index/Footer";
 import { Button } from "@/components/ui/button";
 import { PlaneTakeoff, ArrowRight, X } from "lucide-react";
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 
 const FloatingCTA = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -35,11 +35,12 @@ const FloatingCTA = () => {
               Reivindique até R$ 10.000 pelo atraso ou cancelamento do seu voo.
             </h3>
           </div>
-
-          <Button className="bg-white text-blue-600 hover:bg-blue-50 whitespace-nowrap group transition-all w-full sm:w-auto">
-            Verificar indenização
-            <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
-          </Button>
+          <Link href="/login">
+            <Button className="bg-white text-blue-600 hover:bg-blue-50 whitespace-nowrap group transition-all w-full sm:w-auto">
+              Verificar indenização
+              <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

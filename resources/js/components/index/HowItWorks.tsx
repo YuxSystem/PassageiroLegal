@@ -2,6 +2,7 @@
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Link } from "@inertiajs/react";
 
 const features = [
   {
@@ -72,9 +73,11 @@ const HowItWorks = () => {
               <p className="text-muted-foreground mb-6">
                 Nossa tarifa é deduzida da indenização que ganhamos para você. Isso significa que nada sai da sua conta bancária e você não tem nada a perder. Nossa tarifa padrão é de 35% e já inclui todas as taxas, ou seja, sem surpresas no final.
               </p>
-              <Button className="bg-indigo-800 hover:bg-indigo-700">
-                Verificar meu direito
-              </Button>
+              <Link href="/login">
+                <Button className="bg-indigo-800 hover:bg-indigo-700">
+                  Verificar meu direito
+                </Button>
+              </Link>
             </div>
 
             <div className="md:col-span-5">

@@ -1,10 +1,9 @@
-
 import { Button } from "@/components/ui/button";
 import { Check, Award, PlaneTakeoff } from "lucide-react";
 
 const PassengerRights = () => {
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+    <section id="seus-direitos" className="py-16 md:py-24 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
       <div className="page-container">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-6">
@@ -20,7 +19,9 @@ const PassengerRights = () => {
 
             <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex items-start gap-3">
-                <Check className="h-6 w-6 text-white bg-green-500 rounded-full p-1 mt-0.5" />
+                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+                  <Check className="h-3.5 w-3.5 text-white" />
+                </div>
                 <div>
                   <h3 className="font-medium mb-1">R$ 100 para problemas com voo</h3>
                   <p className="text-sm text-blue-100">Compensação imediata para qualquer problema</p>
@@ -28,7 +29,9 @@ const PassengerRights = () => {
               </div>
 
               <div className="flex items-start gap-3">
-                <Check className="h-6 w-6 text-white bg-green-500 rounded-full p-1 mt-0.5" />
+                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+                  <Check className="h-3.5 w-3.5 text-white" />
+                </div>
                 <div>
                   <h3 className="font-medium mb-1">Acesso à sala VIP durante um problema</h3>
                   <p className="text-sm text-blue-100">Espere confortavelmente enquanto resolvemos seu caso</p>
@@ -36,7 +39,9 @@ const PassengerRights = () => {
               </div>
 
               <div className="flex items-start gap-3">
-                <Check className="h-6 w-6 text-white bg-green-500 rounded-full p-1 mt-0.5" />
+                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+                  <Check className="h-3.5 w-3.5 text-white" />
+                </div>
                 <div>
                   <h3 className="font-medium mb-1">R$ 100 por perda ou atraso de mala</h3>
                   <p className="text-sm text-blue-100">Compensação por transtornos com bagagem</p>
@@ -44,7 +49,9 @@ const PassengerRights = () => {
               </div>
 
               <div className="flex items-start gap-3">
-                <Check className="h-6 w-6 text-white bg-green-500 rounded-full p-1 mt-0.5" />
+                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+                  <Check className="h-3.5 w-3.5 text-white" />
+                </div>
                 <div>
                   <h3 className="font-medium mb-1">Assistência 24 horas, todos os dias</h3>
                   <p className="text-sm text-blue-100">Suporte completo quando você mais precisar</p>

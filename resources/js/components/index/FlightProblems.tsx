@@ -1,6 +1,7 @@
 
 import { PlaneTakeoff, Clock, Users, Building, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "@inertiajs/react";
 
 const problemTypes = [
   {
@@ -130,9 +131,11 @@ const FlightProblems = () => {
           </div>
 
           <div className="mt-12 text-center">
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg h-auto">
-              Verificar Indenização
-            </Button>
+            <Link href="/login">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg h-auto">
+                Verificar Indenização
+              </Button>
+            </Link>
           </div>
         </div>
 

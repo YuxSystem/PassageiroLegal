@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PlaneTakeoff, Search, Star, Check, BarChart, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Link } from "@inertiajs/react";
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -47,12 +48,12 @@ const Hero = () => {
                     />
                   </div>
 
-                  <div>
+                  <Link href="/cadastro">
                     <Button className="w-full md:w-auto h-12 bg-orange-100 hover:bg-orange-200 text-base text-indigo-8">
                       <Search className="h-4 w-4 mr-2" />
                       Verificar indenização
                     </Button>
-                  </div>
+                  </Link>
                 </div>
 
                 <div className="mt-4 text-sm text-center text-muted-foreground">

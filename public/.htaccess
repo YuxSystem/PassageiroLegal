@@ -1,24 +1,33 @@
 <IfModule mod_rewrite.c>
+    # Desativa MultiViews e Indexação
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>
 
     RewriteEngine On
 
-    # Handle Authorization Header
+    # Redireciona http://deployteste.com.br → https://www.deployteste.com.br
+    RewriteCond %{HTTP_HOST} ^deployteste\.com\.br$ [NC]
+    RewriteRule ^(.*)$ https://www.deployteste.com.br/$1 [L,R=301]
+
+    # Força HTTPS em todas as requisições
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Permite passar o Authorization Header corretamente
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Handle X-XSRF-Token Header
+    # Permite X-XSRF-Token Headers
     RewriteCond %{HTTP:x-xsrf-token} .
     RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
 
-    # Redirect Trailing Slashes If Not A Folder...
+    # Remove barras no final das URLs, caso não seja uma pasta
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
+    # Redireciona todas as requisições para o index.php (caso não seja um arquivo ou diretório existente)
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]

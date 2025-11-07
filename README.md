@@ -1,66 +1,223 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🛫 Passageiro Legal
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Plataforma web para resolução de problemas com voos aéreos no Brasil, baseada na **Resolução nº 400 da ANAC**. A aplicação facilita o processo de registro de reclamações, gerenciamento de documentos e acompanhamento de status através de um sistema hierárquico de equipe interna.
 
-## About Laravel
+## 📋 Sobre o Projeto
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+O **Passageiro Legal** foi desenvolvido para auxiliar passageiros aéreos a solicitarem indenizações e reivindicações quando ocorrem problemas com voos. A plataforma informa os passageiros sobre seus direitos garantidos pela Resolução ANAC 400 e oferece um processo simplificado para registro de reclamações.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Tipos de Problemas Suportados
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- ✈️ Atrasos de voos
+- ❌ Cancelamentos
+- 👥 Overbooking
+- 🧳 Bagagem extraviada ou danificada
 
-## Learning Laravel
+## 🎯 Funcionalidades
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Para Passageiros
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- 📝 Registro de reclamações através de formulário multi-step
+- 📄 Upload de documentos necessários (registro de nascimento, comprovante de residência, comprovante de voo)
+- 👀 Acompanhamento do status das solicitações
+- 📚 Informações sobre direitos do passageiro (Resolução ANAC 400)
+- 🔐 Autenticação segura com 2FA
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Para a Equipe Interna
 
-## Laravel Sponsors
+#### Agentes (Nível Básico)
+- Visualização de processos atribuídos
+- Análise de documentação
+- Execução de tarefas operacionais
+- Atualização de status dos processos
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+#### Supervisores (Nível Intermediário)
+- Visualização de todos os processos
+- Atribuição de processos aos agentes
+- Validação e aprovação de trabalhos
+- Supervisão da equipe
 
-### Premium Partners
+#### Administradores (Nível Total)
+- Controle total do sistema
+- Gerenciamento de usuários e permissões
+- Acesso a estatísticas completas
+- Tomada de decisões estratégicas
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## 🛠️ Stack Tecnológico
 
-## Contributing
+### Backend
+- **Laravel 11.31+** - Framework PHP
+- **Laravel Fortify** - Autenticação
+- **Laravel Jetstream** - Profile management e 2FA
+- **Laravel Sanctum** - API tokens
+- **PHP 8.2+** - Linguagem
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Frontend
+- **React 18.3.1+** - Biblioteca UI
+- **TypeScript 5.5.3+** - Type safety
+- **Inertia.js 2.0+** - Integração Laravel/React
+- **Tailwind CSS 3.4+** - Estilização
+- **Radix UI** - Componentes acessíveis
+- **React Hook Form** - Gerenciamento de formulários
 
-## Code of Conduct
+### Ferramentas
+- **Vite 5.4+** - Build tool
+- **Ziggy** - Rotas Laravel no frontend
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 📦 Requisitos
 
-## Security Vulnerabilities
+- PHP 8.2 ou superior
+- Composer
+- Node.js 18+ e npm
+- Banco de dados (SQLite para desenvolvimento, MySQL/PostgreSQL para produção)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 🚀 Instalação
 
-## License
+1. **Clone o repositório**
+```bash
+git clone https://github.com/seu-usuario/passageiro-legal.git
+cd passageiro-legal
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+2. **Instale as dependências do backend**
+```bash
+composer install
+```
+
+3. **Instale as dependências do frontend**
+```bash
+npm install
+```
+
+4. **Configure o ambiente**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+5. **Configure o banco de dados no `.env`**
+```env
+DB_CONNECTION=sqlite
+# ou
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=passageiro_legal
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+6. **Execute as migrations**
+```bash
+php artisan migrate
+```
+
+7. **Compile os assets**
+```bash
+npm run build
+# ou para desenvolvimento
+npm run dev
+```
+
+8. **Inicie o servidor**
+```bash
+php artisan serve
+```
+
+A aplicação estará disponível em `http://localhost:8000`
+
+## 🏗️ Estrutura do Projeto
+
+```
+passageiro-legal/
+├── app/
+│   ├── Enums/              # Enums PHP
+│   ├── Http/
+│   │   ├── Controllers/    # Controllers
+│   │   ├── Middleware/     # Middleware customizado
+│   │   └── Requests/       # Request validation
+│   ├── Models/             # Eloquent models
+│   ├── Repositories/       # Repository pattern
+│   ├── Services/           # Service layer
+│   └── Providers/          # Service providers
+├── resources/
+│   ├── js/
+│   │   ├── components/     # Componentes React
+│   │   ├── pages/          # Páginas Inertia
+│   │   ├── models/         # TypeScript models
+│   │   └── utils/          # Utilitários
+│   └── views/              # Templates Blade
+├── routes/
+│   ├── web.php             # Rotas web
+│   └── auth.php            # Rotas de autenticação
+└── database/
+    ├── migrations/          # Database migrations
+    └── seeders/            # Database seeders
+```
+
+## 📚 Base Legal
+
+A plataforma está fundamentada na **Resolução nº 400 da ANAC** (Agência Nacional de Aviação Civil), que estabelece os direitos dos passageiros aéreos no Brasil em casos de problemas com voos.
+
+## 🔐 Sistema de Autenticação
+
+O projeto utiliza um sistema hierárquico de roles:
+
+- **User** - Passageiros que registram reclamações
+- **Employee** - Agentes que processam solicitações
+- **Admin** - Administradores com controle total
+
+## 🧪 Testes
+
+Execute os testes com:
+```bash
+php artisan test
+```
+
+## 📝 Scripts Disponíveis
+
+### Composer
+```bash
+composer dev  # Inicia servidor, queue, logs e Vite simultaneamente
+```
+
+### NPM
+```bash
+npm run dev   # Modo desenvolvimento com hot reload
+npm run build # Build de produção
+```
+
+## 🤝 Contribuindo
+
+Contribuições são bem-vindas! Por favor:
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+### Diretrizes de Desenvolvimento
+
+- **Reutilize arquivos existentes** sempre que possível
+- **Melhore o código existente** antes de criar novos arquivos
+- Mantenha o código **organizado, limpo e reutilizável**
+- Evite fragmentar a estrutura do projeto
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+## 👥 Autores
+
+- **Equipe Passageiro Legal**
+
+## 🙏 Agradecimentos
+
+- Laravel Framework
+- Comunidade React
+- ANAC pela Resolução 400
+
+---
+
+**Desenvolvido com ❤️ para ajudar passageiros aéreos no Brasil**

@@ -131,6 +131,47 @@ class SolicitationController extends Controller
     return back();
   }
 
+  public function validate(Request $request, string $id)
+  {
+    $request->validate([
+      'status' => 'required|in:Aprovado,Rejeitado',
+      'notes' => 'nullable|string|max:500',
+    ]);
+
+    $this->solicitationService->validateSolicitation(
+      $id,
+      $request->input('status'),
+      $request->input('notes')
+    );
+
+    return back();
+  }
+
+  public function pendingValidation(Request $request)
+  {
+    $perPage = (int)$request->input('per_page', 10);
+    $page = (int)$request->input('page', 1);
+
+    $solicitations = $this->solicitationService->getPendingValidation($perPage, $page);
+
+    return Inertia::render('Solicitations', [
+      'solicitations' => $solicitations->items(),
+      'pagination' => [
+        'current_page' => $solicitations->currentPage(),
+        'total_pages' => $solicitations->lastPage(),
+        'total_items' => $solicitations->total(),
+        'per_page' => $solicitations->perPage(),
+        'next_page' => $solicitations->nextPageUrl()
+          ? $solicitations->nextPageUrl() . "&per_page={$perPage}"
+          : null,
+        'previous_page' => $solicitations->previousPageUrl()
+          ? $solicitations->previousPageUrl() . "&per_page={$perPage}"
+          : null,
+      ],
+      'filter' => 'pending_validation',
+    ]);
+  }
+
   public function unassigned(Request $request)
   {
     $perPage = (int)$request->input('per_page', 10);
@@ -154,6 +195,83 @@ class SolicitationController extends Controller
       ],
       'filter' => 'unassigned',
     ]);
+  }
+
+  public function export(Request $request, string $format)
+  {
+    $solicitations = Solicitation::with(['user', 'assignedTo', 'assignedBy'])
+      ->orderBy('created_at', 'desc')
+      ->get();
+
+    if ($format === 'csv') {
+      return $this->exportToCsv($solicitations);
+    } elseif ($format === 'pdf') {
+      return $this->exportToPdf($solicitations);
+    }
+
+    return back()->withErrors(['format' => 'Formato não suportado']);
+  }
+
+  private function exportToCsv($solicitations)
+  {
+    $filename = 'solicitacoes_' . date('Y-m-d_H-i-s') . '.csv';
+    
+    $headers = [
+      'Content-Type' => 'text/csv',
+      'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+    ];
+
+    $callback = function() use ($solicitations) {
+      $file = fopen('php://output', 'w');
+      
+      // BOM para UTF-8
+      fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+      
+      // Cabeçalhos
+      fputcsv($file, [
+        'ID',
+        'Usuário',
+        'Motivo',
+        'Número do Voo',
+        'Data do Voo',
+        'Status',
+        'Atribuído Para',
+        'Atribuído Por',
+        'Data de Criação',
+      ], ';');
+
+      // Dados
+      foreach ($solicitations as $solicitation) {
+        fputcsv($file, [
+          $solicitation->id,
+          $solicitation->user->name ?? 'N/A',
+          $solicitation->motivo,
+          $solicitation->num_voo,
+          $solicitation->dta_voo?->format('d/m/Y') ?? 'N/A',
+          $solicitation->status,
+          $solicitation->assignedTo->name ?? 'Não atribuído',
+          $solicitation->assignedBy->name ?? 'N/A',
+          $solicitation->created_at->format('d/m/Y H:i'),
+        ], ';');
+      }
+
+      fclose($file);
+    };
+
+    return response()->stream($callback, 200, $headers);
+  }
+
+  private function exportToPdf($solicitations)
+  {
+    // Para PDF, vamos usar uma view simples que pode ser convertida
+    // Em produção, use uma biblioteca como dompdf ou snappy
+    $html = view('exports.solicitations-pdf', ['solicitations' => $solicitations])->render();
+    
+    // Por enquanto, retornamos HTML que pode ser impresso como PDF pelo navegador
+    // Em produção, implemente com dompdf: composer require dompdf/dompdf
+    return response($html)
+      ->header('Content-Type', 'text/html')
+      ->header('Content-Disposition', 'inline; filename="solicitacoes_' . date('Y-m-d') . '.html"');
   }
 
   public function downloadFile(string $id, string $type)

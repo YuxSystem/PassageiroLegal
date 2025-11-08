@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Services\SolicitationService;
+use App\Services\MessagingService;
+use App\Enums\MessagingKindEnum;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
@@ -15,6 +17,7 @@ class SolicitationController extends Controller
 
   public function __construct(
     protected SolicitationService $solicitationService,
+    protected MessagingService $messagingService,
   ) {}
 
   public function index(Request $request)
@@ -44,9 +47,11 @@ class SolicitationController extends Controller
   public function show(string $id)
   {
     $solicitation = $this->solicitationService->getSolicitation($id);
+    $agents = User::where('role', 'Employee')->where('status', 'Enabled')->get(['id', 'name', 'email']);
 
     return Inertia::render('SolicitationDetails', [
-      'solicitation' => $solicitation
+      'solicitation' => $solicitation,
+      'agents' => $agents,
     ]);
   }
 
@@ -72,12 +77,19 @@ class SolicitationController extends Controller
       $user->save();
     }
 
-    // if ($request->input("email_companion") != null) {
-    //   $this->messagingService->send(MessagingKindEnum::EMAIL, $request->input("email_companion"));
-    // }
-
-    // TODO: Implementar envio de mensagem
-    // $this->messagingService->send(MessagingKindEnum::WHATSAPP, $request->input("cellphone"));
+    // Enviar notificação WhatsApp se celular fornecido
+    if ($userData && !empty($userData['cellphone'])) {
+      try {
+        $message = "Olá {$user->name}! Sua solicitação foi registrada com sucesso no Passageiro Legal. ID: {$solicitation['id']}. Acompanhe o status em nossa plataforma.";
+        $this->messagingService->send(MessagingKindEnum::WHATSAPP, $userData['cellphone'], $message);
+      } catch (\Exception $e) {
+        // Log do erro mas não interrompe o fluxo
+        \Log::error('Erro ao enviar WhatsApp após criação de solicitação', [
+          'solicitation_id' => $solicitation['id'],
+          'error' => $e->getMessage(),
+        ]);
+      }
+    }
 
     return redirect("/solicitacoes");
   }
@@ -87,6 +99,61 @@ class SolicitationController extends Controller
     $this->solicitationService->updateSolicitationStatus($id, $request->all());
 
     return back();
+  }
+
+  public function assign(Request $request, string $id)
+  {
+    $request->validate([
+      'agent_id' => 'required|exists:users,id',
+    ]);
+
+    /** @var \App\Models\User $user */
+    $user = Auth::user();
+    
+    $this->solicitationService->assignSolicitation($id, $request->input('agent_id'), $user->id);
+
+    return back();
+  }
+
+  public function addComment(Request $request, string $id)
+  {
+    $request->validate([
+      'comment' => 'required|string|max:1000',
+      'is_internal' => 'boolean',
+    ]);
+
+    $this->solicitationService->addComment(
+      $id,
+      $request->input('comment'),
+      $request->input('is_internal', false)
+    );
+
+    return back();
+  }
+
+  public function unassigned(Request $request)
+  {
+    $perPage = (int)$request->input('per_page', 10);
+    $page = (int)$request->input('page', 1);
+
+    $solicitations = $this->solicitationService->getUnassignedSolicitations($perPage, $page);
+
+    return Inertia::render('Solicitations', [
+      'solicitations' => $solicitations->items(),
+      'pagination' => [
+        'current_page' => $solicitations->currentPage(),
+        'total_pages' => $solicitations->lastPage(),
+        'total_items' => $solicitations->total(),
+        'per_page' => $solicitations->perPage(),
+        'next_page' => $solicitations->nextPageUrl()
+          ? $solicitations->nextPageUrl() . "&per_page={$perPage}"
+          : null,
+        'previous_page' => $solicitations->previousPageUrl()
+          ? $solicitations->previousPageUrl() . "&per_page={$perPage}"
+          : null,
+      ],
+      'filter' => 'unassigned',
+    ]);
   }
 
   public function downloadFile(string $id, string $type)

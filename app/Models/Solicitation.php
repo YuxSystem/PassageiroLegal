@@ -18,11 +18,13 @@ class Solicitation extends Model
     protected $fillable = [
         'user_id', 'motivo', 'num_voo', 'dta_voo', 'detalhe',
         'registro_nasc', 'comprovante_res', 'comprovante_voo', 'status',
-        'assigned_to', 'assigned_by', 'assigned_at'
+        'assigned_to', 'assigned_by', 'assigned_at',
+        'validation_status', 'validated_by', 'validated_at', 'validation_notes'
     ];
 
     protected $casts = [
         'assigned_at' => 'datetime',
+        'validated_at' => 'datetime',
         'dta_voo' => 'date',
     ];
 
@@ -51,9 +53,29 @@ class Solicitation extends Model
         return $this->hasMany(SolicitationComment::class, 'solicitation_id', 'id');
     }
 
+    public function validatedBy()
+    {
+        return $this->belongsTo(User::class, 'validated_by', 'id');
+    }
+
     public function isAssigned(): bool
     {
         return $this->assigned_to !== null;
+    }
+
+    public function needsValidation(): bool
+    {
+        return $this->validation_status === null || $this->validation_status === 'Pendente';
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->validation_status === 'Aprovado';
+    }
+
+    public function isRejected(): bool
+    {
+        return $this->validation_status === 'Rejeitado';
     }
 
     public static function booted() {

@@ -10,9 +10,15 @@ interface SolicitationRepository {
 
     public function getByUserId(string $userId, int $perPage, int $page): LengthAwarePaginator;
 
+    public function getUnassigned(int $perPage, int $page): LengthAwarePaginator;
+
+    public function getByAssignedTo(string $agentId, int $perPage, int $page): LengthAwarePaginator;
+
     public function create(array $data): Solicitation;
 
     public function get(string $id): Solicitation;
 
     public function update(string $id, array $data): Solicitation;
+
+    public function assign(string $id, string $agentId, string $assignedById): Solicitation;
 }

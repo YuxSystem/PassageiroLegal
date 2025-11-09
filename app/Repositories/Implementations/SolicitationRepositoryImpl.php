@@ -20,6 +20,18 @@ class SolicitationRepositoryImpl implements SolicitationRepository
             ->paginate($perPage, ['*'], 'page', $page);
     }
 
+    public function getUnassigned(int $perPage = 10, int $page = 1): LengthAwarePaginator
+    {
+        return Solicitation::whereNull('assigned_to')
+            ->paginate($perPage, ['*'], 'page', $page);
+    }
+
+    public function getByAssignedTo(string $agentId, int $perPage = 10, int $page = 1): LengthAwarePaginator
+    {
+        return Solicitation::where('assigned_to', $agentId)
+            ->paginate($perPage, ['*'], 'page', $page);
+    }
+
     public function create(array $data): Solicitation
     {
         return Solicitation::create($data);
@@ -27,7 +39,8 @@ class SolicitationRepositoryImpl implements SolicitationRepository
 
     public function get(string $id): Solicitation
     {
-        return Solicitation::findOrFail($id);
+        return Solicitation::with(['user', 'assignedTo', 'assignedBy', 'validatedBy', 'statusHistory.changedBy', 'comments.user'])
+            ->findOrFail($id);
     }
 
     public function update(string $id, array $data): Solicitation
@@ -36,5 +49,17 @@ class SolicitationRepositoryImpl implements SolicitationRepository
         $solicitationToUpdate->update($data);
 
         return $solicitationToUpdate;
+    }
+
+    public function assign(string $id, string $agentId, string $assignedById): Solicitation
+    {
+        $solicitation = Solicitation::findOrFail($id);
+        $solicitation->update([
+            'assigned_to' => $agentId,
+            'assigned_by' => $assignedById,
+            'assigned_at' => now(),
+        ]);
+
+        return $solicitation->fresh();
     }
 }

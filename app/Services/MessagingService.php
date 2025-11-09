@@ -6,5 +6,5 @@ use App\Enums\MessagingKindEnum;
 
 interface MessagingService
 {
-    public function send(MessagingKindEnum $kind, string $to): void;
+    public function send(MessagingKindEnum $kind, string $to, ?string $message = null): void;
 }

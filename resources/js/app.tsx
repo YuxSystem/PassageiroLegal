@@ -4,6 +4,7 @@ import "../css/index.css"
 import { createInertiaApp } from "@inertiajs/react";
 import { createRoot } from "react-dom/client";
 import Layout from "@/components/layout/Layout";
+import "./i18n/config";
 
 createInertiaApp({
   resolve: (name) => {

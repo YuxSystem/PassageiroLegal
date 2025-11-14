@@ -4,8 +4,11 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { Link } from "@inertiajs/react";
+import { useTranslation } from "react-i18next";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 const Header = () => {
+  const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -22,10 +25,10 @@ const Header = () => {
   }, []);
 
   const navItems = [
-    { name: "Como Funciona", href: "#como-funciona" },
-    { name: "Seus Direitos", href: "#seus-direitos" },
-    { name: "Perguntas Frequentes", href: "#faq" },
-    { name: "Contato", href: "#contato" },
+    { name: t("header.howItWorks"), href: "#como-funciona" },
+    { name: t("header.yourRights"), href: "#seus-direitos" },
+    { name: t("header.faq"), href: "#faq" },
+    { name: t("header.contact"), href: "#contato" },
   ];
 
   return (
@@ -46,7 +49,7 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-4">
             {navItems.map((item) => (
               <a
                 key={item.name}
@@ -56,9 +59,10 @@ const Header = () => {
                 {item.name}
               </a>
             ))}
+            <LanguageSelector />
             <Link href="/login">
               <Button className="bg-indigo-800 hover:bg-indigo-700 btn-glow transition-all duration-300">
-                Solicitar Reembolso
+                {t("header.requestRefund")}
               </Button>
             </Link>
           </nav>
@@ -91,8 +95,11 @@ const Header = () => {
               </Link>
             ))}
             <Button className="w-full mt-2 bg-indigo-800 hover:bg-indigo-700">
-              Solicitar Reembolso
+              {t("header.requestRefund")}
             </Button>
+            <div className="mt-2">
+              <LanguageSelector variant="compact" />
+            </div>
           </nav>
         )}
       </div>

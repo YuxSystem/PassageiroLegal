@@ -73,32 +73,109 @@ O **Passageiro Legal** foi desenvolvido para auxiliar passageiros aéreos a soli
 
 ## 🚀 Instalação
 
+> **💡 Instalando no XAMPP?** Veja o guia completo em [INSTALACAO_XAMPP.md](INSTALACAO_XAMPP.md)
+
+### Método 1: Instalador Web (Recomendado)
+
+O Passageiro Legal possui um instalador web interativo que facilita a configuração inicial.
+
 1. **Clone o repositório**
 ```bash
 git clone https://github.com/seu-usuario/passageiro-legal.git
 cd passageiro-legal
 ```
 
-2. **Instale as dependências do backend**
+2. **Instale as dependências**
 ```bash
 composer install
-```
-
-3. **Instale as dependências do frontend**
-```bash
 npm install
 ```
 
-4. **Configure o ambiente**
+3. **Compile os assets do frontend**
+```bash
+npm run build
+```
+
+4. **Configure o servidor web**
+   - Configure seu servidor web (Apache/Nginx) para apontar para o diretório `public/`
+   - Ou use o servidor de desenvolvimento do Laravel:
+   ```bash
+   php artisan serve
+   ```
+
+5. **Acesse o instalador**
+   - Abra seu navegador e acesse: `http://localhost:8000/install`
+   - O instalador irá guiá-lo através dos seguintes passos:
+     - ✅ Verificação de requisitos do sistema
+     - ⚙️ Configuração do arquivo `.env`
+     - 🗄️ Teste de conexão com banco de dados
+     - 📊 Execução automática das migrations
+     - 👤 Criação do usuário administrador
+     - ✨ Finalização da instalação
+
+6. **Pronto!**
+   - Após a instalação, você será redirecionado para a página de login
+   - Use as credenciais do administrador criadas durante a instalação
+
+### Método 2: Instalação via Linha de Comando
+
+Para instalação rápida via terminal:
+
+1. **Clone e instale dependências**
+```bash
+git clone https://github.com/seu-usuario/passageiro-legal.git
+cd passageiro-legal
+composer install
+npm install
+npm run build
+```
+
+2. **Execute o comando de instalação**
+```bash
+php artisan app:install
+```
+
+O comando irá:
+- Verificar requisitos do sistema
+- Criar arquivo `.env` se não existir
+- Gerar chave da aplicação
+- Executar migrations
+- Criar usuário administrador (solicitará informações)
+
+**Opções do comando:**
+```bash
+# Com opções personalizadas
+php artisan app:install \
+  --admin-name="Seu Nome" \
+  --admin-email="admin@exemplo.com" \
+  --admin-password="senha123"
+
+# Pular etapas específicas
+php artisan app:install --skip-env --skip-migrations
+```
+
+### Método 3: Instalação Manual
+
+1. **Clone o repositório**
+```bash
+git clone https://github.com/seu-usuario/passageiro-legal.git
+cd passageiro-legal
+```
+
+2. **Instale as dependências**
+```bash
+composer install
+npm install
+```
+
+3. **Configure o ambiente**
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-5. **Configure o banco de dados no `.env`**
+4. **Configure o banco de dados no `.env`**
 ```env
-DB_CONNECTION=sqlite
-# ou
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
@@ -107,9 +184,25 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-6. **Execute as migrations**
+5. **Execute as migrations**
 ```bash
 php artisan migrate
+```
+
+6. **Crie um usuário administrador**
+```bash
+php artisan tinker
+```
+```php
+User::create([
+    'id' => \Illuminate\Support\Str::uuid(),
+    'name' => 'Administrador',
+    'email' => 'admin@passageirolegal.com.br',
+    'password' => \Illuminate\Support\Facades\Hash::make('senha123'),
+    'role' => \App\Enums\UserRoleEnum::Admin->value,
+    'status' => 'enabled',
+    'email_verified_at' => now(),
+]);
 ```
 
 7. **Compile os assets**
@@ -125,6 +218,13 @@ php artisan serve
 ```
 
 A aplicação estará disponível em `http://localhost:8000`
+
+### ⚠️ Notas Importantes
+
+- **Permissões**: Certifique-se de que os diretórios `storage/` e `bootstrap/cache/` tenham permissões de escrita
+- **Banco de Dados**: Crie o banco de dados antes de executar a instalação
+- **Node.js**: Certifique-se de ter Node.js 18+ instalado para compilar os assets
+- **PHP**: Requer PHP 8.2 ou superior com extensões necessárias (PDO, OpenSSL, Mbstring, etc.)
 
 ## 🏗️ Estrutura do Projeto
 
@@ -178,13 +278,22 @@ php artisan test
 
 ### Composer
 ```bash
-composer dev  # Inicia servidor, queue, logs e Vite simultaneamente
+composer dev              # Inicia servidor, queue, logs e Vite simultaneamente
+php artisan app:install  # Instalador via linha de comando
 ```
 
 ### NPM
 ```bash
 npm run dev   # Modo desenvolvimento com hot reload
 npm run build # Build de produção
+```
+
+### Artisan
+```bash
+php artisan app:install              # Instalador completo
+php artisan app:install --skip-env  # Pular configuração do .env
+php artisan migrate                  # Executar migrations
+php artisan db:seed                  # Executar seeders
 ```
 
 ## 🤝 Contribuindo

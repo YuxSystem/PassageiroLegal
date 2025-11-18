@@ -10,9 +10,11 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Eye, MoreVertical, CheckCircle2, XCircle, ClipboardList } from "lucide-react";
 import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { ptBR, enUS } from "date-fns/locale";
 import { Separator } from "@/components/ui/separator";
 import { Head, router, usePage } from "@inertiajs/react";
+import { useTranslation } from "react-i18next";
+import { useLocale } from "@/hooks/useLocale";
 import {
   Select,
   SelectContent,
@@ -119,15 +121,18 @@ const EmptyState = () => {
       <div className="bg-gray-50 rounded-full p-4 mb-4">
         <ClipboardList className="h-8 w-8 text-gray-400" />
       </div>
-      <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhuma solicitação encontrada</h3>
+      <h3 className="text-lg font-medium text-gray-900 mb-2">{t('solicitations.noSolicitations')}</h3>
       <p className="text-sm text-gray-500 text-center max-w-sm">
-        Não existem solicitações de indenização registradas no momento.
+        {t('solicitations.noSolicitations')}
       </p>
     </div>
   );
 };
 
 const Solicitations = ({ solicitations, pagination }: Props) => {
+  const { t } = useTranslation();
+  const { locale } = useLocale();
+  const dateLocale = locale === 'pt-BR' ? ptBR : enUS;
   const [selectedSolicitation, setSelectedSolicitation] = useState<Solicitation | null>(null);
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [newStatus, setNewStatus] = useState<string>("");
@@ -179,15 +184,41 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
 
   return (
     <>
-      <Head title="Solicitações | Passageiro Legal" />
+      <Head title={`${t('solicitations.title')} | Passageiro Legal`} />
 
       <div className="px-2 sm:px-4 md:container mx-auto py-6 md:py-10">
         <div className="space-y-4">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold tracking-tight text-indigo-800">Solicitações</h1>
-            <p className="text-sm text-gray-500">
-              Gerencie todas as solicitações de indenização
-            </p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold tracking-tight text-indigo-800">{t('solicitations.title')}</h1>
+                <p className="text-sm text-gray-500">
+                  {t('solicitations.manageAll')}
+                </p>
+              </div>
+              {IS_ADMIN && (
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => router.get('/admin/solicitacoes/nao-atribuidas')}
+                  >
+                    {t('solicitations.unassigned')}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => window.location.href = '/admin/solicitacoes/exportar/csv'}
+                  >
+                    {t('solicitations.exportCSV')}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => window.location.href = '/admin/solicitacoes/exportar/pdf'}
+                  >
+                    {t('solicitations.exportPDF')}
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
           <Separator />
         </div>
@@ -199,11 +230,11 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>ID</TableHead>
-                    <TableHead>Motivo</TableHead>
-                    <TableHead>Voo</TableHead>
-                    <TableHead>Data</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Ações</TableHead>
+                    <TableHead>{t('solicitations.reason')}</TableHead>
+                    <TableHead>{t('solicitations.flight')}</TableHead>
+                    <TableHead>{t('solicitations.date')}</TableHead>
+                    <TableHead>{t('solicitations.status')}</TableHead>
+                    <TableHead className="text-right">{t('solicitations.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -216,7 +247,7 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
                       <TableCell>{solicitation.num_voo}</TableCell>
                       <TableCell>
                         {format(new Date(solicitation.dta_voo), "dd/MM/yyyy", {
-                          locale: ptBR,
+                          locale: dateLocale,
                         })}
                       </TableCell>
                       <TableCell>
@@ -234,7 +265,7 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
                           <DropdownMenuContent align="end" className="cursor-pointer">
                             <DropdownMenuItem onClick={() => handleViewSolicitation(solicitation.id)} className="cursor-pointer">
                               <Eye className="h-4 w-4 mr-2" />
-                              Visualizar
+                              {t('solicitations.view')}
                             </DropdownMenuItem>
                             {IS_ADMIN && getNextStatus(solicitation.status) && (
                               <DropdownMenuItem
@@ -244,7 +275,7 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
                                 className="cursor-pointer"
                               >
                                 <CheckCircle2 className="h-4 w-4 mr-2" />
-                                Avançar para {getNextStatus(solicitation.status)}
+                                {t('solicitations.advanceTo')} {getNextStatus(solicitation.status)}
                               </DropdownMenuItem>
                             )}
                             {IS_ADMIN && getPreviousStatus(solicitation.status) && (
@@ -255,7 +286,7 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
                                 className="cursor-pointer"
                               >
                                 <XCircle className="h-4 w-4 mr-2" />
-                                Voltar para {getPreviousStatus(solicitation.status)}
+                                {t('solicitations.backTo')} {getPreviousStatus(solicitation.status)}
                               </DropdownMenuItem>
                             )}
                           </DropdownMenuContent>
@@ -320,17 +351,17 @@ const Solicitations = ({ solicitations, pagination }: Props) => {
       <Dialog open={showStatusModal} onOpenChange={setShowStatusModal}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Confirmar alteração de status</DialogTitle>
+            <DialogTitle>{t('solicitations.changeStatus')}</DialogTitle>
             <DialogDescription>
-              Tem certeza que deseja alterar o status da solicitação{" "}
-              {selectedSolicitation?.id.slice(0, 8)}... para {newStatus}?
+              {t('solicitations.confirmStatusChange')} {" "}
+              {selectedSolicitation?.id.slice(0, 8)}... {t('solicitations.to')} {newStatus}?
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowStatusModal(false)}>
-              Cancelar
+              {t('common.cancel')}
             </Button>
-            <Button onClick={confirmStatusChange}>Confirmar</Button>
+            <Button onClick={confirmStatusChange}>{t('common.confirm')}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

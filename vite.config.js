@@ -10,4 +10,6 @@ export default defineConfig({
     }),
     react(),
   ],
+  // Configuração para funcionar em subdiretórios (ex: XAMPP)
+  base: process.env.ASSET_URL || '/',
 });

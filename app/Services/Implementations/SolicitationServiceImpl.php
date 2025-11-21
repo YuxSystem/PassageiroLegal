@@ -6,9 +6,11 @@ use App\Models\SolicitationStatusHistory;
 use App\Models\SolicitationComment;
 use App\Repositories\SolicitationRepository;
 use App\Services\SolicitationService;
+use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Http;
 
 
 class SolicitationServiceImpl implements SolicitationService
@@ -50,7 +52,11 @@ class SolicitationServiceImpl implements SolicitationService
 
   public function createSolicitation(array $data): array
   {
-    return $this->solicitationRepository->create($data)->toArray();
+    $solicitation = $this->solicitationRepository->create($data)->toArray();
+
+    $this->sendWebhook("client.created", $solicitation);
+
+    return $solicitation;
   }
 
   public function getSolicitation(string $id): array
@@ -62,14 +68,14 @@ class SolicitationServiceImpl implements SolicitationService
   {
     // O histórico será registrado automaticamente pelo Observer
     $updated = $this->solicitationRepository->update($id, $data);
-    
+
     return $updated->toArray();
   }
 
   public function assignSolicitation(string $id, string $agentId, string $assignedById): array
   {
     $assigned = $this->solicitationRepository->assign($id, $agentId, $assignedById);
-    
+
     // Adicionar comentário interno sobre a atribuição
     SolicitationComment::create([
       'solicitation_id' => $id,
@@ -77,35 +83,35 @@ class SolicitationServiceImpl implements SolicitationService
       'comment' => "Processo atribuído ao agente",
       'is_internal' => true,
     ]);
-    
+
     return $assigned->toArray();
   }
 
   public function addComment(string $id, string $comment, bool $isInternal = false): array
   {
     $solicitation = $this->solicitationRepository->get($id);
-    
+
     $commentModel = SolicitationComment::create([
       'solicitation_id' => $id,
       'user_id' => Auth::id(),
       'comment' => $comment,
       'is_internal' => $isInternal,
     ]);
-    
+
     return $commentModel->load('user')->toArray();
   }
 
   public function validateSolicitation(string $id, string $status, ?string $notes = null): array
   {
     $solicitation = $this->solicitationRepository->get($id);
-    
+
     $updated = $this->solicitationRepository->update($id, [
       'validation_status' => $status,
       'validated_by' => Auth::id(),
       'validated_at' => now(),
       'validation_notes' => $notes,
     ]);
-    
+
     // Adicionar comentário sobre validação
     $statusLabel = $status === 'Aprovado' ? 'aprovado' : 'rejeitado';
     SolicitationComment::create([
@@ -114,7 +120,7 @@ class SolicitationServiceImpl implements SolicitationService
       'comment' => "Processo {$statusLabel}" . ($notes ? ": {$notes}" : ''),
       'is_internal' => false,
     ]);
-    
+
     return $updated->fresh()->toArray();
   }
 
@@ -137,5 +143,16 @@ class SolicitationServiceImpl implements SolicitationService
     $this->solicitationRepository->update($id, $paths);
 
     return $paths;
+  }
+
+  private function sendWebhook(string $event, array $data): void
+  {
+    $url = 'https://webhook.exponentialgroup.com.br/webhook/xflow-integration-mgladvogados';
+
+    Http::post($url, [
+      "event" => $event,
+      "timestamp" => Carbon::now('UTC')->toIso8601String(),
+      "data" => $data
+    ]);
   }
 }

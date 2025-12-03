@@ -13,7 +13,7 @@ import {
 import { format } from "date-fns";
 import { ptBR, enUS } from "date-fns/locale";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell, Legend } from "recharts";
 import { useTranslation } from "react-i18next";
 import { useLocale } from "@/hooks/useLocale";
 

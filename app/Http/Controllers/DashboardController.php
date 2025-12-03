@@ -38,7 +38,7 @@ class DashboardController extends Controller
                     'status' => $s->status,
                     'user_name' => $s->user->name ?? 'N/A',
                     'assigned_to' => $s->assignedTo->name ?? null,
-                    'created_at' => $s->created_at->format('d/m/Y H:i'),
+                    'created_at' => $s->created_at->toIso8601String(),
                 ]),
         ];
 

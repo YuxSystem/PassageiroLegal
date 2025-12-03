@@ -41,4 +41,8 @@ return [
         'instance' => env('EVOLUTION_API_INSTANCE', ''),
     ],
 
+    'whatsapp' => [
+        'number' => env('WHATSAPP_NUMBER'),
+    ],
+
 ];

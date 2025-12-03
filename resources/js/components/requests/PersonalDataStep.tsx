@@ -214,7 +214,7 @@ export function PersonalDataStep({
             <Button variant="secondary" onClick={onBack} disabled={processing}>
               Voltar
             </Button>
-            <Button onClick={onNext} disabled={!isUserDataValid() || processing}>
+            <Button onClick={onNext} disabled={processing}>
               {processing ? "Enviando..." : "Finalizar"}
             </Button>
           </div>

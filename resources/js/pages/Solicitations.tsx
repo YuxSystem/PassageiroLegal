@@ -116,6 +116,8 @@ const getPreviousStatus = (currentStatus: string): string | null => {
 };
 
 const EmptyState = () => {
+  const { t } = useTranslation()
+
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4">
       <div className="bg-gray-50 rounded-full p-4 mb-4">

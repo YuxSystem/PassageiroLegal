@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Services\SolicitationService;
-use App\Services\MessagingService;
-use App\Enums\MessagingKindEnum;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
@@ -17,7 +15,6 @@ class SolicitationController extends Controller
 
   public function __construct(
     protected SolicitationService $solicitationService,
-    protected MessagingService $messagingService,
   ) {}
 
   public function index(Request $request)
@@ -77,21 +74,13 @@ class SolicitationController extends Controller
       $user->save();
     }
 
-    // Enviar notificação WhatsApp se celular fornecido
-    if ($userData && !empty($userData['cellphone'])) {
-      try {
-        $message = "Olá {$user->name}! Sua solicitação foi registrada com sucesso no Passageiro Legal. ID: {$solicitation['id']}. Acompanhe o status em nossa plataforma.";
-        $this->messagingService->send(MessagingKindEnum::WHATSAPP, $userData['cellphone'], $message);
-      } catch (\Exception $e) {
-        // Log do erro mas não interrompe o fluxo
-        \Log::error('Erro ao enviar WhatsApp após criação de solicitação', [
-          'solicitation_id' => $solicitation['id'],
-          'error' => $e->getMessage(),
-        ]);
-      }
-    }
-
-    return redirect("/solicitacoes");
+    // Redireciona para a página de detalhes da solicitação criada
+    return redirect("/solicitacao/{$solicitation['id']}")->with([
+      'solicitation_id' => $solicitation['id'],
+      'user_name' => $user->name,
+      'user_cellphone' => $userData['cellphone'] ?? null,
+      'success' => 'Solicitação criada com sucesso!',
+    ]);
   }
 
   public function updateStatus(Request $request, string $id)
@@ -109,7 +98,7 @@ class SolicitationController extends Controller
 
     /** @var \App\Models\User $user */
     $user = Auth::user();
-    
+
     $this->solicitationService->assignSolicitation($id, $request->input('agent_id'), $user->id);
 
     return back();
@@ -215,7 +204,7 @@ class SolicitationController extends Controller
   private function exportToCsv($solicitations)
   {
     $filename = 'solicitacoes_' . date('Y-m-d_H-i-s') . '.csv';
-    
+
     $headers = [
       'Content-Type' => 'text/csv',
       'Content-Disposition' => "attachment; filename=\"{$filename}\"",
@@ -223,10 +212,10 @@ class SolicitationController extends Controller
 
     $callback = function() use ($solicitations) {
       $file = fopen('php://output', 'w');
-      
+
       // BOM para UTF-8
       fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
-      
+
       // Cabeçalhos
       fputcsv($file, [
         'ID',
@@ -266,7 +255,7 @@ class SolicitationController extends Controller
     // Para PDF, vamos usar uma view simples que pode ser convertida
     // Em produção, use uma biblioteca como dompdf ou snappy
     $html = view('exports.solicitations-pdf', ['solicitations' => $solicitations])->render();
-    
+
     // Por enquanto, retornamos HTML que pode ser impresso como PDF pelo navegador
     // Em produção, implemente com dompdf: composer require dompdf/dompdf
     return response($html)

@@ -1,22 +1,9 @@
 <?php
 
-use App\Http\Controllers\InstallController;
 use App\Http\Controllers\SolicitationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
-// Install Routes (deve estar antes de qualquer middleware)
-Route::prefix('install')->group(function () {
-    Route::get('/', [InstallController::class, 'index'])->name('install.index');
-    Route::get('/check', [InstallController::class, 'check'])->name('install.check');
-    Route::get('/requirements', [InstallController::class, 'checkRequirements'])->name('install.requirements');
-    Route::post('/env', [InstallController::class, 'setupEnv'])->name('install.env');
-    Route::post('/database/test', [InstallController::class, 'testDatabase'])->name('install.database.test');
-    Route::post('/migrations', [InstallController::class, 'runMigrations'])->name('install.migrations');
-    Route::post('/admin', [InstallController::class, 'createAdmin'])->name('install.admin');
-    Route::post('/finish', [InstallController::class, 'finish'])->name('install.finish');
-});
 
 // Index Page
 Route::get('/', function () {

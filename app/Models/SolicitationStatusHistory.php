@@ -10,6 +10,8 @@ class SolicitationStatusHistory extends Model
 {
     use HasFactory;
 
+    protected $table = 'solicitation_status_history';
+
     protected $keyType = 'string';
     public $incrementing = false;
 

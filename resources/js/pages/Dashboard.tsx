@@ -13,9 +13,10 @@ import {
 import { format } from "date-fns";
 import { ptBR, enUS } from "date-fns/locale";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell, Legend, ResponsiveContainer } from "recharts";
 import { useTranslation } from "react-i18next";
 import { useLocale } from "@/hooks/useLocale";
+import { useState, useEffect } from "react";
 
 interface Stats {
   total_solicitations: number;
@@ -45,6 +46,18 @@ const Dashboard = ({ stats }: Props) => {
   const { t } = useTranslation();
   const { locale } = useLocale();
   const dateLocale = locale === 'pt-BR' ? ptBR : enUS;
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -76,11 +89,11 @@ const Dashboard = ({ stats }: Props) => {
     <>
       <Head title="Dashboard | Passageiro Legal" />
 
-      <div className="px-2 sm:px-4 md:container mx-auto py-6 md:py-10">
-        <div className="space-y-6">
+      <div className="px-3 sm:px-4 md:px-6 lg:container mx-auto py-4 sm:py-6 md:py-10">
+        <div className="space-y-4 sm:space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-indigo-800">{t('dashboard.title')}</h1>
-            <p className="text-sm text-gray-500 mt-1">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-indigo-800">{t('dashboard.title')}</h1>
+            <p className="text-xs sm:text-sm text-gray-500 mt-1">
               {t('dashboard.subtitle')}
             </p>
           </div>
@@ -191,10 +204,10 @@ const Dashboard = ({ stats }: Props) => {
             </Card>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
             <Card>
               <CardHeader>
-                <CardTitle>{t('dashboard.byReason')}</CardTitle>
+                <CardTitle className="text-base sm:text-lg">{t('dashboard.byReason')}</CardTitle>
               </CardHeader>
               <CardContent>
                 {Object.keys(stats.solicitations_by_reason).length > 0 ? (
@@ -205,15 +218,28 @@ const Dashboard = ({ stats }: Props) => {
                         color: "hsl(var(--chart-1))",
                       },
                     }}
-                    className="h-[300px]"
+                    className="h-[250px] sm:h-[300px] lg:h-[350px] w-full"
                   >
-                    <BarChart data={Object.entries(stats.solicitations_by_reason).map(([name, value]) => ({ name, value }))}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="value" fill="var(--color-motivo)" radius={[8, 8, 0, 0]} />
-                    </BarChart>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart 
+                        data={Object.entries(stats.solicitations_by_reason).map(([name, value]) => ({ name, value }))}
+                        margin={{ top: 5, right: 10, left: 0, bottom: 5 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis 
+                          dataKey="name" 
+                          angle={-45}
+                          textAnchor="end"
+                          height={80}
+                          interval={0}
+                          tick={{ fontSize: 12 }}
+                          className="text-xs"
+                        />
+                        <YAxis tick={{ fontSize: 12 }} />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Bar dataKey="value" fill="var(--color-motivo)" radius={[8, 8, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
                   </ChartContainer>
                 ) : (
                   <p className="text-sm text-gray-500">{t('dashboard.noData')}</p>
@@ -223,7 +249,7 @@ const Dashboard = ({ stats }: Props) => {
 
             <Card>
               <CardHeader>
-                <CardTitle>{t('dashboard.byStatus')}</CardTitle>
+                <CardTitle className="text-base sm:text-lg">{t('dashboard.byStatus')}</CardTitle>
               </CardHeader>
               <CardContent>
                 {Object.keys(stats.solicitations_by_status).length > 0 ? (
@@ -234,26 +260,37 @@ const Dashboard = ({ stats }: Props) => {
                         color: "hsl(var(--chart-2))",
                       },
                     }}
-                    className="h-[300px]"
+                    className="h-[250px] sm:h-[300px] lg:h-[350px] w-full"
                   >
-                    <PieChart>
-                      <Pie
-                        data={Object.entries(stats.solicitations_by_status).map(([name, value]) => ({ name, value }))}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="value"
-                      >
-                        {Object.entries(stats.solicitations_by_status).map((_, index) => (
-                          <Cell key={`cell-${index}`} fill={index === 0 ? "#3b82f6" : index === 1 ? "#eab308" : "#22c55e"} />
-                        ))}
-                      </Pie>
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Legend />
-                    </PieChart>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={Object.entries(stats.solicitations_by_status).map(([name, value]) => ({ name, value }))}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          label={({ name, percent }) => {
+                            const label = `${name}: ${(percent * 100).toFixed(0)}%`;
+                            return isMobile ? name : label;
+                          }}
+                          outerRadius={isMobile ? 60 : 80}
+                          fill="#8884d8"
+                          dataKey="value"
+                        >
+                          {Object.entries(stats.solicitations_by_status).map((_, index) => (
+                            <Cell key={`cell-${index}`} fill={index === 0 ? "#3b82f6" : index === 1 ? "#eab308" : "#22c55e"} />
+                          ))}
+                        </Pie>
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Legend 
+                          wrapperStyle={{ fontSize: '12px' }}
+                          iconSize={12}
+                          layout="horizontal"
+                          verticalAlign="bottom"
+                          align="center"
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
                   </ChartContainer>
                 ) : (
                   <p className="text-sm text-gray-500">{t('dashboard.noData')}</p>
@@ -268,14 +305,14 @@ const Dashboard = ({ stats }: Props) => {
             </CardHeader>
             <CardContent>
               {stats.recent_solicitations.length > 0 ? (
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {stats.recent_solicitations.map((solicitation) => (
                     <div
                       key={solicitation.id}
-                      className="flex items-center justify-between p-4 border rounded-lg"
+                      className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border rounded-lg gap-2 sm:gap-0"
                     >
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-wrap items-center gap-2 mb-1">
                           <span className="font-mono text-xs text-gray-500">
                             {solicitation.id.slice(0, 8)}...
                           </span>
@@ -283,13 +320,13 @@ const Dashboard = ({ stats }: Props) => {
                             {getStatusLabel(solicitation.status)}
                           </Badge>
                         </div>
-                        <p className="text-sm font-medium">{solicitation.motivo}</p>
-                        <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
-                          <span>Por: {solicitation.user_name}</span>
+                        <p className="text-sm font-medium truncate">{solicitation.motivo}</p>
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 mt-2 text-xs text-gray-500">
+                          <span className="truncate">Por: {solicitation.user_name}</span>
                           {solicitation.assigned_to && (
-                            <span>Atribuído: {solicitation.assigned_to}</span>
+                            <span className="truncate">Atribuído: {solicitation.assigned_to}</span>
                           )}
-                          <span>
+                          <span className="whitespace-nowrap">
                             {format(new Date(solicitation.created_at), "dd/MM/yyyy HH:mm", {
                               locale: dateLocale,
                             })}

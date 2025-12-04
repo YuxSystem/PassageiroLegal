@@ -1,28 +1,32 @@
-import React from 'react';
-import { Head, useForm, usePage } from '@inertiajs/react';
-import { Card } from '@/components/ui/card';
-import { Stepper } from '@/components/ui/Stepper';
-import { EligibilityStep } from '@/components/requests/EligibilityStep';
-import { FlightInfoStep } from '@/components/requests/FlightInfoStep';
-import { DocumentsStep } from '@/components/requests/DocumentsStep';
-import { PersonalDataStep } from '@/components/requests/PersonalDataStep';
-import { UserModel } from '@/models/UserModel';
-import { STEPS, REQUIRED_USER_FIELDS } from '@/constants/solicitation';
-import { router } from '@inertiajs/react'
-import { Separator } from '@/components/ui/separator';
-import { ConfirmationStep } from '@/components/requests/ConfirmationStep';
+import React from "react";
+import { Head, useForm, usePage } from "@inertiajs/react";
+import { Card } from "@/components/ui/card";
+import { Stepper } from "@/components/ui/Stepper";
+import { EligibilityStep } from "@/components/requests/EligibilityStep";
+import { FlightInfoStep } from "@/components/requests/FlightInfoStep";
+import { DocumentsStep } from "@/components/requests/DocumentsStep";
+import { PersonalDataStep } from "@/components/requests/PersonalDataStep";
+import { UserModel } from "@/models/UserModel";
+import { STEPS, REQUIRED_USER_FIELDS } from "@/constants/solicitation";
+import { router } from "@inertiajs/react";
+import { Separator } from "@/components/ui/separator";
+import { ConfirmationStep } from "@/components/requests/ConfirmationStep";
 
 export default function SolicitationCreate() {
   const [currentStep, setCurrentStep] = React.useState(1);
-  const [stepErrors, setStepErrors] = React.useState<Record<number, boolean>>({});
-  const { user } = usePage().props.auth
+  const [stepErrors, setStepErrors] = React.useState<Record<number, boolean>>(
+    {}
+  );
+  const [userDataValidationErrors, setUserDataValidationErrors] =
+    React.useState<Record<string, string>>({});
+  const { user } = usePage().props.auth;
 
   const { data, setData, processing, errors, clearErrors } = useForm({
-    motivo: '',
-    outrosMotivo: '',
-    num_voo: '',
+    motivo: "",
+    outrosMotivo: "",
+    num_voo: "",
     dta_voo: undefined as Date | undefined,
-    detalhe: '',
+    detalhe: "",
     registro_nasc: null as File | null,
     comprovante_res: null as File | null,
     comprovante_voo: null as File | null,
@@ -47,7 +51,11 @@ export default function SolicitationCreate() {
       case 2:
         return !errors.num_voo && !errors.dta_voo && !errors.detalhe;
       case 3:
-        return !errors.registro_nasc && !errors.comprovante_res && !errors.comprovante_voo;
+        return (
+          !errors.registro_nasc &&
+          !errors.comprovante_res &&
+          !errors.comprovante_voo
+        );
       case 4:
         return !Object.keys(errors.userData || {}).length;
       case 5:
@@ -58,23 +66,54 @@ export default function SolicitationCreate() {
   };
 
   const handleNext = () => {
+    // Validação específica para step 4 (Dados Pessoais)
+    if (currentStep === 4) {
+      const validationErrors: Record<string, string> = {};
+      let hasErrors = false;
+
+      REQUIRED_USER_FIELDS.forEach((field) => {
+        const value = data.userData[field];
+        if (!value || value.toString().trim() === "") {
+          validationErrors[field] = "Este campo é obrigatório";
+          hasErrors = true;
+        }
+      });
+
+      if (hasErrors) {
+        setUserDataValidationErrors(validationErrors);
+        setStepErrors((prev) => ({ ...prev, [currentStep]: true }));
+        return;
+      } else {
+        // Limpa os erros de validação se tudo estiver válido
+        setUserDataValidationErrors({});
+      }
+    }
+
     if (currentStep < STEPS.length) {
       if (validateStep(currentStep)) {
         setCurrentStep(currentStep + 1);
         clearErrors();
+        setUserDataValidationErrors({});
       } else {
-        setStepErrors(prev => ({ ...prev, [currentStep]: true }));
+        setStepErrors((prev) => ({ ...prev, [currentStep]: true }));
       }
     } else if (currentStep === STEPS.length) {
       if (validateStep(currentStep)) {
         const formattedData = {
           ...data,
-          dta_voo: data.dta_voo ? new Date(data.dta_voo).toISOString().split('T')[0] : undefined,
+          dta_voo: data.dta_voo
+            ? new Date(data.dta_voo).toISOString().split("T")[0]
+            : undefined,
         };
 
-        router.post('/solicitacao', formattedData as any);
+        router.post("/solicitacao", formattedData as any, {
+          onSuccess: (page) => {
+            // O redirect do backend já leva para a página de detalhes
+            // O usuário pode enviar mensagem via WhatsApp a partir de lá
+          },
+        });
       } else {
-        setStepErrors(prev => ({ ...prev, [currentStep]: true }));
+        setStepErrors((prev) => ({ ...prev, [currentStep]: true }));
       }
     }
   };
@@ -83,33 +122,56 @@ export default function SolicitationCreate() {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
       clearErrors();
-      setStepErrors(prev => ({ ...prev, [currentStep]: false }));
+      setStepErrors((prev) => ({ ...prev, [currentStep]: false }));
+      setUserDataValidationErrors({});
     }
   };
 
-  const handleUserDataChange = (field: keyof UserModel) => (
-    valueOrEvent: string | React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = typeof valueOrEvent === 'string'
-      ? valueOrEvent
-      : valueOrEvent.target.value;
+  const handleUserDataChange =
+    (field: keyof UserModel) =>
+    (valueOrEvent: string | React.ChangeEvent<HTMLInputElement>) => {
+      const value =
+        typeof valueOrEvent === "string"
+          ? valueOrEvent
+          : valueOrEvent.target.value;
 
-    setData('userData', {
-      ...data.userData,
-      [field]: value,
-    });
-  };
+      setData("userData", {
+        ...data.userData,
+        [field]: value,
+      });
+
+      // Remove o erro de validação do campo quando o usuário começa a preencher
+      if (userDataValidationErrors[field]) {
+        setUserDataValidationErrors((prev) => {
+          const newErrors = { ...prev };
+          delete newErrors[field];
+          return newErrors;
+        });
+      }
+    };
 
   const handleUserDataBatchChange = (updates: Partial<UserModel>) => {
-    setData('userData', {
+    setData("userData", {
       ...data.userData,
-      ...updates
+      ...updates,
+    });
+
+    // Remove os erros de validação dos campos que foram atualizados
+    setUserDataValidationErrors((prev) => {
+      const newErrors = { ...prev };
+      Object.keys(updates).forEach((field) => {
+        if (newErrors[field]) {
+          delete newErrors[field];
+        }
+      });
+      return newErrors;
     });
   };
 
   const isUserDataValid = () => {
     return REQUIRED_USER_FIELDS.every(
-      (field) => data.userData[field] && data.userData[field].toString().trim() !== ''
+      (field) =>
+        data.userData[field] && data.userData[field].toString().trim() !== ""
     );
   };
 
@@ -120,8 +182,8 @@ export default function SolicitationCreate() {
           <EligibilityStep
             motivo={data.motivo}
             outrosMotivo={data.outrosMotivo}
-            onMotivoChange={(value) => setData('motivo', value)}
-            onOutrosMotivoChange={(value) => setData('outrosMotivo', value)}
+            onMotivoChange={(value) => setData("motivo", value)}
+            onOutrosMotivoChange={(value) => setData("outrosMotivo", value)}
             onNext={handleNext}
             error={errors.motivo || errors.outrosMotivo}
           />
@@ -132,9 +194,9 @@ export default function SolicitationCreate() {
             numeroVoo={data.num_voo}
             dataVoo={data.dta_voo}
             detalhesOcorrido={data.detalhe}
-            onNumeroVooChange={(value) => setData('num_voo', value)}
-            onDataVooChange={(value) => setData('dta_voo', value)}
-            onDetalhesOcorridoChange={(value) => setData('detalhe', value)}
+            onNumeroVooChange={(value) => setData("num_voo", value)}
+            onDataVooChange={(value) => setData("dta_voo", value)}
+            onDetalhesOcorridoChange={(value) => setData("detalhe", value)}
             onBack={handleBack}
             onNext={handleNext}
             errors={{
@@ -150,9 +212,11 @@ export default function SolicitationCreate() {
             registroNacional={data.registro_nasc}
             comprovanteResidencia={data.comprovante_res}
             passagemAerea={data.comprovante_voo}
-            onRegistroNacionalChange={(file) => setData('registro_nasc', file)}
-            onComprovanteResidenciaChange={(file) => setData('comprovante_res', file)}
-            onPassagemAereaChange={(file) => setData('comprovante_voo', file)}
+            onRegistroNacionalChange={(file) => setData("registro_nasc", file)}
+            onComprovanteResidenciaChange={(file) =>
+              setData("comprovante_res", file)
+            }
+            onPassagemAereaChange={(file) => setData("comprovante_voo", file)}
             onBack={handleBack}
             onNext={handleNext}
             errors={{
@@ -171,7 +235,13 @@ export default function SolicitationCreate() {
             isUserDataValid={isUserDataValid}
             onBack={handleBack}
             onNext={handleNext}
-            errors={errors.userData as unknown as Record<keyof UserModel, string>}
+            errors={{
+              ...((errors.userData as unknown as Record<
+                keyof UserModel,
+                string
+              >) || {}),
+              ...userDataValidationErrors,
+            }}
             processing={processing}
           />
         );
@@ -201,7 +271,9 @@ export default function SolicitationCreate() {
       <div className="px-2 sm:px-4 md:container mx-auto py-6 md:py-10">
         <div className="space-y-4">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold tracking-tight text-indigo-800">Nova Solicitação</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-indigo-800">
+              Nova Solicitação
+            </h1>
             <p className="text-sm text-gray-500">
               Preencha os dados para solicitar sua indenização
             </p>
@@ -215,15 +287,11 @@ export default function SolicitationCreate() {
               steps={STEPS}
               currentStep={currentStep}
               renderContent={(stepId) => (
-                <Card className="sm:hidden">
-                  {renderStepContent()}
-                </Card>
+                <Card className="sm:hidden">{renderStepContent()}</Card>
               )}
             />
           </div>
-          <Card className="hidden sm:block">
-            {renderStepContent()}
-          </Card>
+          <Card className="hidden sm:block">{renderStepContent()}</Card>
         </div>
       </div>
     </>

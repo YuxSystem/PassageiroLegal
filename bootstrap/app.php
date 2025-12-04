@@ -10,10 +10,6 @@ return Application::configure(basePath: dirname(__DIR__))
     health: '/up',
   )
   ->withMiddleware(function (Middleware $middleware) {
-    $middleware->web(prepend: [
-      \App\Http\Middleware\CheckInstallation::class,
-    ]);
-    
     $middleware->web(append: [
       \App\Http\Middleware\SetLocale::class,
       \App\Http\Middleware\HandleInertiaRequests::class,

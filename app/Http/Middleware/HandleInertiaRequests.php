@@ -37,6 +37,9 @@ class HandleInertiaRequests extends Middleware
                 'location' => $request->url(),
             ],
             'locale' => fn () => app()->getLocale(),
+            'whatsapp' => [
+                'number' => config('services.whatsapp.number'),
+            ],
         ];
     }
 }
